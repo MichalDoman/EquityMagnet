@@ -1,7 +1,6 @@
 import os
 from django.core.management import BaseCommand
 import pandas as pd
-import yfinance as yf
 import requests
 
 from final_project.settings import BASE_DIR
@@ -15,34 +14,48 @@ EXCHANGES = (
 )
 
 
+def get_tickers(csv_file_path):
+    """Get all the tickers for a stock market from a csv file"""
+    tickers = pd.read_csv(csv_file_path)['Symbol']
+    tickers[2700] = "NA"  # Symbol 'NA' was switched to NaN value, and needs fixing.
+    return tickers
+
+
 def insert_exchanges_data():
     """Insert information about stock exchanges to database"""
     for exchange in EXCHANGES:
         Exchange.objects.create(name=exchange[1], symbol=exchange[0])
 
 
-def get_tickers(csv_file_path):
-    """Get all the tickers for a stock market form a csv file"""
-    tickers = pd.read_csv(csv_file_path)['Symbol']
-    tickers[2700] = "NA"  # Symbol NA was switched to NaN value
-    return tickers
+def insert_company_and_sector_data(ticker):
+    """
+    Pull company's information from financialmodelingprep.com,
+    segregate it and save to database. Check if company's sector is already in database,
+    if not create a new sector object.
+    """
 
+    url = f"https://financialmodelingprep.com/api/v3/profile/{ticker}"
+    response = requests.get(url)
+    data = response.json()
+    exchange = Exchange.objects.get(symbol=data['exchangeShortName'])
+    sector_name = data['sector']
+    if Sector.objects.get(name=sector_name).exists():
+        sector = Sector.objects.get(name=sector_name)
+    else:
+        sector = Sector.objects.create(name=sector_name)
+        sector.exchanges.add(exchange)
+        sector.save()
 
-def yahoo_finance():
-    for exchange in EXCHANGES:
-        path = os.path.join(BASE_DIR, 'main_app', 'management', 'commands_data', f'{exchange[0]}.csv')
-
-        try:
-            tickers = get_tickers(path)
-            for ticker in tickers:
-                company = yf.Ticker(ticker)
-                print(company.info['underlyingSymbol'])
-
-                # return company.history(period="1mo)"
-
-        except FileNotFoundError:
-            print(f"No such file or directory: '{path}'")
-            continue
+    Company.objects.create(
+        name=data['companyName'],
+        symbol=ticker,
+        exchange=exchange,
+        country=data['country'],
+        sector=sector,
+        description=data['description'],
+        market_cap=data['mktCap'],
+        web_site=data['website'],
+    )
 
 
 def insert_income_statement_data(ticker):
@@ -192,6 +205,34 @@ def insert_cash_flow_statement_data(ticker):
         )
 
 
+def insert_all_data():
+    """
+    Call all the insert functions in a loop for every ticker. Count how many companies were added.
+
+    :return: number of companies added or an error if a csv file with a ticker list, does not exist or
+    EXCHANGES settings are incorrect.
+    """
+
+    insert_exchanges_data()
+    companies_inserted = 0
+    for exchange in EXCHANGES:
+        path = os.path.join(BASE_DIR, 'main_app', 'management', 'commands_data', f'{exchange[0]}.csv')
+        try:
+            tickers = get_tickers(path)
+            for ticker in tickers:
+                insert_company_and_sector_data(ticker)
+                insert_income_statement_data(ticker)
+                insert_balance_sheet_data(ticker)
+                insert_cash_flow_statement_data(ticker)
+                companies_inserted += 1
+
+        except FileNotFoundError:
+            print(f"No such file or directory: '{path}'")
+            continue
+
+    return companies_inserted
+
+
 class Command(BaseCommand):
     help = """
         Insert companies' data to app's database.
@@ -204,6 +245,5 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **kwargs):
-        # print(pd.DataFrame(insert_income_statement_data("AAPL")).to_string())
-        print(insert_income_statement_data("AAPL"))
-        print("Data loaded successfully!")
+        companies_inserted = insert_all_data()
+        print(f"{companies_inserted} companies were successfully inserted!")

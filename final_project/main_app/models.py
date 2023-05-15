@@ -8,7 +8,7 @@ class Exchange(models.Model):
 
 class Sector(models.Model):
     name = models.CharField(max_length=255)
-    exchange = models.ManyToManyField(Exchange)
+    exchanges = models.ManyToManyField(Exchange)
 
 
 class Company(models.Model):
@@ -17,6 +17,9 @@ class Company(models.Model):
     exchange = models.ForeignKey(Exchange, on_delete=models.CASCADE)
     country = models.CharField(max_length=255)
     sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
+    description = models.TextField()
+    market_cap = models.IntegerField()
+    website = models.URLField()
 
 
 class Price(models.Model):
