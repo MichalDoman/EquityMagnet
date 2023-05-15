@@ -3,7 +3,7 @@ from django.db import models
 
 class Exchange(models.Model):
     name = models.CharField(max_length=255)
-    symbol = models.CharField(max_length=10)
+    symbol = models.CharField(max_length=10, unique=True)
 
 
 class Sector(models.Model):
@@ -22,7 +22,7 @@ class Company(models.Model):
 class Price(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     current_value = models.FloatField()
-    history = models.JSONField()
+    history = models.JSONField()  # TODO
 
 
 class IncomeStatement(models.Model):
@@ -46,6 +46,9 @@ class IncomeStatement(models.Model):
     ebitda_ratio = models.FloatField()
     operating_income = models.IntegerField()
     operating_income_ratio = models.FloatField()
+    total_other_income_expenses_net = models.IntegerField()
+    income_before_tax = models.IntegerField()
+    income_before_tax_ratio = models.FloatField()
     income_tax_expense = models.IntegerField()
     net_income = models.IntegerField()
     net_income_ratio = models.FloatField()
@@ -81,6 +84,7 @@ class BalanceSheet(models.Model):
     deferred_revenue_non_current = models.IntegerField()
     deferred_tax_liabilities_non_current = models.IntegerField()
     other_non_current_liabilities = models.IntegerField()
+    total_non_current_liabilities = models.IntegerField()
     other_liabilities = models.IntegerField()
     capital_lease_obligations = models.IntegerField()
     total_liabilities = models.IntegerField()
