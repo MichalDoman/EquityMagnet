@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
 
-</body>
-</html>
+{% block title %}example_company{% endblock %}
+
+{% block content %}
+    Szczegółowy widok spółki:
+        1. sprawozdania finansowe
+        2. wskaźniki
+        3. opis
+        4. cena akcji
+{% endblock %}

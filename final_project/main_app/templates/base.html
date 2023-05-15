@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
 
-</body>
+<html lang="en">
+    {% load static %}
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{% static "base.css" %}">
+        <title>{% block title %}{% endblock %} | FinalProject</title>
+    </head>
+    <body>
+        <header>
+            <nav class="nav_bar">
+                Tutaj będzie logo i search-box
+                <ul class="nav_links">
+                    <li><a href="">home</a></li>
+                    <li><a href="">global index</a></li>
+                    <li><a href="{% url "companies" "gpw" %}">search</a></li>
+                    <li><a href="">watchlist (tylko dla zalogowanych)</a></li>
+                    <li><a href="">your evaluations (tylko dla zalogowanych)</a></li>
+                    <li><a href="">register (tylko dla niezalogowanych)</a></li>
+                    <li><a href="">login (tylko dla niezalogowanych)</a></li>
+                    <li><a href="">logout (tylko dla zalogowanych)</a></li>
+                    <li><a href="">profile (tylko dla zalogowanych)</a></li>
+                </ul>
+                <!-- guzik do zmiany koloru na ciemny -->
+            </nav>
+        </header>
+
+        <div class="content_block">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <footer>
+
+        </footer>
+    </body>
 </html>
