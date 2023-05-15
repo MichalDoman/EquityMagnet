@@ -3,7 +3,6 @@ from django.core.management import BaseCommand
 import pandas as pd
 import yfinance as yf
 import requests
-import django
 
 from final_project.settings import BASE_DIR
 from main_app.models import Exchange, Company
@@ -23,38 +22,43 @@ def insert_exchanges_data():
 def get_tickers(csv_file_path):
     """Get all the tickers for a stock market form a csv file"""
     tickers = pd.read_csv(csv_file_path)['Symbol']
+    tickers[2700] = "NA"  # Symbol NA was switched to NaN value
     return tickers
 
 
-def function():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main_app.settings')
-    django.setup()
+def yahoo_finance():
     for exchange in EXCHANGES:
         path = os.path.join(BASE_DIR, 'main_app', 'management', 'commands_data', f'{exchange[0]}.csv')
 
         try:
-            for ticker in get_tickers(path):
-                if ticker is None:
-                    print(str(ticker))
-                    break
+            tickers = get_tickers(path)
+            for ticker in tickers:
                 company = yf.Ticker(ticker)
-                print(ticker)
-                # Save company's data to database
-                # return company.history(period="1mo)"
+                print(company.info['underlyingSymbol'])
 
+                # return company.history(period="1mo)"
 
         except FileNotFoundError:
             print(f"No such file or directory: '{path}'")
             continue
 
 
-def get_financial_statements(ticker):
+def get_income_statements(ticker):
     url = f"https://financialmodelingprep.com/api/v3/income-statement/{ticker}?limit=120&apikey=566b84b1d223b010c6be47cf0bc0bce2"
     response = requests.get(url)
     return response.json()
 
 
-# print(pd.DataFrame(get_financial_statements("AAPL")).to_string())
+def get_balance_sheet(ticker):
+    url = f"https://financialmodelingprep.com/api/v3/balance-sheet-statement/{ticker}?limit=120&apikey=566b84b1d223b010c6be47cf0bc0bce2"
+    response = requests.get(url)
+    return response.json()
+
+
+def get_cash_flow_statement(ticker):
+    url = f"https://financialmodelingprep.com/api/v3/cash-flow-statement/{ticker}?limit=120&apikey=566b84b1d223b010c6be47cf0bc0bce2"
+    response = requests.get(url)
+    return response.json()
 
 
 class Command(BaseCommand):
@@ -69,5 +73,5 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **kwargs):
-        function()
+        print(pd.DataFrame(get_cash_flow_statement("AAPL")).to_string())
         print("Data loaded successfully!")
