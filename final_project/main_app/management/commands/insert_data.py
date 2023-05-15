@@ -85,7 +85,7 @@ def insert_income_statement_data(ticker):
         )
 
 
-def get_balance_sheet(ticker):
+def insert_balance_sheet_data(ticker):
     """Pull balance sheet statement data from financialmodelingprep.com,
     segregate it and save to database."""
 
@@ -145,14 +145,51 @@ def get_balance_sheet(ticker):
         )
 
 
-def get_cash_flow_statement(ticker):
+def insert_cash_flow_statement_data(ticker):
     """
     Pull cash flow statement data from financialmodelingprep.com,
     segregate it and save to database.
     """
     url = f"https://financialmodelingprep.com/api/v3/cash-flow-statement/{ticker}?limit=120&apikey={API_KEY}"
     response = requests.get(url)
-    return response.json()
+    data = response.json()
+    company = Company.objects.get(symbol=ticker)
+
+    for _ in data:
+        CashFlowStatement.objects.create(
+            company=company,
+            year=data['calendarYear'],
+            net_income=data['netIncome'],
+            depreciation_and_amortization=data['depreciationAndAmortization'],
+            deferred_income_tax=data['deferredIncomeTax'],
+            stock_based_compensation=data['stockBasedCompensation'],
+            change_in_working_capital=data['changeInWorkingCapital'],
+            accounts_receivables=data['accountsReceivables'],
+            inventory=data['inventory'],
+            account_payables=data['accountsPayables'],
+            other_working_capitals=data['otherWorkingCapital'],
+            other_non_cash_items=data['otherNonCashItems'],
+            net_cash_provided_by_operating_activities=data['netCashProvidedByOperatingActivities'],
+            investments_in_property_plant_and_equipment=data['investmentsInPropertyPlantAndEquipment'],
+            acquisitions_net=data['acquisitionsNet'],
+            purchases_of_investments=data['purchasesOfInvestments'],
+            sales_maturities_of_investments=data['salesMaturitiesOfInvestments'],
+            other_investing_activities=data['otherInvestingActivites'],
+            net_cash_used_for_investing_activities=data['netCashUsedForInvestingActivites'],
+            debt_repayment=data['debtRepayment'],
+            common_stock_issued=data['commonStockRepurchased'],
+            common_stock_repurchased=data['commonStockIssued'],
+            dividends_paid=data['dividendsPaid'],
+            other_financing_activities=data['otherFinancingActivites'],
+            net_cash_used_provided_by_financing_activities=data['netCashUsedProvidedByFinancingActivities'],
+            effect_of_forex_changes_on_cash=data['effectOfForexChangesOnCash'],
+            net_change_in_cash=data['netChangeInCash'],
+            cash_at_end_of_period=data['cashAtEndOfPeriod'],
+            cash_at_beginning_of_period=data['cashAtBeginningOfPeriod'],
+            operating_cash_flow=data['operatingCashFlow'],
+            capital_expenditure=data['capitalExpenditure'],
+            free_cash_flow=data['freeCashFlow'],
+        )
 
 
 class Command(BaseCommand):
