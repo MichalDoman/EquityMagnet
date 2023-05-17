@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import ListView
 
 from main_app.models import Company
 
@@ -12,9 +13,9 @@ class HomeView(View):
         })
 
 
-class CompaniesListView(View):
-    def get(self, request, stock_market):
-        return render(request, "companies.html")
+class CompaniesListView(ListView):
+    model = Company
+    paginate_by = 5
 
 
 class CompanyDetailsView(View):

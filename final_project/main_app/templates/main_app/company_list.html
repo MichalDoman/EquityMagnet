@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Company List{% endblock %}
+
+{% block content %}
+    <table>
+        <tr>
+            <th>Name:</th>
+            <th>Symbol:</th>
+            <th>Exchange:</th>
+            <th>Country:</th>
+            <th>Sector:</th>
+            <th>Market Cap:</th>
+        </tr>
+        {% for company in page_obj %}
+            <tr>
+                <td>{{ company.name }}</td>
+                <td>{{ company.symbol }}</td>
+                <td>{{ company.exchange.symbol }}</td>
+                <td>{{ company.country }}</td>
+                <td>{{ company.sector.name }}</td>
+                <td>{{ company.market_cap }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="pagination">
+        <span class="step_links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}
