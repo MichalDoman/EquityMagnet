@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ company.symbol }}{% endblock %}
+
+{% block content %}
+    <nav>
+        <ul class="detail_tabs">
+            <li><a href="">About</a></li>
+            <li><a href="">Price</a></li>
+            <li><a href="">Income Statement</a></li>
+            <li><a href="">Balance Sheet</a></li>
+            <li><a href="">Cash Flow Statement</a></li>
+        </ul>
+    </nav>
+{% endblock %}

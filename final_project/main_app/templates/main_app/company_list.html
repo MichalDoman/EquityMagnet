@@ -15,7 +15,9 @@
         </tr>
         {% for company in page_obj %}
             <tr>
-                <td>{{ company.name }}</td>
+                <td>
+                    <a href="{% url "company_details" company.pk %}">{{ company.name }}</a>
+                </td>
                 <td>{{ company.symbol }}</td>
                 <td>{{ company.exchange.symbol }}</td>
                 <td>{{ company.country }}</td>

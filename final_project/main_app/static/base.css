@@ -36,6 +36,7 @@ footer {
     border-left: 1px solid #D2D4D9;
 }
 
+/* ---------------------------------------------------------------- Home Page: */
 .grid_box {
     display: grid;
     grid-template-columns: auto auto;
@@ -55,4 +56,11 @@ footer {
     display: grid;
     grid-template-columns: auto auto;
     color: #a41515;
+}
+
+/* ---------------------------------------------------------------- Company Details: */
+.detail_tabs li {
+    display: inline-block;
+    padding: 20px;
+    border: 1px solid #D2D4D9;
 }
