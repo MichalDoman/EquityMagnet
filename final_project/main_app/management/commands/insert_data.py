@@ -7,50 +7,53 @@ from final_project.settings import BASE_DIR
 from main_app.models import Exchange, Company, Sector, Price, IncomeStatement, BalanceSheet, CashFlowStatement
 
 # API_KEY = "566b84b1d223b010c6be47cf0bc0bce2"
-API_KEY = "429da98c445a02548c83cb5eb73ce2f1"
-
-EXCHANGES = (
-    ('nasdaq', 'National Association of Securities Dealers Automated Quotations'),
-    # ('nyse', 'New York Stock Exchange')
-)
+# API_KEY = "429da98c445a02548c83cb5eb73ce2f1"
+# API_KEY = "6a5c4821aa277d716732ea2cd74fde79"
+API_KEY = "fd176e483095e94a648a283c593dea0f"
 
 
 def get_tickers(csv_file_path):
-    """Get all the tickers for a stock market from a csv file"""
-    tickers = pd.read_csv(csv_file_path)['Symbol']
-    tickers[2700] = "NA"  # Symbol 'NA' was switched to NaN value, and needs fixing.
+    """Get 1000 tickers of companies from a csv file"""
+    all_tickers = pd.read_csv(csv_file_path)['Symbol']
+    tickers = all_tickers[:1000]
     return tickers
 
 
-def insert_exchanges_data():
-    """Insert information about stock exchanges to database"""
-    for exchange in EXCHANGES:
-        if not Exchange.objects.filter(symbol=exchange[0]).exists():
-            Exchange.objects.create(name=exchange[1], symbol=exchange[0])
+def insert_and_get_exchange(exchange_symbol):
+    """Insert information about exchange if it does not exist, and return Exchange object"""
+    if Exchange.objects.filter(symbol=exchange_symbol).exists():
+        exchange = Exchange.objects.get(symbol=exchange_symbol)
+    else:
+        exchange = Exchange.objects.create(symbol=exchange_symbol)
+    return exchange
 
 
-def insert_company_and_sector_data(ticker, exchange_symbol):
-    """
-    Pull company's information from financialmodelingprep.com,
-    segregate it and save to database. Check if company's sector is already in database,
-    if not create a new sector object.
-    """
-
-    url = f"https://financialmodelingprep.com/api/v3/profile/{ticker}?apikey={API_KEY}"
-    response = requests.get(url)
-    data = response.json()[0]
-
-    # Get Exchange object:
-    exchange = Exchange.objects.get(symbol=exchange_symbol)
-
-    # Get or create Sector object:
-    sector_name = data['sector']
+def insert_and_get_sector(sector_name, exchange):
+    """Insert information about sector if it does not exist, and return Sector object"""
     if Sector.objects.filter(name=sector_name).exists():
         sector = Sector.objects.get(name=sector_name)
     else:
         sector = Sector.objects.create(name=sector_name)
         sector.exchanges.add(exchange)
         sector.save()
+    return sector
+
+
+def insert_company_data(ticker):
+    """
+    Pull company's information from financialmodelingprep.com, segregate it and save to database.
+    Check if company's sector and exchange is already in database, if not create new objects.
+    """
+
+    url = f"https://financialmodelingprep.com/api/v3/profile/{ticker}?apikey={API_KEY}"
+    response = requests.get(url)
+    data = response.json()[0]
+
+    # Get and create Exchange object:
+    exchange = insert_and_get_exchange(data['exchangeShortName'])
+
+    # Get and create Sector object:
+    sector = insert_and_get_sector(data['sector'], exchange)
 
     # Create Company object:
     if not Company.objects.filter(symbol=ticker).exists():
@@ -217,26 +220,23 @@ def insert_all_data():
     """
     Call all the insert functions in a loop for every ticker. Count how many companies were added.
 
-    :return: number of companies added or an error if a csv file with a ticker list, does not exist or
-    EXCHANGES settings are incorrect.
+    :return: number of companies added or an error if a csv file with a ticker list, does not exist
+    or the path to the file is incorrect.
     """
 
-    insert_exchanges_data()
     companies_inserted = 0
-    for exchange in EXCHANGES:
-        path = os.path.join(BASE_DIR, 'main_app', 'management', 'commands_data', f'{exchange[0]}.csv')
-        try:
-            tickers = get_tickers(path)
-            for ticker in ['AACG']:
-                insert_company_and_sector_data(ticker, exchange[0])
-                insert_income_statement_data(ticker)
-                insert_balance_sheet_data(ticker)
-                insert_cash_flow_statement_data(ticker)
-                companies_inserted += 1
+    path = os.path.join(BASE_DIR, 'main_app', 'management', 'commands_data', f'data.csv')
+    try:
+        # tickers = get_tickers(path)
+        for ticker in ['BRK-B']:
+            insert_company_data(ticker)
+            insert_income_statement_data(ticker)
+            insert_balance_sheet_data(ticker)
+            insert_cash_flow_statement_data(ticker)
+            companies_inserted += 1
 
-        except FileNotFoundError:
-            print(f"No such file or directory: '{path}'")
-            continue
+    except FileNotFoundError:
+        print(f"No such file or directory: '{path}'")
 
     return companies_inserted
 

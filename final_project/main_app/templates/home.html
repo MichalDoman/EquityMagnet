@@ -4,6 +4,20 @@
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
-    Tutaj będzie strona główna:
-        1. losowe linki do społek z różnych giełd
+    <article class="grid_box">
+        {% for company in companies %}
+            <div class="grid_item">
+                <h3>
+                    <a href="{% url "company_details" company.pk %}">{{ company.symbol }} </a>
+                    ({{ company.country }})</h3>
+                <p>{{ company.name }}</p>
+                <p><i>{{ company.exchange.symbol.upper }}</i></p>
+                <p>Market Cap: {{ company.market_cap }}</p>
+                <div class="home_price_box">
+                    <p>Price</p>
+                    <p>Change</p>
+                </div>
+            </div>
+        {% endfor %}
+    </article>
 {% endblock %}

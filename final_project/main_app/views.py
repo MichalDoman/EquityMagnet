@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.views import View
 
+from main_app.models import Company
+
 
 class HomeView(View):
     def get(self, request):
-        return render(request, "home.html")
+        companies = Company.objects.order_by("-market_cap")[:10]
+        return render(request, "home.html", context={
+            "companies": companies
+        })
 
 
 class CompaniesListView(View):

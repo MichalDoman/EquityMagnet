@@ -10,19 +10,19 @@
     <body>
         <header>
             <nav class="nav_bar">
-                Tutaj będzie logo i search-box
+                <h1 class="logo"><u>FINAL PROJECT</u></h1>
+                <!-- guzik do zmiany koloru na ciemny -->
                 <ul class="nav_links">
-                    <li><a href="">home</a></li>
+                    <li><a href="{% url "home" %}">home</a></li>
                     <li><a href="">global index</a></li>
                     <li><a href="{% url "companies" "gpw" %}">search</a></li>
-                    <li><a href="">watchlist (tylko dla zalogowanych)</a></li>
-                    <li><a href="">your evaluations (tylko dla zalogowanych)</a></li>
-                    <li><a href="">register (tylko dla niezalogowanych)</a></li>
-                    <li><a href="">login (tylko dla niezalogowanych)</a></li>
-                    <li><a href="">logout (tylko dla zalogowanych)</a></li>
-                    <li><a href="">profile (tylko dla zalogowanych)</a></li>
+                    <li><a href="">watchlist</a></li>
+                    <li><a href="">your evaluations</a></li>
+                    <li><a href="">register</a></li>
+                    <li><a href="">login</a></li>
+                    <li><a href="">logout</a></li>
+                    <li><a href="">profile</a></li>
                 </ul>
-                <!-- guzik do zmiany koloru na ciemny -->
             </nav>
         </header>
 
@@ -32,7 +32,18 @@
         </div>
 
         <footer>
-
+            <div class="footer_box">
+                <label><b>About author:</b><br></label>
+                <label>
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
+                    Cuem sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+                    ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo,
+                    fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae,
+                    justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper
+                    nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
+                    Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.
+                </label>
+            </div>
         </footer>
     </body>
 </html>

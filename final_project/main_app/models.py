@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Exchange(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True)
     symbol = models.CharField(max_length=10, unique=True)
 
 
@@ -16,7 +16,7 @@ class Company(models.Model):
     symbol = models.CharField(max_length=10)
     exchange = models.ForeignKey(Exchange, on_delete=models.CASCADE)
     country = models.CharField(max_length=255, null=True)
-    sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
+    sector = models.ForeignKey(Sector, on_delete=models.CASCADE, null=True)
     description = models.TextField(null=True)
     market_cap = models.BigIntegerField()
     website = models.URLField(null=True)
