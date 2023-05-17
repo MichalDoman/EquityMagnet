@@ -6,7 +6,8 @@ import requests
 from final_project.settings import BASE_DIR
 from main_app.models import Exchange, Company, Sector, Price, IncomeStatement, BalanceSheet, CashFlowStatement
 
-API_KEY = "566b84b1d223b010c6be47cf0bc0bce2"
+# API_KEY = "566b84b1d223b010c6be47cf0bc0bce2"
+API_KEY = "429da98c445a02548c83cb5eb73ce2f1"
 
 EXCHANGES = (
     ('nasdaq', 'National Association of Securities Dealers Automated Quotations'),
@@ -24,38 +25,45 @@ def get_tickers(csv_file_path):
 def insert_exchanges_data():
     """Insert information about stock exchanges to database"""
     for exchange in EXCHANGES:
-        Exchange.objects.create(name=exchange[1], symbol=exchange[0])
+        if not Exchange.objects.filter(symbol=exchange[0]).exists():
+            Exchange.objects.create(name=exchange[1], symbol=exchange[0])
 
 
-def insert_company_and_sector_data(ticker):
+def insert_company_and_sector_data(ticker, exchange_symbol):
     """
     Pull company's information from financialmodelingprep.com,
     segregate it and save to database. Check if company's sector is already in database,
     if not create a new sector object.
     """
 
-    url = f"https://financialmodelingprep.com/api/v3/profile/{ticker}"
+    url = f"https://financialmodelingprep.com/api/v3/profile/{ticker}?apikey={API_KEY}"
     response = requests.get(url)
-    data = response.json()
-    exchange = Exchange.objects.get(symbol=data['exchangeShortName'])
+    data = response.json()[0]
+
+    # Get Exchange object:
+    exchange = Exchange.objects.get(symbol=exchange_symbol)
+
+    # Get or create Sector object:
     sector_name = data['sector']
-    if Sector.objects.get(name=sector_name).exists():
+    if Sector.objects.filter(name=sector_name).exists():
         sector = Sector.objects.get(name=sector_name)
     else:
         sector = Sector.objects.create(name=sector_name)
         sector.exchanges.add(exchange)
         sector.save()
 
-    Company.objects.create(
-        name=data['companyName'],
-        symbol=ticker,
-        exchange=exchange,
-        country=data['country'],
-        sector=sector,
-        description=data['description'],
-        market_cap=data['mktCap'],
-        web_site=data['website'],
-    )
+    # Create Company object:
+    if not Company.objects.filter(symbol=ticker).exists():
+        Company.objects.create(
+            name=data['companyName'],
+            symbol=ticker,
+            exchange=exchange,
+            country=data['country'],
+            sector=sector,
+            description=data['description'],
+            market_cap=data['mktCap'],
+            website=data['website'],
+        )
 
 
 def insert_income_statement_data(ticker):
@@ -67,34 +75,34 @@ def insert_income_statement_data(ticker):
     data = response.json()
     company = Company.objects.get(symbol=ticker)
 
-    for _ in data:
+    for period_data in data:
         IncomeStatement.objects.create(
             company=company,
-            year=data['calendarYear'],
-            total_revenue=data['revenue'],
-            cost_of_revenue=data['costOfRevenue'],
-            gross_profit=data['grossProfit'],
-            gross_profit_ratio=data['grossProfitRatio'],
-            research_and_development_expenses=data['researchAndDevelopmentExpenses'],
-            general_and_administrative_expenses=data['generalAndAdministrativeExpenses'],
-            selling_and_marketing_expenses=data['sellingAndMarketingExpenses'],
-            selling_general_and_administrative_expenses=data['sellingGeneralAndAdministrativeExpenses'],
-            other_expenses=data['otherExpenses'],
-            operating_expenses=data['operatingExpenses'],
-            cost_and_expenses=data['costAndExpenses'],
-            interest_income=data['interestIncome'],
-            interest_expense=data['interestExpense'],
-            depreciation_and_amortization=data['depreciationAndAmortization'],
-            ebitda=['ebitda'],
-            ebitda_ratio=data['ebitdaratio'],
-            operating_income=data['operatingIncome'],
-            operating_income_ratio=data['operatingIncomeRatio'],
-            total_other_income_expenses_net=data['totalOtherIncomeExpensesNet'],
-            income_before_tax=data['incomeBeforeTax'],
-            income_before_tax_ratio=data['incomeBeforeTaxRatio'],
-            income_tax_expense=['incomeTaxExpense'],
-            net_income=data['netIncome'],
-            net_income_ratio=data['netIncomeRatio'],
+            year=period_data['calendarYear'],
+            total_revenue=period_data['revenue'],
+            cost_of_revenue=period_data['costOfRevenue'],
+            gross_profit=period_data['grossProfit'],
+            gross_profit_ratio=period_data['grossProfitRatio'],
+            research_and_development_expenses=period_data['researchAndDevelopmentExpenses'],
+            general_and_administrative_expenses=period_data['generalAndAdministrativeExpenses'],
+            selling_and_marketing_expenses=period_data['sellingAndMarketingExpenses'],
+            selling_general_and_administrative_expenses=period_data['sellingGeneralAndAdministrativeExpenses'],
+            other_expenses=period_data['otherExpenses'],
+            operating_expenses=period_data['operatingExpenses'],
+            cost_and_expenses=period_data['costAndExpenses'],
+            interest_income=period_data['interestIncome'],
+            interest_expense=period_data['interestExpense'],
+            depreciation_and_amortization=period_data['depreciationAndAmortization'],
+            ebitda=period_data['ebitda'],
+            ebitda_ratio=period_data['ebitdaratio'],
+            operating_income=period_data['operatingIncome'],
+            operating_income_ratio=period_data['operatingIncomeRatio'],
+            total_other_income_expenses_net=period_data['totalOtherIncomeExpensesNet'],
+            income_before_tax=period_data['incomeBeforeTax'],
+            income_before_tax_ratio=period_data['incomeBeforeTaxRatio'],
+            income_tax_expense=period_data['incomeTaxExpense'],
+            net_income=period_data['netIncome'],
+            net_income_ratio=period_data['netIncomeRatio'],
         )
 
 
@@ -107,54 +115,54 @@ def insert_balance_sheet_data(ticker):
     data = response.json()
     company = Company.objects.get(symbol=ticker)
 
-    for _ in data:
+    for period_data in data:
         BalanceSheet.objects.create(
             company=company,
-            year=data['calendarYear'],
-            cash_and_cash_equivalents=data['cashAndCashEquivalents'],
-            short_term_investments=data['shortTermInvestments'],
-            cash_and_short_term_investments=data['cashAndShortTermInvestments'],
-            net_receivables=data['netReceivables'],
-            inventory=data['inventory'],
-            other_current_assets=data['otherCurrentAssets'],
-            total_current_assets=data['totalCurrentAssets'],
-            property_plant_equipment_net=data['propertyPlantEquipmentNet'],
-            goodwill=data['goodwill'],
-            intangible_assets=data['intangibleAssets'],
-            goodwill_and_intangible_assets=data['goodwillAndIntangibleAssets'],
-            long_term_investments=data['longTermInvestments'],
-            tax_assets=data['taxAssets'],
-            other_non_current_assets=data['otherNonCurrentAssets'],
-            total_non_current_assets=data['totalNonCurrentAssets'],
-            other_assets=data['otherAssets'],
-            total_assets=data['totalAssets'],
-            account_payables=data['accountPayables'],
-            short_term_debt=data['shortTermDebt'],
-            tax_payables=data['taxPayables'],
-            deferred_revenue=data['deferredRevenue'],
-            other_current_liabilities=data['otherCurrentLiabilities'],
-            total_current_liabilities=data['totalCurrentLiabilities'],
-            long_term_debt=data['longTermDebt'],
-            deferred_revenue_non_current=data['deferredRevenueNonCurrent'],
-            deferred_tax_liabilities_non_current=data['deferredTaxLiabilitiesNonCurrent'],
-            other_non_current_liabilities=data['otherNonCurrentLiabilities'],
-            total_non_current_liabilities=data['totalNonCurrentLiabilities'],
-            other_liabilities=data['otherLiabilities'],
-            capital_lease_obligations=data['capitalLeaseObligations'],
-            total_liabilities=data['totalLiabilities'],
-            preferred_stock=data['preferredStock'],
-            common_stock=data['commonStock'],
-            retained_earnings=data['retainedEarnings'],
-            accumulated_other_comprehensive_income_loss=data['accumulatedOtherComprehensiveIncomeLoss'],
-            other_total_stockholder_equity=data['othertotalStockholdersEquity'],
-            total_stock_holder_equity=data['totalStockholdersEquity'],
-            total_equity=data['totalEquity'],
-            total_liabilities_and_stock_holder_equity=data['totalLiabilitiesAndStockholdersEquity'],
-            minority_interest=data['minorityInterest'],
-            total_liabilities_and_total_equity=data['totalLiabilitiesAndTotalEquity'],
-            total_investments=data['totalInvestments'],
-            total_debt=data['totalDebt'],
-            net_debt=data['netDebt'],
+            year=period_data['calendarYear'],
+            cash_and_cash_equivalents=period_data['cashAndCashEquivalents'],
+            short_term_investments=period_data['shortTermInvestments'],
+            cash_and_short_term_investments=period_data['cashAndShortTermInvestments'],
+            net_receivables=period_data['netReceivables'],
+            inventory=period_data['inventory'],
+            other_current_assets=period_data['otherCurrentAssets'],
+            total_current_assets=period_data['totalCurrentAssets'],
+            property_plant_equipment_net=period_data['propertyPlantEquipmentNet'],
+            goodwill=period_data['goodwill'],
+            intangible_assets=period_data['intangibleAssets'],
+            goodwill_and_intangible_assets=period_data['goodwillAndIntangibleAssets'],
+            long_term_investments=period_data['longTermInvestments'],
+            tax_assets=period_data['taxAssets'],
+            other_non_current_assets=period_data['otherNonCurrentAssets'],
+            total_non_current_assets=period_data['totalNonCurrentAssets'],
+            other_assets=period_data['otherAssets'],
+            total_assets=period_data['totalAssets'],
+            account_payables=period_data['accountPayables'],
+            short_term_debt=period_data['shortTermDebt'],
+            tax_payables=period_data['taxPayables'],
+            deferred_revenue=period_data['deferredRevenue'],
+            other_current_liabilities=period_data['otherCurrentLiabilities'],
+            total_current_liabilities=period_data['totalCurrentLiabilities'],
+            long_term_debt=period_data['longTermDebt'],
+            deferred_revenue_non_current=period_data['deferredRevenueNonCurrent'],
+            deferred_tax_liabilities_non_current=period_data['deferredTaxLiabilitiesNonCurrent'],
+            other_non_current_liabilities=period_data['otherNonCurrentLiabilities'],
+            total_non_current_liabilities=period_data['totalNonCurrentLiabilities'],
+            other_liabilities=period_data['otherLiabilities'],
+            capital_lease_obligations=period_data['capitalLeaseObligations'],
+            total_liabilities=period_data['totalLiabilities'],
+            preferred_stock=period_data['preferredStock'],
+            common_stock=period_data['commonStock'],
+            retained_earnings=period_data['retainedEarnings'],
+            accumulated_other_comprehensive_income_loss=period_data['accumulatedOtherComprehensiveIncomeLoss'],
+            other_total_stockholder_equity=period_data['othertotalStockholdersEquity'],
+            total_stock_holder_equity=period_data['totalStockholdersEquity'],
+            total_equity=period_data['totalEquity'],
+            total_liabilities_and_stock_holder_equity=period_data['totalLiabilitiesAndStockholdersEquity'],
+            minority_interest=period_data['minorityInterest'],
+            total_liabilities_and_total_equity=period_data['totalLiabilitiesAndTotalEquity'],
+            total_investments=period_data['totalInvestments'],
+            total_debt=period_data['totalDebt'],
+            net_debt=period_data['netDebt'],
         )
 
 
@@ -168,40 +176,40 @@ def insert_cash_flow_statement_data(ticker):
     data = response.json()
     company = Company.objects.get(symbol=ticker)
 
-    for _ in data:
+    for period_data in data:
         CashFlowStatement.objects.create(
             company=company,
-            year=data['calendarYear'],
-            net_income=data['netIncome'],
-            depreciation_and_amortization=data['depreciationAndAmortization'],
-            deferred_income_tax=data['deferredIncomeTax'],
-            stock_based_compensation=data['stockBasedCompensation'],
-            change_in_working_capital=data['changeInWorkingCapital'],
-            accounts_receivables=data['accountsReceivables'],
-            inventory=data['inventory'],
-            account_payables=data['accountsPayables'],
-            other_working_capitals=data['otherWorkingCapital'],
-            other_non_cash_items=data['otherNonCashItems'],
-            net_cash_provided_by_operating_activities=data['netCashProvidedByOperatingActivities'],
-            investments_in_property_plant_and_equipment=data['investmentsInPropertyPlantAndEquipment'],
-            acquisitions_net=data['acquisitionsNet'],
-            purchases_of_investments=data['purchasesOfInvestments'],
-            sales_maturities_of_investments=data['salesMaturitiesOfInvestments'],
-            other_investing_activities=data['otherInvestingActivites'],
-            net_cash_used_for_investing_activities=data['netCashUsedForInvestingActivites'],
-            debt_repayment=data['debtRepayment'],
-            common_stock_issued=data['commonStockRepurchased'],
-            common_stock_repurchased=data['commonStockIssued'],
-            dividends_paid=data['dividendsPaid'],
-            other_financing_activities=data['otherFinancingActivites'],
-            net_cash_used_provided_by_financing_activities=data['netCashUsedProvidedByFinancingActivities'],
-            effect_of_forex_changes_on_cash=data['effectOfForexChangesOnCash'],
-            net_change_in_cash=data['netChangeInCash'],
-            cash_at_end_of_period=data['cashAtEndOfPeriod'],
-            cash_at_beginning_of_period=data['cashAtBeginningOfPeriod'],
-            operating_cash_flow=data['operatingCashFlow'],
-            capital_expenditure=data['capitalExpenditure'],
-            free_cash_flow=data['freeCashFlow'],
+            year=period_data['calendarYear'],
+            net_income=period_data['netIncome'],
+            depreciation_and_amortization=period_data['depreciationAndAmortization'],
+            deferred_income_tax=period_data['deferredIncomeTax'],
+            stock_based_compensation=period_data['stockBasedCompensation'],
+            change_in_working_capital=period_data['changeInWorkingCapital'],
+            accounts_receivables=period_data['accountsReceivables'],
+            inventory=period_data['inventory'],
+            account_payables=period_data['accountsPayables'],
+            other_working_capitals=period_data['otherWorkingCapital'],
+            other_non_cash_items=period_data['otherNonCashItems'],
+            net_cash_provided_by_operating_activities=period_data['netCashProvidedByOperatingActivities'],
+            investments_in_property_plant_and_equipment=period_data['investmentsInPropertyPlantAndEquipment'],
+            acquisitions_net=period_data['acquisitionsNet'],
+            purchases_of_investments=period_data['purchasesOfInvestments'],
+            sales_maturities_of_investments=period_data['salesMaturitiesOfInvestments'],
+            other_investing_activities=period_data['otherInvestingActivites'],
+            net_cash_used_for_investing_activities=period_data['netCashUsedForInvestingActivites'],
+            debt_repayment=period_data['debtRepayment'],
+            common_stock_issued=period_data['commonStockRepurchased'],
+            common_stock_repurchased=period_data['commonStockIssued'],
+            dividends_paid=period_data['dividendsPaid'],
+            other_financing_activities=period_data['otherFinancingActivites'],
+            net_cash_used_provided_by_financing_activities=period_data['netCashUsedProvidedByFinancingActivities'],
+            effect_of_forex_changes_on_cash=period_data['effectOfForexChangesOnCash'],
+            net_change_in_cash=period_data['netChangeInCash'],
+            cash_at_end_of_period=period_data['cashAtEndOfPeriod'],
+            cash_at_beginning_of_period=period_data['cashAtBeginningOfPeriod'],
+            operating_cash_flow=period_data['operatingCashFlow'],
+            capital_expenditure=period_data['capitalExpenditure'],
+            free_cash_flow=period_data['freeCashFlow'],
         )
 
 
@@ -219,8 +227,8 @@ def insert_all_data():
         path = os.path.join(BASE_DIR, 'main_app', 'management', 'commands_data', f'{exchange[0]}.csv')
         try:
             tickers = get_tickers(path)
-            for ticker in tickers:
-                insert_company_and_sector_data(ticker)
+            for ticker in ['AACG']:
+                insert_company_and_sector_data(ticker, exchange[0])
                 insert_income_statement_data(ticker)
                 insert_balance_sheet_data(ticker)
                 insert_cash_flow_statement_data(ticker)
@@ -245,5 +253,6 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **kwargs):
+        print("Please wait, the data is loading...")
         companies_inserted = insert_all_data()
         print(f"{companies_inserted} companies were successfully inserted!")
