@@ -5,14 +5,15 @@
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="{% static "base.css" %}">
+        {% block javascript %}{% endblock %}
         <title>{% block title %}{% endblock %} | FinalProject</title>
     </head>
     <body>
         <header>
-            <nav class="nav_bar">
+            <nav class="nav-bar">
                 <h1 class="logo"><u>FINAL PROJECT</u></h1>
                 <!-- guzik do zmiany koloru na ciemny -->
-                <ul class="nav_links">
+                <ul class="nav-links">
                     <li><a href="{% url "home" %}">home</a></li>
                     <li><a href="">global index</a></li>
                     <li><a href="{% url "companies" %}">search</a></li>
@@ -26,13 +27,13 @@
             </nav>
         </header>
 
-        <div class="content_block">
+        <div class="content-block">
             {% block content %}
             {% endblock %}
         </div>
 
         <footer>
-            <div class="footer_box">
+            <div class="footer-box">
                 <label><b>About author:</b><br></label>
                 <label>
                     Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.

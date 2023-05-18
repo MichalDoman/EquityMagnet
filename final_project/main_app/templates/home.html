@@ -4,16 +4,16 @@
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
-    <article class="grid_box">
+    <article class="grid-box">
         {% for company in companies %}
-            <div class="grid_item">
+            <div class="grid-item">
                 <h3>
                     <a href="{% url "company_details" company.pk %}">{{ company.symbol }} </a>
                     ({{ company.country }})</h3>
                 <p>{{ company.name }}</p>
                 <p><i>{{ company.exchange.symbol.upper }}</i></p>
                 <p>Market Cap: {{ company.market_cap }}</p>
-                <div class="home_price_box">
+                <div class="home-price-box">
                     <p>Price</p>
                     <p>Change</p>
                 </div>

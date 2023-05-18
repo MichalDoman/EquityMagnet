@@ -1,16 +1,44 @@
 {% extends "base.html" %}
 {% load static %}
+{% block javascript %}
+    <script src="{% static "js/company_details.js" %}" defer></script>
+{% endblock %}
 
 {% block title %}{{ company.symbol }}{% endblock %}
 
 {% block content %}
-    <nav>
-        <ul class="detail_tabs">
-            <li><a href="">About</a></li>
-            <li><a href="">Price</a></li>
-            <li><a href="">Income Statement</a></li>
-            <li><a href="">Balance Sheet</a></li>
-            <li><a href="">Cash Flow Statement</a></li>
-        </ul>
-    </nav>
+    <section class="details-section">
+
+        <div class="company-name">
+            <h2>{{ company.name }}</h2>
+            <p>{{ company.symbol }}</p>
+        </div>
+
+        <div class="center-section">
+
+            <div class="btn-box">
+                <button class="tab-btn active" data-id="about">About</button>
+                <button class="tab-btn" data-id="income-statement">Income Statement</button>
+                <button class="tab-btn" data-id="balance-sheet">Balance Sheet</button>
+                <button class="tab-btn" data-id="cash-flow-statement">Cash Flow Statement</button>
+            </div>
+
+            <div class="detail-box">
+                <div class="details active" id="about">
+                    <h3>About</h3>
+                </div>
+                <div class="details" id="income-statement">
+                    <h3>Income Statement</h3>
+                </div>
+                <div class="details" id="balance-sheet">
+                    <h3>Balance Sheet</h3>
+                </div>
+                <div class="details" id="cash-flow-statement">
+                    <h3>Cash Flow Statement</h3>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
 {% endblock %}

@@ -5,12 +5,12 @@
 }
 
 
-.content_block {
+.content-block {
     font-size: 30px;
     background-color: #ffffff;
 }
 
-.nav_bar {
+.nav-bar {
     font-size: 25px;
     background-color: #6f94c6;
     padding: 20px;
@@ -21,30 +21,30 @@ footer {
     padding: 50px;
 }
 
-.footer_box {
+.footer-box {
     background-color: #81d4fa;
     padding: 50px;
 }
 
-.nav_links {
+.nav-links {
     list-style: none;
 }
 
-.nav_links li {
+.nav-links li {
     display: inline-block;
     padding: 0 20px;
     border-left: 1px solid #D2D4D9;
 }
 
 /* ---------------------------------------------------------------- Home Page: */
-.grid_box {
+.grid-box {
     display: grid;
     grid-template-columns: auto auto;
     gap: 10px;
     padding: 10px 150px;
 }
 
-.grid_item {
+.grid-item {
     padding: 20px;
     text-align: start;
     background-color: #ffffff;
@@ -52,15 +52,34 @@ footer {
     border-radius: 5px;
 }
 
-.home_price_box {
+.home-price-box {
     display: grid;
     grid-template-columns: auto auto;
     color: #a41515;
 }
 
 /* ---------------------------------------------------------------- Company Details: */
-.detail_tabs li {
-    display: inline-block;
-    padding: 20px;
-    border: 1px solid #D2D4D9;
+.btn-box {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+}
+
+.tab-btn {
+    padding: 20px 0;
+    border: none;
+    text-transform: capitalize;
+    font-size: 20px;
+    display: block;
+}
+
+.tab-btn.active {
+    background: #ffffff;
+}
+
+.details {
+    display: none;
+}
+
+.details.active {
+    display: block;
 }
