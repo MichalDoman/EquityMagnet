@@ -9,7 +9,7 @@ from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStat
 class HomeView(View):
     def get(self, request):
         all_companies = Company.objects.all()
-        sample_companies = sample(list(all_companies), 4)
+        sample_companies = sample(list(all_companies), 1)
         return render(request, "home.html", context={
             "companies": sample_companies
         })
@@ -25,33 +25,35 @@ class CompanyDetailView(DetailView):
     context_object_name = "company"
 
     def get_context_data(self, **kwargs):
+        """Extend context by company's financial statements and all of their field names"""
+
         context = super().get_context_data(**kwargs)
         income_statements = IncomeStatement.objects.filter(company=self.kwargs["pk"]).order_by("year")
         balance_sheets = BalanceSheet.objects.filter(company=self.kwargs["pk"]).order_by("year")
         cash_flow_statements = CashFlowStatement.objects.filter(company=self.kwargs["pk"]).order_by("year")
+
         # Add all statements for all years for a given company to the context:
         context["income_statements"] = income_statements
         context["balance_sheets"] = balance_sheets
         context["cash_flow_statements"] = cash_flow_statements
+
         # Add all field names of every type of statement to the context:
-        context["income_statement_fields"] = get_statement_fields_names(income_statements[0])
-        context["balance_sheet_fields"] = get_statement_fields_names(balance_sheets[0])
-        context["cash_flow_statement_fields"] = get_statement_fields_names(cash_flow_statements[0])
+        context["income_statement_dicts"] = get_field_dictionaries(income_statements)
+        context["balance_sheet_dicts"] = get_field_dictionaries(balance_sheets)
+        context["cash_flow_statement_dicts"] = get_field_dictionaries(cash_flow_statements)
         return context
 
 
-def get_statement_fields_names(instance):
-    """Capitalize and space all the field names of a given financial statement model.
+def get_field_dictionaries(queryset):
+    field_names = [field.name for field in queryset[0]._meta.get_fields()]
+    field_dictionaries = []
 
-    :param instance: An instance of a model of one of the financial statements.
-    :return: A list of capitalized and properly spaced field names of a given statement.
-    The list excludes company and year fields.
-    """
+    for field_name in field_names:
+        values = []
 
-    field_names = [field.name for field in instance._meta.get_fields()]
-    styled_field_names = []
-    for name in field_names:
-        name = name.capitalize()
-        name = name.replace("_", " ")
-        styled_field_names.append(name)
-    return styled_field_names[3:]
+        for instance in queryset:
+            value = getattr(instance, field_name)
+            values.append(value)
+        styled_name = field_name.capitalize().replace("_", " ")
+        field_dictionaries.append({styled_name: values})
+    return field_dictionaries[2:]

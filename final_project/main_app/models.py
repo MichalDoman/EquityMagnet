@@ -28,9 +28,15 @@ class Price(models.Model):
     history = models.JSONField()  # TODO
 
 
-class IncomeStatement(models.Model):
+class FinancialStatement(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     year = models.IntegerField()
+
+    class Meta:
+        abstract = True
+
+
+class IncomeStatement(FinancialStatement):
     total_revenue = models.BigIntegerField()
     cost_of_revenue = models.BigIntegerField()
     gross_profit = models.BigIntegerField()
@@ -57,9 +63,7 @@ class IncomeStatement(models.Model):
     net_income_ratio = models.FloatField()
 
 
-class BalanceSheet(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    year = models.IntegerField()
+class BalanceSheet(FinancialStatement):
     cash_and_cash_equivalents = models.BigIntegerField()
     short_term_investments = models.BigIntegerField()
     cash_and_short_term_investments = models.BigIntegerField()
@@ -106,9 +110,7 @@ class BalanceSheet(models.Model):
     net_debt = models.BigIntegerField()
 
 
-class CashFlowStatement(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    year = models.IntegerField()
+class CashFlowStatement(FinancialStatement):
     net_income = models.BigIntegerField()
     depreciation_and_amortization = models.BigIntegerField()
     deferred_income_tax = models.BigIntegerField()
