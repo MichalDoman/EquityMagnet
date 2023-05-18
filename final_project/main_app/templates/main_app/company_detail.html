@@ -10,8 +10,8 @@
     <section class="details-section">
 
         <div class="company-name">
-            <h2>{{ company.name }}</h2>
-            <p>{{ company.symbol }}</p>
+            <h2>{{ company.name }} ({{ company.symbol }})</h2>
+            <p>{{ company.exchange.symbol }}</p>
         </div>
 
         <div class="center-section">
@@ -24,18 +24,47 @@
             </div>
 
             <div class="detail-box">
+
                 <div class="details active" id="about">
                     <h3>About</h3>
+                    <p><b>Country:</b> {{ company.country }}</p>
+                    <p><b>Sector:</b> {{ company.sector.name }}</p>
+                    <p><b>Description:</b> {{ company.description }}</p>
+                    <p><b>Market cap:</b> {{ company.market_cap }}</p>
+                    <p><b>Official website:</b> {{ company.website }}</p>
                 </div>
+
                 <div class="details" id="income-statement">
                     <h3>Income Statement</h3>
+                    {% for field_name in field_names %}
+                        <p>{{ field_name }}</p>
+                    {% endfor %}
+
+{#                    <table>#}
+{#                        <tr>#}
+{#                            <th></th>#}
+{#                            {% for income_statement in income_statements %}#}
+{#                                <th>{{ income_statement.year }}</th>#}
+{#                            {% endfor %}#}
+{#                            <th></th>#}
+{#                        </tr>#}
+{#                        <tr>#}
+{#                            <th>Total revenue</th>#}
+{#                            {% for income_statement in income_statements %}#}
+{#                                <td>{{ income_statement.total_revenue }}</td>#}
+{#                            {% endfor %}#}
+{#                        </tr>#}
+{#                    </table>#}
                 </div>
+
                 <div class="details" id="balance-sheet">
                     <h3>Balance Sheet</h3>
                 </div>
+
                 <div class="details" id="cash-flow-statement">
                     <h3>Cash Flow Statement</h3>
                 </div>
+
             </div>
 
         </div>
