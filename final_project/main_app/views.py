@@ -4,6 +4,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 
 from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement
+from main_app.utils import get_field_dictionaries
 
 
 class HomeView(View):
@@ -33,9 +34,9 @@ class CompanyDetailView(DetailView):
         cash_flow_statements = CashFlowStatement.objects.filter(company=self.kwargs["pk"]).order_by("year")
 
         # Add all statements for all years for a given company to the context:
-        context["income_statements"] = income_statements
-        context["balance_sheets"] = balance_sheets
-        context["cash_flow_statements"] = cash_flow_statements
+        # context["income_statements"] = income_statements
+        # context["balance_sheets"] = balance_sheets
+        # context["cash_flow_statements"] = cash_flow_statements
 
         # Add all field names of every type of statement to the context:
         context["income_statement_dicts"] = get_field_dictionaries(income_statements)
@@ -44,16 +45,4 @@ class CompanyDetailView(DetailView):
         return context
 
 
-def get_field_dictionaries(queryset):
-    field_names = [field.name for field in queryset[0]._meta.get_fields()]
-    field_dictionaries = []
 
-    for field_name in field_names:
-        values = []
-
-        for instance in queryset:
-            value = getattr(instance, field_name)
-            values.append(value)
-        styled_name = field_name.capitalize().replace("_", " ")
-        field_dictionaries.append({styled_name: values})
-    return field_dictionaries[2:]

@@ -8,6 +8,7 @@
 .content-block {
     font-size: 30px;
     background-color: #ffffff;
+    padding: 0 100px;
 }
 
 .nav-bar {
@@ -36,7 +37,7 @@ footer {
     border-left: 1px solid #D2D4D9;
 }
 
-/* ---------------------------------------------------------------- Home Page: */
+/* ---------------------------------------------- Home Page: */
 .grid-box {
     display: grid;
     grid-template-columns: auto auto;
@@ -58,7 +59,20 @@ footer {
     color: #a41515;
 }
 
-/* ---------------------------------------------------------------- Company Details: */
+/* ---------------------------------------------- Company Details: */
+.details-section {
+    padding: 0 10px;
+    background: #aaaaaa;
+}
+
+.company-label {
+    padding: 10px 50px;
+}
+
+.center-section {
+    border-radius: 100px;
+}
+
 .btn-box {
     display: grid;
     grid-template-columns: auto auto auto auto;
@@ -78,8 +92,37 @@ footer {
 
 .details {
     display: none;
+    padding: 20px;
 }
 
 .details.active {
     display: block;
+    background: #ffffff;
 }
+
+.financial-statement table{
+    font-size: 20px;
+    border-collapse: collapse;
+}
+
+.financial-statement table tr:first-child {
+    background: #dddddd;
+    font-weight: bold;
+}
+
+.financial-statement tr td,
+.financial-statement tr th {
+    border-bottom: 1px solid black;
+    padding: 5px;
+}
+
+.financial-statement td {
+    text-align: center;
+}
+
+.financial-statement th {
+    font-style: italic;
+    text-align: left;
+    padding: 0 10px;
+}
+

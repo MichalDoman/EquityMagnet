@@ -8,14 +8,12 @@
 
 {% block content %}
     <section class="details-section">
-
-        <div class="company-name">
+        <div class="company-label">
             <h2>{{ company.name }} ({{ company.symbol }})</h2>
             <p>{{ company.exchange.symbol }}</p>
         </div>
 
         <div class="center-section">
-
             <div class="btn-box">
                 <button class="tab-btn active" data-id="about">About</button>
                 <button class="tab-btn" data-id="income-statement">Income Statement</button>
@@ -24,9 +22,7 @@
             </div>
 
             <div class="detail-box">
-
                 <div class="details active" id="about">
-                    <h3>About</h3>
                     <p><b>Country:</b> {{ company.country }}</p>
                     <p><b>Sector:</b> {{ company.sector.name }}</p>
                     <p><b>Description:</b> {{ company.description }}</p>
@@ -34,8 +30,7 @@
                     <p><b>Official website:</b> {{ company.website }}</p>
                 </div>
 
-                <div class="details" id="income-statement">
-                    <h3>Income Statement</h3>
+                <div class="details financial-statement" id="income-statement">
                     <table>
                         {% for dict in income_statement_dicts %}
                             {% for field_name, values in dict.items %}
@@ -50,17 +45,36 @@
                     </table>
                 </div>
 
-                <div class="details" id="balance-sheet">
-                    <h3>Balance Sheet</h3>
+                <div class="details financial-statement" id="balance-sheet">
+                    <table>
+                        {% for dict in balance_sheet_dicts %}
+                            {% for field_name, values in dict.items %}
+                                <tr>
+                                    <th>{{ field_name }}</th>
+                                    {% for value in values %}
+                                        <td>{{ value }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </table>
                 </div>
 
-                <div class="details" id="cash-flow-statement">
-                    <h3>Cash Flow Statement</h3>
+                <div class="details financial-statement" id="cash-flow-statement">
+                    <table>
+                        {% for dict in cash_flow_statement_dicts %}
+                            {% for field_name, values in dict.items %}
+                                <tr>
+                                    <th>{{ field_name }}</th>
+                                    {% for value in values %}
+                                        <td>{{ value }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </table>
                 </div>
-
             </div>
-
         </div>
-
     </section>
 {% endblock %}
