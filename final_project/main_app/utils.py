@@ -17,14 +17,14 @@ def get_field_dictionaries(queryset):
             values.append(value)
         styled_name = field_name.capitalize().replace("_", " ")
 
-        styled_values = style_statements_values(values)
+        styled_values = style_numeric_data(values)
         if field_name == "year":    # Do not style year values
             styled_values = values
         field_dictionaries.append({styled_name: styled_values})
     return field_dictionaries
 
 
-def style_statements_values(values):
+def style_numeric_data(values):
     """Change style of big integers and percentage data.
 
     :param values: A list of values to be converted.
