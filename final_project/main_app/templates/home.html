@@ -4,15 +4,17 @@
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
+    {% load style_numeric_data %}
+
     <article class="grid-box">
-        {% for tuple in company_tuples %}
+        {% for company in companies %}
             <div class="grid-item">
                 <h3>
-                    <a href="{% url "company_details" tuple.0.pk %}">{{ tuple.0.symbol }} </a>
-                    ({{ tuple.0.country }})</h3>
-                <p>{{ tuple.0.name }}</p>
-                <p><i>{{ tuple.0.exchange.symbol.upper }}</i></p>
-                <p>Market Cap: {{ tuple.1 }}</p>
+                    <a href="{% url "company_details" company.pk %}">{{ company.symbol }} </a>
+                    ({{ company.country }})</h3>
+                <p>{{ company.name }}</p>
+                <p><i>{{ company.exchange.symbol.upper }}</i></p>
+                <p>Market Cap: {{ company.market_cap|style_numeric_data }}</p>
                 <div class="home-price-box">
                     <p>Price</p>
                     <p>Change</p>

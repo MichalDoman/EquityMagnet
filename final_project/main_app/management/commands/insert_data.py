@@ -28,7 +28,7 @@ def insert_and_get_exchange(exchange_symbol):
     return exchange
 
 
-def insert_and_get_sector(sector_name, exchange):
+def insert_and_get_sector(sector_name, exchange):  # Użyj get-or-create()
     """Insert information about sector if it does not exist, and return Sector object"""
     if Sector.objects.filter(name=sector_name).exists():
         sector = Sector.objects.get(name=sector_name)
@@ -67,6 +67,19 @@ def insert_company_data(ticker):
             market_cap=data['mktCap'],
             website=data['website'],
         )
+
+
+def insert_company_price_history_data(ticker):
+    start = "2018-01-01"
+    end = "2023-05-05"
+
+    url = f"https://financialmodelingprep.com/api/v3/historical-price-full/{ticker}?from={start}&to={end}&apikey={API_KEY}"
+    response = requests.get(url)
+    data = response.json()
+    company = Company.objects.get(symbol=ticker)
+    current_price = data["historical"][0]["close"]
+
+    Price.objects.create(company=company, current_value=current_price, history=data)
 
 
 def insert_income_statement_data(ticker):
@@ -254,5 +267,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         print("Please wait, the data is loading...")
-        companies_inserted = insert_all_data()
-        print(f"{companies_inserted} companies were successfully inserted!")
+        # companies_inserted = insert_all_data()
+        # print(f"{companies_inserted} companies were successfully inserted!")
+        insert_company_price_history_data("AMZN")

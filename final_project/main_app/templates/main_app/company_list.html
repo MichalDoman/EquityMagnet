@@ -4,6 +4,7 @@
 {% block title %}Company List{% endblock %}
 
 {% block content %}
+    {% load style_numeric_data %}
     <table>
         <tr>
             <th>Name:</th>
@@ -22,7 +23,7 @@
                 <td>{{ company.exchange.symbol }}</td>
                 <td>{{ company.country }}</td>
                 <td>{{ company.sector.name }}</td>
-                <td>{{ company.market_cap }}</td>
+                <td>{{ company.market_cap|style_numeric_data }}</td>
             </tr>
         {% endfor %}
     </table>

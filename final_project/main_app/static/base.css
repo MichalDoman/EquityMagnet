@@ -69,13 +69,13 @@ footer {
     padding: 10px 50px;
 }
 
-.center-section {
-    border-radius: 100px;
+.section-center {
+    border-radius: 10px;
 }
 
 .btn-box {
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto;
 }
 
 .tab-btn {

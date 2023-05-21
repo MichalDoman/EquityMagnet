@@ -25,7 +25,7 @@ class Company(models.Model):
 class Price(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     current_value = models.FloatField()
-    history = models.JSONField()  # TODO
+    history = models.JSONField()
 
 
 class FinancialStatement(models.Model):

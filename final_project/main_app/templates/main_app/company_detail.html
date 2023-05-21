@@ -1,21 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block javascript %}
     <script src="{% static "js/company_details.js" %}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
 {% endblock %}
 
 {% block title %}{{ company.symbol }}{% endblock %}
 
 {% block content %}
+    {% load style_numeric_data %}
+
     <section class="details-section">
         <div class="company-label">
             <h2>{{ company.name }} ({{ company.symbol }})</h2>
             <p>{{ company.exchange.symbol }}</p>
         </div>
 
-        <div class="center-section">
+        <div class="section-center">
             <div class="btn-box">
                 <button class="tab-btn active" data-id="about">About</button>
+                <button class="tab-btn" data-id="price-chart">Price Chart</button>
                 <button class="tab-btn" data-id="income-statement">Income Statement</button>
                 <button class="tab-btn" data-id="balance-sheet">Balance Sheet</button>
                 <button class="tab-btn" data-id="cash-flow-statement">Cash Flow Statement</button>
@@ -26,8 +31,14 @@
                     <p><b>Country:</b> {{ company.country }}</p>
                     <p><b>Sector:</b> {{ company.sector.name }}</p>
                     <p><b>Description:</b> {{ company.description }}</p>
-                    <p><b>Market cap:</b> {{ market_cap.0 }}</p>
+                    <p><b>Market cap:</b> {{ company.market_cap|style_numeric_data }}</p>
                     <p><b>Official website:</b> {{ company.website }}</p>
+                </div>
+
+                <div class="details" id="price-chart"
+                     data-chart-data="{{ chart_data }}"
+                     data-chart-labels="{{ chart_labels }}">
+                    <canvas id="price-chart-canvas"></canvas>
                 </div>
 
                 <div class="details financial-statement" id="income-statement">
