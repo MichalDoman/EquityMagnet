@@ -12,29 +12,46 @@
 }
 
 .nav-bar {
-    font-size: 25px;
-    background-color: #6f94c6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 20px;
+    border-bottom: 3px solid #4ac1f7;
+    background-color: #333333;
 }
 
-footer {
-    background-color: #6f94c6;
-    padding: 50px;
-}
-
-.footer-box {
-    background-color: #81d4fa;
-    padding: 50px;
+.logo {
+    color: #81d4fa;
+    font-size: 40px;
 }
 
 .nav-links {
     list-style: none;
+    font-size: 25px;
 }
 
 .nav-links li {
     display: inline-block;
     padding: 0 20px;
     border-left: 1px solid #D2D4D9;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    text-transform: capitalize;
+    color: #fff;
+}
+
+footer {
+    background-color: #333333;
+    padding: 50px;
+}
+
+.footer-box {
+    background-color: #81d4fa;
+    padding: 50px;
+    border: 3px solid #4ac1f7;
+    border-radius: 15px;
 }
 
 /* ---------------------------------------------- Home Page: */
@@ -53,24 +70,61 @@ footer {
     border-radius: 5px;
 }
 
+.company-link {
+    text-decoration: underline;
+    color: #333333;
+    font-style: italic;
+}
+
 .home-price-box {
     display: grid;
     grid-template-columns: auto auto;
     color: #a41515;
 }
 
+/* ---------------------------------------------- Company List: */
+.company-list {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 30px;
+
+}
+
+.company-list tr:hover {
+    background: #81d4fa;
+}
+
+.company-list tr th,
+.company-list tr td {
+    text-decoration: none;
+    font-size: 20px;
+    padding: 5px;
+    text-align: center;
+    border-bottom: 1px solid #333333;
+}
+
+.company-list tr th {
+    font-size: 22px;
+}
+
+.company-list a {
+    text-decoration: none;
+    color: #333333;
+}
+
+.pagination {
+    text-align: center;
+    padding: 25px 0;
+}
+
 /* ---------------------------------------------- Company Details: */
 .details-section {
     padding: 0 10px;
-    background: #aaaaaa;
+    background: #dddddd;
 }
 
 .company-label {
     padding: 10px 50px;
-}
-
-.section-center {
-    border-radius: 10px;
 }
 
 .btn-box {
@@ -84,6 +138,7 @@ footer {
     text-transform: capitalize;
     font-size: 20px;
     display: block;
+    background: #dddddd;
 }
 
 .tab-btn.active {
@@ -100,20 +155,25 @@ footer {
     background: #ffffff;
 }
 
+.value-disclaimer {
+    font-size: 18px;
+    text-align: right;
+    padding: 5px;
+}
+
 .chart-container {
-    width: 2000px;
     max-width: 1000px;
     overflow-x: scroll;
 }
 
 .chart-body {
-    height: 500px;
+    height: 400px;
 }
 
-
-.financial-statement table{
+.financial-statement table {
     font-size: 20px;
     border-collapse: collapse;
+    width: 100%;
 }
 
 .financial-statement table tr:first-child {
@@ -136,4 +196,3 @@ footer {
     text-align: left;
     padding: 0 10px;
 }
-

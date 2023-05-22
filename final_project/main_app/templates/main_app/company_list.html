@@ -5,14 +5,14 @@
 
 {% block content %}
     {% load style_numeric_data %}
-    <table>
+    <table class="company-list">
         <tr>
-            <th>Name:</th>
-            <th>Symbol:</th>
-            <th>Exchange:</th>
-            <th>Country:</th>
-            <th>Sector:</th>
-            <th>Market Cap:</th>
+            <th>Name</th>
+            <th>Symbol</th>
+            <th>Exchange</th>
+            <th>Country</th>
+            <th>Sector</th>
+            <th>Market Cap ($ millions)</th>
         </tr>
         {% for company in page_obj %}
             <tr>

@@ -17,11 +17,14 @@
                     <li><a href="{% url "home" %}">home</a></li>
                     <li><a href="{% url "companies" %}">search</a></li>
                     <li><a href="">watchlist</a></li>
-                    <li><a href="">your evaluations</a></li>
-                    <li><a href="">register</a></li>
-                    <li><a href="/accounts/login">login</a></li>
-                    <li><a href="">logout</a></li>
-                    <li><a href="">profile</a></li>
+                    <li><a href="">evaluations</a></li>
+                    {% if user.is_authenticated  %}
+                        <li><a href="">profile</a></li>
+                        <li><a href="{% url 'logout' %}?next={{ request.path }}">logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}?next={{ request.path }}">login</a></li>
+                        <li><a href="">register</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </header>

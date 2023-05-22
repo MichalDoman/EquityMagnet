@@ -21,19 +21,14 @@ def get_tickers(csv_file_path):
 
 def insert_and_get_exchange(exchange_symbol):
     """Insert information about exchange if it does not exist, and return Exchange object"""
-    if Exchange.objects.filter(symbol=exchange_symbol).exists():
-        exchange = Exchange.objects.get(symbol=exchange_symbol)
-    else:
-        exchange = Exchange.objects.create(symbol=exchange_symbol)
+    exchange, _ = Exchange.objects.get_or_create(symbol=exchange_symbol)
     return exchange
 
 
-def insert_and_get_sector(sector_name, exchange):  # Użyj get-or-create()
+def insert_and_get_sector(sector_name, exchange):
     """Insert information about sector if it does not exist, and return Sector object"""
-    if Sector.objects.filter(name=sector_name).exists():
-        sector = Sector.objects.get(name=sector_name)
-    else:
-        sector = Sector.objects.create(name=sector_name)
+    sector, created = Sector.objects.get_or_create(name=sector_name)
+    if created:
         sector.exchanges.add(exchange)
         sector.save()
     return sector
@@ -241,8 +236,9 @@ def insert_all_data():
     path = os.path.join(BASE_DIR, 'main_app', 'management', 'commands_data', f'data.csv')
     try:
         # tickers = get_tickers(path)
-        for ticker in ['AMZN']:
+        for ticker in ['MSFT']:
             insert_company_data(ticker)
+            insert_company_price_history_data(ticker)
             insert_income_statement_data(ticker)
             insert_balance_sheet_data(ticker)
             insert_cash_flow_statement_data(ticker)
@@ -267,6 +263,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         print("Please wait, the data is loading...")
-        # companies_inserted = insert_all_data()
-        # print(f"{companies_inserted} companies were successfully inserted!")
-        insert_company_price_history_data("AMZN")
+        companies_inserted = insert_all_data()
+        print(f"{companies_inserted} companies were successfully inserted!")
+

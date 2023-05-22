@@ -4,5 +4,16 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    {{ form }}
+    <form method="POST">
+        {% csrf_token %}
+        <label>
+            Username:
+            <input name="username">
+        </label>
+        <label>
+            Password:
+            <input name="password">
+        </label>
+        <button type="submit">Login</button>
+    </form>
 {% endblock %}

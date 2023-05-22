@@ -37,16 +37,16 @@
 
                 <div class="details" id="price-chart" data-chart-data="{{ chart_data }}"
                      data-chart-labels="{{ chart_labels }}">
-                    <div class="chart-wrapper">
-                        <div class="chart-container">
-                            <div class="chart-body">
-                                <canvas id="price-chart-canvas"></canvas>
-                            </div>
+                    <h4>{{ company.symbol }} - historical price ($)</h4>
+                    <div class="chart-container">
+                        <div class="chart-body">
+                            <canvas id="price-chart-canvas"></canvas>
                         </div>
                     </div>
                 </div>
 
                 <div class="details financial-statement" id="income-statement">
+                    <p class="value-disclaimer">(all values in millions USD)</p>
                     <table>
                         {% for dict in income_statement_dicts %}
                             {% for field_name, values in dict.items %}
@@ -62,6 +62,7 @@
                 </div>
 
                 <div class="details financial-statement" id="balance-sheet">
+                    <p class="value-disclaimer">(all values in millions USD)</p>
                     <table>
                         {% for dict in balance_sheet_dicts %}
                             {% for field_name, values in dict.items %}
@@ -77,6 +78,7 @@
                 </div>
 
                 <div class="details financial-statement" id="cash-flow-statement">
+                    <p class="value-disclaimer">(all values in millions USD)</p>
                     <table>
                         {% for dict in cash_flow_statement_dicts %}
                             {% for field_name, values in dict.items %}

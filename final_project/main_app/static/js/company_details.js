@@ -28,10 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
             labels: chartLabels,
             datasets: [{
                 data: chartData,
-                backgroundColor: 'rgb(75, 192, 192)',
                 borderColor: 'rgb(75, 192, 192)',
                 borderWidth: 4,
-                tension: 0.3,
+                tension: 0.1,
             }]
         },
         options: {
@@ -45,14 +44,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 legend: {
                     display: false
                 }
-            }
+            },
         }
     });
     const chartBody = document.querySelector(".chart-body")
     const labelsNumber = priceChart.data.labels.length
-    if(labelsNumber > 10){
-        const newWidth = 700 + ((labelsNumber - 10) * 5)
-        chartBody.style.width = `${newWidth}px`;
-    }
+    chartBody.style.width = `${labelsNumber * 5}px`;
 });
 

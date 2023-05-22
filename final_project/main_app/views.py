@@ -18,7 +18,7 @@ class HomeView(View):
 
     def get(self, request):
         all_companies = Company.objects.all()
-        sample_companies = sample(list(all_companies), 1)
+        sample_companies = sample(list(all_companies), 4)
 
         return render(request, "home.html", context={
             "companies": sample_companies
@@ -57,3 +57,11 @@ class CompanyDetailView(DetailView):
         context["chart_labels"] = json.dumps(dates)
         context["chart_data"] = json.dumps(historical_prices)
         return context
+
+
+class Favorites(View, LoginRequiredMixin):
+    pass
+
+
+class Evaluations(View, LoginRequiredMixin):
+    pass

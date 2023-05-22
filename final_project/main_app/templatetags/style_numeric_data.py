@@ -36,8 +36,6 @@ def style_numeric_data(value):
         value = spaced_value[::-1].strip(",")
 
         if is_negative:
-            value = "-" + value + " M"
-        else:
-            value += " M"
+            value = "-" + value
 
     return value
