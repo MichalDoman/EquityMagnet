@@ -1,12 +1,12 @@
-from random import sample
 import json
+from random import sample
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement
-from main_app.utils import get_field_dictionaries
+from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price
+from main_app.utils import get_field_dictionaries, extract_historical_prices
 
 
 class HomeView(View):
@@ -49,6 +49,11 @@ class CompanyDetailView(DetailView):
         context["balance_sheet_dicts"] = get_field_dictionaries(balance_sheets)
         context["cash_flow_statement_dicts"] = get_field_dictionaries(cash_flow_statements)
 
-        context["chart_labels"] = json.dumps([50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
-        context["chart_data"] = json.dumps([7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15])
+        # Add company's historical data to the context:
+        price = Price.objects.get(company=self.kwargs["pk"])
+        history = price.history['historical']
+        dates, historical_prices = extract_historical_prices(history)
+
+        context["chart_labels"] = json.dumps(dates)
+        context["chart_data"] = json.dumps(historical_prices)
         return context

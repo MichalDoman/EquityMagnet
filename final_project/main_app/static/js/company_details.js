@@ -22,20 +22,37 @@ const chartData = JSON.parse(document.querySelector("#price-chart").getAttribute
 const chartLabels = JSON.parse(document.querySelector("#price-chart").getAttribute("data-chart-labels"));
 
 document.addEventListener("DOMContentLoaded", function () {
-    new Chart(context, {
+    const priceChart = new Chart(context, {
         type: "line",
         data: {
             labels: chartLabels,
             datasets: [{
-                fill: false,
-                label: 'Historical Price',
                 data: chartData,
-                backgroundColor: 'red',
-                borderColor: 'black',
-                borderWidth: 1
+                backgroundColor: 'rgb(75, 192, 192)',
+                borderColor: 'rgb(75, 192, 192)',
+                borderWidth: 4,
+                tension: 0.3,
             }]
         },
         options: {
-}
+            maintainAspectRatio: false,
+            elements: {
+                point: {
+                    radius: 0
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
     });
+    const chartBody = document.querySelector(".chart-body")
+    const labelsNumber = priceChart.data.labels.length
+    if(labelsNumber > 10){
+        const newWidth = 700 + ((labelsNumber - 10) * 5)
+        chartBody.style.width = `${newWidth}px`;
+    }
 });
+

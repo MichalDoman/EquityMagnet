@@ -35,10 +35,15 @@
                     <p><b>Official website:</b> {{ company.website }}</p>
                 </div>
 
-                <div class="details" id="price-chart"
-                     data-chart-data="{{ chart_data }}"
+                <div class="details" id="price-chart" data-chart-data="{{ chart_data }}"
                      data-chart-labels="{{ chart_labels }}">
-                    <canvas id="price-chart-canvas"></canvas>
+                    <div class="chart-wrapper">
+                        <div class="chart-container">
+                            <div class="chart-body">
+                                <canvas id="price-chart-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="details financial-statement" id="income-statement">

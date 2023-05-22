@@ -33,42 +33,16 @@ def get_field_dictionaries(queryset):
         field_dictionaries.append({styled_name: styled_values})
     return field_dictionaries
 
-# def style_numeric_data(values):
-#     """Change style of big integers and percentage data.
-#
-#     :param values: A list of values to be converted.
-#     Big positive or negative integers are displayed in millions and spaced with comas.
-#     Float values are changed to percentages with 2 decimal places.
-#     :return: A list of styled values.
-#     """
-#
-#     styled_values = []
-#     for value in values:
-#         if value == 0:
-#             pass
-#         elif isinstance(value, float):
-#             value = str(round((value * 100), 2)) + "%"
-#         else:
-#             is_negative = False
-#             if value < 0:
-#                 is_negative = True
-#
-#             value = str(int(value / 1_000_000))
-#             if is_negative:
-#                 value = value.strip("-")
-#             spaced_value = ""
-#             temp_value = ""
-#             for digit in value[::-1]:
-#                 temp_value += digit
-#                 if len(temp_value) % 3 == 0:
-#                     spaced_value += temp_value + ","
-#                     temp_value = ""
-#             spaced_value += temp_value
-#             value = spaced_value[::-1].strip(",")
-#
-#             if is_negative:
-#                 value = "-" + value + " M"
-#             else:
-#                 value += " M"
-#         styled_values.append(value)
-#     return styled_values
+
+def extract_historical_prices(historical_price_list):
+    """Get dates and historical prices from JSON.field of a Price instance,
+    and return them in separate lists."""
+
+    dates = []
+    close_prices = []
+    for daily_price_dict in historical_price_list[::-1]:
+        dates.append(daily_price_dict["date"])
+        close_prices.append(daily_price_dict["close"])
+
+    return dates, close_prices
+
