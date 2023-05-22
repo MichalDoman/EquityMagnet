@@ -1,52 +1,61 @@
 <!DOCTYPE html>
 
 <html lang="en">
-    {% load static %}
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="{% static "base.css" %}">
-        {% block javascript %}{% endblock %}
-        <title>{% block title %}{% endblock %} | FinalProject</title>
-    </head>
-    <body>
-        <header>
-            <nav class="nav-bar">
-                <h1 class="logo"><u>FINAL PROJECT</u></h1>
-                <!-- guzik do zmiany koloru na ciemny -->
-                <ul class="nav-links">
-                    <li><a href="{% url "home" %}">home</a></li>
-                    <li><a href="{% url "companies" %}">search</a></li>
-                    <li><a href="">watchlist</a></li>
-                    <li><a href="">evaluations</a></li>
-                    {% if user.is_authenticated  %}
-                        <li><a href="">profile</a></li>
-                        <li><a href="{% url 'logout' %}?next={{ request.path }}">logout</a></li>
-                    {% else %}
-                        <li><a href="{% url 'login' %}?next={{ request.path }}">login</a></li>
-                        <li><a href="">register</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </header>
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static "base.css" %}">
+    {% block javascript %}{% endblock %}
+    <title>{% block title %}{% endblock %} | FinalProject</title>
+</head>
+<body>
+<header>
+    <nav class="nav-bar">
+        <h1 class="logo"><u>FINAL PROJECT</u></h1>
+        <ul class="nav-links">
+            <li><a href="{% url "home" %}">home</a></li>
+            <li><a href="{% url "companies" %}">search</a></li>
+            <li><a href="{% url "favorites" %}">watchlist</a></li>
+            <li><a href="">evaluations</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="">profile</a></li>
+                <li><a href="{% url 'logout' %}?next={{ request.path }}">logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}?next={{ request.path }}">login</a></li>
+                <li><a href="">register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
 
-        <div class="content-block">
-            {% block content %}
-            {% endblock %}
-        </div>
 
-        <footer>
-            <div class="footer-box">
-                <label><b>About author:</b><br></label>
-                <label>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-                    Cuem sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
-                    ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo,
-                    fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae,
-                    justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper
-                    nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
-                    Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.
-                </label>
-            </div>
-        </footer>
-    </body>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+<div class="content-block">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<footer>
+    <div class="footer-box">
+        <label><b>About author:</b><br></label>
+        <label>
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
+            Cuem sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+            ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo,
+            fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae,
+            justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper
+            nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
+            Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.
+        </label>
+    </div>
+</footer>
+</body>
 </html>

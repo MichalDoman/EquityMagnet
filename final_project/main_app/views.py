@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LogoutView
 
 from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price
 from main_app.utils import get_field_dictionaries, extract_historical_prices
@@ -59,9 +60,14 @@ class CompanyDetailView(DetailView):
         return context
 
 
-class Favorites(View, LoginRequiredMixin):
-    pass
+class FavoriteCompanies(View, LoginRequiredMixin):
+    def get(self, request):
+        return render(request, "favorite_companies.html")
 
 
 class Evaluations(View, LoginRequiredMixin):
+    pass
+
+
+class CustomLogoutView(LogoutView):
     pass

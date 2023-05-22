@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Exchange(models.Model):
@@ -141,3 +142,19 @@ class CashFlowStatement(FinancialStatement):
     operating_cash_flow = models.BigIntegerField()
     capital_expenditure = models.BigIntegerField()
     free_cash_flow = models.BigIntegerField()
+
+
+class FavoriteCompany(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("user", "company")
+
+
+class Evaluation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("user", "company")

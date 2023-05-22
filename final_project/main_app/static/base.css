@@ -54,6 +54,18 @@ footer {
     border-radius: 15px;
 }
 
+/* ---------------------------------------------- Messages: */
+/*.messages {*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: -5px;*/
+/*    border: 4px solid #a41515;*/
+/*    background: #006b1b;*/
+/*    border-radius: 10px;*/
+/*    width: 490px;*/
+/*    height: 90px;*/
+/*}*/
+
 /* ---------------------------------------------- Home Page: */
 .grid-box {
     display: grid;
@@ -91,7 +103,7 @@ footer {
 }
 
 .company-list tr:hover {
-    background: #81d4fa;
+    background: #cccccc;
 }
 
 .company-list tr th,
