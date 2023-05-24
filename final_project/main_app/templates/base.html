@@ -4,6 +4,7 @@
 {% load static %}
 <head>
     <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{% static "base.css" %}">
     {% block javascript %}{% endblock %}
     <title>{% block title %}{% endblock %} | FinalProject</title>
@@ -15,7 +16,7 @@
         <ul class="nav-links">
             <li><a href="{% url "home" %}">home</a></li>
             <li><a href="{% url "companies" %}">search</a></li>
-            <li><a href="{% url "favorites" %}">watchlist</a></li>
+            <li><a href="">watchlist</a></li>
             <li><a href="">evaluations</a></li>
             {% if user.is_authenticated %}
                 <li><a href="">profile</a></li>

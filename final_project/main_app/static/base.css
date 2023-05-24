@@ -124,6 +124,12 @@ footer {
     color: #333333;
 }
 
+.favorite-icon {
+    color: red;
+    font-size: 28px;
+    cursor: pointer;
+}
+
 .pagination {
     text-align: center;
     padding: 25px 0;

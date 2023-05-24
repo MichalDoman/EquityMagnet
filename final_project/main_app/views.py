@@ -1,12 +1,15 @@
 import json
 from random import sample
+
 from django.shortcuts import render
+from django.http import JsonResponse
 from django.views import View
 from django.views.generic import ListView, DetailView
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView
 
-from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price
+from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price, FavoriteCompany
 from main_app.utils import get_field_dictionaries, extract_historical_prices
 
 
@@ -29,7 +32,7 @@ class HomeView(View):
 class CompanyListView(ListView, LoginRequiredMixin):
     """A generic list view for Company objects"""
     model = Company
-    paginate_by = 5
+    paginate_by = 10
 
 
 class CompanyDetailView(DetailView):
@@ -60,13 +63,25 @@ class CompanyDetailView(DetailView):
         return context
 
 
-class FavoriteCompanies(View, LoginRequiredMixin):
-    def get(self, request):
-        return render(request, "favorite_companies.html")
+class ManageFavoritesView(View, LoginRequiredMixin):
+    def post(self, request):
+        response = {"is_authenticated": request.user.is_authenticated}
+        if response['is_authenticated']:
+            company_id = request.POST["company_id"][0]
+            company = Company.objects.get(pk=company_id)
 
+            is_favorite = FavoriteCompany.objects.filter(user=request.user, company=company).exists()
+            if is_favorite:
+                FavoriteCompany.objects.get(user=request.user, company=company).delete()
+                messages.add_message(request, messages.SUCCESS, f"{company.symbol} was removed from favorites.")
+            else:
+                FavoriteCompany.objects.create(user=request.user, company=company)
+                messages.add_message(request, messages.SUCCESS, f"{company.symbol} was added to favorites.")
 
-class Evaluations(View, LoginRequiredMixin):
-    pass
+            response["is_favorite"] = is_favorite
+            return JsonResponse(response)
+
+        return JsonResponse(response)
 
 
 class CustomLogoutView(LogoutView):

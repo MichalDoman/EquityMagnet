@@ -1,9 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block javascript %}
+    <script src="{% static "js/favorites.js" %}" defer></script>
+{% endblock %}
+
 {% block title %}Company List{% endblock %}
 
 {% block content %}
+    <form id="csrf-token">
+        {% csrf_token %}
+    </form>
+
     {% load style_numeric_data %}
     <table class="company-list">
         <tr>
@@ -13,6 +21,7 @@
             <th>Country</th>
             <th>Sector</th>
             <th>Market Cap ($ millions)</th>
+            <th></th>
         </tr>
         {% for company in page_obj %}
             <tr>
@@ -24,6 +33,8 @@
                 <td>{{ company.country }}</td>
                 <td>{{ company.sector.name }}</td>
                 <td>{{ company.market_cap|style_numeric_data }}</td>
+                <td><i class="material-icons favorite-icon" data-company-id="{{ company.pk }}"
+                >favorite_border</i></td>
             </tr>
         {% endfor %}
     </table>
