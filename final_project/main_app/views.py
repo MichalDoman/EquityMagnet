@@ -29,7 +29,7 @@ class HomeView(View):
         })
 
 
-class CompanyListView(ListView, LoginRequiredMixin):
+class CompanyListView(ListView):
     """A generic list view for Company objects"""
     model = Company
     paginate_by = 10
@@ -73,7 +73,7 @@ class ManageFavoritesView(View, LoginRequiredMixin):
             is_favorite = FavoriteCompany.objects.filter(user=request.user, company=company).exists()
             if is_favorite:
                 FavoriteCompany.objects.get(user=request.user, company=company).delete()
-                messages.add_message(request, messages.SUCCESS, f"{company.symbol} was removed from favorites.")
+                messages.info(request, f"{company.symbol} was removed from favorites.")
             else:
                 FavoriteCompany.objects.create(user=request.user, company=company)
                 messages.add_message(request, messages.SUCCESS, f"{company.symbol} was added to favorites.")

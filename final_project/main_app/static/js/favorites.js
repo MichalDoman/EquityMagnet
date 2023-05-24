@@ -15,8 +15,17 @@ favoriteIcons.forEach(favoriteIcon =>
 
         request.onload = function () {
             if (request.status === 200){
-                favoriteIcon.textContent = newIcon;
-                console.log(request.status)
+                const response = JSON.parse(request.responseText);
+
+                if (response["is_authenticated"]){
+                    if (response["is_favorite"]){
+                        favoriteIcon.textContent = "favorite_border";
+                    } else {
+                        favoriteIcon.textContent = "favorite";
+                    }
+                } else {
+
+                }
             } else {
                 console.log(request.status)
             }
