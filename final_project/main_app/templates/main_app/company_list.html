@@ -24,12 +24,84 @@
     {% load style_numeric_data %}
     <table class="company-list">
         <tr>
-            <th>Name</th>
-            <th>Symbol</th>
-            <th>Exchange</th>
-            <th>Country</th>
-            <th>Sector</th>
-            <th>Market Cap ($ millions)</th>
+            <th>
+                <div class="table-head-box">
+                    <span>Name</span>
+                    <div class="sort-arrows-box">
+                        <a href="/companies/?sort_by=name">
+                            <i class="material-icons sort-icon">arrow_drop_up</i>
+                        </a>
+                        <a href="/companies/?sort_by=-name">
+                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                        </a>
+                    </div>
+                </div>
+            </th>
+            <th>
+                <div class="table-head-box">
+                    <span>Symbol</span>
+                    <div class="sort-arrows-box">
+                        <a href="/companies/?sort_by=symbol">
+                            <i class="material-icons sort-icon">arrow_drop_up</i>
+                        </a>
+                        <a href="/companies/?sort_by=-symbol">
+                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                        </a>
+                    </div>
+                </div>
+            </th>
+            <th>
+                <div class="table-head-box">
+                    <span>Exchange</span>
+                    <div class="sort-arrows-box">
+                        <a href="/companies/?sort_by=exchange">
+                            <i class="material-icons sort-icon">arrow_drop_up</i>
+                        </a>
+                        <a href="/companies/?sort_by=-exchange">
+                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                        </a>
+                    </div>
+                </div>
+            </th>
+            <th>
+                <div class="table-head-box">
+                    <span>Country</span>
+                    <div class="sort-arrows-box">
+                        <a href="/companies/?sort_by=country">
+                            <i class="material-icons sort-icon">arrow_drop_up</i>
+                        </a>
+                        <a href="/companies/?sort_by=-country">
+                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                        </a>
+                    </div>
+                </div>
+            </th>
+            <th>
+                <div class="table-head-box">
+                    <span>Sector</span>
+                    <div class="sort-arrows-box">
+                        <a href="/companies/?sort_by=sector">
+                            <i class="material-icons sort-icon">arrow_drop_up</i>
+                        </a>
+                        <a href="/companies/?sort_by=-sector">
+                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                        </a>
+                    </div>
+                </div>
+            </th>
+            <th>
+                <div class="table-head-box">
+                    <span>Market cap (millions USD)</span>
+                    <div class="sort-arrows-box">
+                        <a href="/companies/?sort_by=market_cap">
+                            <i class="material-icons sort-icon">arrow_drop_up</i>
+                        </a>
+                        <a href="/companies/?sort_by=-market_cap">
+                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                        </a>
+                    </div>
+                </div>
+            </th>
             <th></th>
         </tr>
         {% for company in page_obj %}
@@ -48,7 +120,7 @@
         {% empty %}
             <tr>
                 <td class="no-search-results-info" colspan="7">
-                    There are no companies with those determinants
+                    There are no companies matching your filters!
                 </td>
             </tr>
         {% endfor %}

@@ -39,6 +39,9 @@ class CompanyListView(ListView):
         queryset = super().get_queryset()
         form = self.form_class(self.request.GET)
         if form.is_valid():
+            sort_by = self.request.GET.get('sort_by', 'pk')
+            queryset = queryset.order_by(sort_by)
+
             phrase = form.cleaned_data['phrase']
             exchanges = [exchange for exchange in form.cleaned_data['exchanges']]
             sectors = [sector for sector in form.cleaned_data['sectors']]
