@@ -12,6 +12,15 @@
         {% csrf_token %}
     </form>
 
+    <form class="search-form">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">
+            <i class="material-icons">search</i>
+        </button>
+    </form>
+
+
     {% load style_numeric_data %}
     <table class="company-list">
         <tr>

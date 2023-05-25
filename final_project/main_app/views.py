@@ -11,6 +11,7 @@ from django.contrib.auth.views import LogoutView
 
 from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price, FavoriteCompany
 from main_app.utils import get_field_dictionaries, extract_historical_prices
+from main_app.forms import SearchFiltersForm
 
 
 class HomeView(View):
@@ -30,9 +31,48 @@ class HomeView(View):
 
 
 class CompanyListView(ListView):
-    """A generic list view for Company objects"""
     model = Company
     paginate_by = 10
+    form_class = SearchFiltersForm
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        form = self.form_class(self.request.GET)
+        if form.is_valid():
+            phrase = form.cleaned_data['phrase']
+            exchanges = [exchange for exchange in form.cleaned_data['exchanges']]
+            sectors = [sector for sector in form.cleaned_data['sectors']]
+            countries = [sector for sector in form.cleaned_data['countries']]
+            market_cap = form.cleaned_data['market_cap']
+
+            if phrase:
+                queryset = queryset.filter(name__icontains=phrase) | queryset.filter(symbol__icontains=phrase)
+
+            if len(exchanges) == 1:
+                queryset = queryset.filter(exchange=exchanges[0])
+            elif len(exchanges) > 1:
+                temp_queryset = queryset.filter(exchange=exchanges[0])
+                for exchange in exchanges[1:]:
+                    temp_queryset = temp_queryset | queryset.filter(exchange=exchange)
+                queryset = temp_queryset
+
+            if sectors:
+                for sector in sectors:
+                    queryset = queryset.filter(sector=sector)
+
+            if countries:
+                for country in countries:
+                    queryset = queryset.filter(country__icontains=country)
+
+            if market_cap:
+                queryset = queryset.filter(market_cap__gt=market_cap)
+
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class(self.request.GET)
+        return context
 
 
 class CompanyDetailView(DetailView):
