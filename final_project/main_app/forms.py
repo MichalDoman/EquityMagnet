@@ -1,7 +1,8 @@
 from django import forms
 from django.core.validators import MinValueValidator
 
-from main_app.models import Exchange, Sector, Company
+from main_app.models import Exchange, Sector
+from main_app.utils import get_all_countries
 
 
 class SearchFiltersForm(forms.Form):
@@ -27,11 +28,7 @@ class SearchFiltersForm(forms.Form):
 
     @staticmethod
     def get_country_choices():
-        country_set = set()
-        for company in Company.objects.all():
-            country_set.add(company.country)
-
         choices = []
-        for num, country in enumerate(list(country_set)):
+        for num, country in enumerate(get_all_countries()):
             choices.append((num, country))
         return choices

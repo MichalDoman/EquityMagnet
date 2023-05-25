@@ -1,3 +1,4 @@
+from main_app.models import Company
 from main_app.templatetags.style_numeric_data import style_numeric_data
 
 
@@ -46,3 +47,9 @@ def extract_historical_prices(historical_price_list):
 
     return dates, close_prices
 
+
+def get_all_countries():
+    country_set = set()
+    for company in Company.objects.all():
+        country_set.add(company.country)
+    return list(country_set)

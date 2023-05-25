@@ -45,6 +45,12 @@
                 <td><i class="material-icons favorite-icon" data-company-id="{{ company.pk }}"
                 >favorite_border</i></td>
             </tr>
+        {% empty %}
+            <tr>
+                <td class="no-search-results-info" colspan="7">
+                    There are no companies with those determinants
+                </td>
+            </tr>
         {% endfor %}
     </table>
 

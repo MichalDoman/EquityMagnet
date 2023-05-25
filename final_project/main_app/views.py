@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView
 
 from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price, FavoriteCompany
-from main_app.utils import get_field_dictionaries, extract_historical_prices
+from main_app.utils import get_field_dictionaries, extract_historical_prices, get_all_countries
 from main_app.forms import SearchFiltersForm
 
 
@@ -42,30 +42,35 @@ class CompanyListView(ListView):
             phrase = form.cleaned_data['phrase']
             exchanges = [exchange for exchange in form.cleaned_data['exchanges']]
             sectors = [sector for sector in form.cleaned_data['sectors']]
-            countries = [sector for sector in form.cleaned_data['countries']]
+
+            country_list = get_all_countries()
+            country_ids = [country for country in form.cleaned_data['countries']]
+
             market_cap = form.cleaned_data['market_cap']
 
             if phrase:
                 queryset = queryset.filter(name__icontains=phrase) | queryset.filter(symbol__icontains=phrase)
 
-            if len(exchanges) == 1:
-                queryset = queryset.filter(exchange=exchanges[0])
-            elif len(exchanges) > 1:
+            if exchanges:
                 temp_queryset = queryset.filter(exchange=exchanges[0])
                 for exchange in exchanges[1:]:
                     temp_queryset = temp_queryset | queryset.filter(exchange=exchange)
                 queryset = temp_queryset
 
             if sectors:
-                for sector in sectors:
-                    queryset = queryset.filter(sector=sector)
+                temp_queryset = queryset.filter(sector=sectors[0])
+                for sector in sectors[1:]:
+                    temp_queryset = temp_queryset | queryset.filter(sector=sector)
+                queryset = temp_queryset
 
-            if countries:
-                for country in countries:
-                    queryset = queryset.filter(country__icontains=country)
+            if country_ids:
+                temp_queryset = queryset.filter(country__icontains=country_list[int(country_ids[0])])
+                for country_id in country_ids[1:]:
+                    temp_queryset = temp_queryset | queryset.filter(country__icontains=country_list[int(country_id)])
+                queryset = temp_queryset
 
             if market_cap:
-                queryset = queryset.filter(market_cap__gt=market_cap)
+                queryset = queryset.filter(market_cap__gt=market_cap * 1_000_000)
 
             return queryset
 
