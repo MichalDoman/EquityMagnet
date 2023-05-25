@@ -117,14 +117,14 @@ footer {
     padding: 0 10px;
 }
 
+.sort-arrows-box a:first-child i{
+    margin-bottom: -5px;
+}
+
 .sort-icon {
     font-weight: bolder;
     font-size: 30px;
     color: #6f94c6;
-}
-
-.sort-icon:first-child {
-    margin-bottom: -4px;
 }
 
 .sort-icon:hover {
@@ -140,6 +140,10 @@ footer {
     width: 100%;
     margin-top: 30px;
 
+}
+
+.company-details-link:hover {
+    text-decoration: underline;
 }
 
 .company-list tr:hover {

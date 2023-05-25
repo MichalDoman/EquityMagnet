@@ -151,3 +151,13 @@ class FavoriteCompany(models.Model):
     class Meta:
         unique_together = ("user", "company")
 
+
+class Evaluation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    purchase_date = models.DateField()
+    expiration_date = models.DateField()
+
+
+    class Meta:
+        unique_together = ("user", "company")

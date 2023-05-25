@@ -32,3 +32,14 @@ class SearchFiltersForm(forms.Form):
         for num, country in enumerate(get_all_countries()):
             choices.append((num, country))
         return choices
+
+# class EvaluationEditablesForm(forms.Form):
+#     wacc =
+#     g =
+#     average_revenue =
+#     koszty_w_przychodach =
+#     dynamika_aktywow=
+#     dynamika_pasywów =
+#     podatek =
+#     udział_pozostałych_kosztów =
+#     instrukcja do wyceny

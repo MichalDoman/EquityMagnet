@@ -9,7 +9,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView
 
-from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price, FavoriteCompany
+from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price, FavoriteCompany, \
+    Evaluation
 from main_app.utils import get_field_dictionaries, extract_historical_prices, get_all_countries
 from main_app.forms import SearchFiltersForm
 
@@ -130,6 +131,26 @@ class ManageFavoritesView(View, LoginRequiredMixin):
             return JsonResponse(response)
 
         return JsonResponse(response)
+
+
+class WatchlistView(ListView):
+    model = FavoriteCompany
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        companies = []
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            favorites = FavoriteCompany.objects.filter(user=user)
+            for favorite in favorites:
+                companies.append(favorite.company)
+
+        context["companies"] = companies
+        return context
+
+
+class EvaluationListView(ListView):
+    model = Evaluation
 
 
 class CustomLogoutView(LogoutView):

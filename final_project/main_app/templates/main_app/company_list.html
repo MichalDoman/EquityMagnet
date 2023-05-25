@@ -93,10 +93,10 @@
                 <div class="table-head-box">
                     <span>Market cap (millions USD)</span>
                     <div class="sort-arrows-box">
-                        <a href="/companies/?sort_by=market_cap">
+                        <a href="/companies/?sort_by=-market_cap">
                             <i class="material-icons sort-icon">arrow_drop_up</i>
                         </a>
-                        <a href="/companies/?sort_by=-market_cap">
+                        <a href="/companies/?sort_by=market_cap">
                                 <i class="material-icons sort-icon">arrow_drop_down</i>
                         </a>
                     </div>
@@ -107,7 +107,7 @@
         {% for company in page_obj %}
             <tr>
                 <td>
-                    <a href="{% url "company_details" company.pk %}">{{ company.name }}</a>
+                    <a class="company-details-link" href="{% url "company_details" company.pk %}">{{ company.name }}</a>
                 </td>
                 <td>{{ company.symbol }}</td>
                 <td>{{ company.exchange.symbol }}</td>
