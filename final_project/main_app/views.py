@@ -10,7 +10,6 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LogoutView
 
 from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price, FavoriteCompany, \
     Evaluation
@@ -135,23 +134,31 @@ class ManageFavoritesView(View, LoginRequiredMixin):
         return JsonResponse(response)
 
 
-class WatchlistView(ListView):
-    model = FavoriteCompany
+class BaseListView(ListView):
+    """Base ListView for list of favorites and evaluations"""
 
     def get_context_data(self, **kwargs):
+        """Extract a list o Company objects from FavoriteCompany and
+        Evaluation models for currently logged user and adds it to the context"""
+
         context = super().get_context_data(**kwargs)
         companies = []
         if self.request.user.is_authenticated:
             user = self.request.user
-            favorites = FavoriteCompany.objects.filter(user=user)
-            for favorite in favorites:
-                companies.append(favorite.company)
+
+            user_assigned_objects = self.model.objects.filter(user=user)
+            for user_assigned_object in user_assigned_objects:
+                companies.append(user_assigned_object.company)
 
         context["companies"] = companies
         return context
 
 
-class EvaluationListView(ListView):
+class WatchlistView(BaseListView):
+    model = FavoriteCompany
+
+
+class EvaluationListView(BaseListView):
     model = Evaluation
 
 

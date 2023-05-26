@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Evaluations{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        {% load style_numeric_data %}
+        <span>Your available evaluations:</span>
+        <table class="company-list">
+            <tr>
+                <th>Name</th>
+                <th>Symbol</th>
+                <th>Exchange</th>
+                <th>Country</th>
+                <th>Sector</th>
+                <th>Market cap</th>
+            </tr>
+            {% for company in companies %}
+                <tr>
+                    <td>
+                        <a href="{% url "company_details" company.pk %}">{{ company.name }}</a>
+                    </td>
+                    <td>{{ company.symbol }}</td>
+                    <td>{{ company.exchange.symbol }}</td>
+                    <td>{{ company.country }}</td>
+                    <td>{{ company.sector.name }}</td>
+                    <td>{{ company.market_cap|style_numeric_data }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td class="no-search-results-info" colspan="7">
+                        You have no access to any evaluations.
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <span>You have to be logged in to manage this tab</span>
+    {% endif %}
+{% endblock %}
