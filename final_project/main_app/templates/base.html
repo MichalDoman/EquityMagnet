@@ -20,10 +20,10 @@
             <li><a href="">evaluations</a></li>
             {% if user.is_authenticated %}
                 <li><a href="">profile</a></li>
-                <li><a href="{% url 'logout' %}?next={{ request.path }}">logout</a></li>
+                <li><a href="{% url "logout" %}?next={{ request.path }}">logout</a></li>
             {% else %}
-                <li><a href="{% url 'login' %}?next={{ request.path }}">login</a></li>
-                <li><a href="">register</a></li>
+                <li><a href="{% url "login" %}?next={{ request.path }}">login</a></li>
+                <li><a href="{% url "register" %}?next={{ request.path }}">register</a></li>
             {% endif %}
         </ul>
     </nav>

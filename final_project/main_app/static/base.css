@@ -6,9 +6,12 @@
 
 
 .content-block {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     font-size: 30px;
     background-color: #ffffff;
-    padding: 0 100px;
+    padding: 0 50px;
 }
 
 .nav-bar {
@@ -146,6 +149,10 @@ footer {
     text-decoration: underline;
 }
 
+.company-list tr {
+    height: 50px;
+}
+
 .company-list tr:hover {
     background: #cccccc;
 }
@@ -157,10 +164,7 @@ footer {
     padding: 5px;
     text-align: center;
     border-bottom: 1px solid #333333;
-}
-
-.company-list tr th {
-    font-size: 22px;
+    white-space: nowrap;
 }
 
 .company-list a {
@@ -257,4 +261,23 @@ footer {
     font-style: italic;
     text-align: left;
     padding: 0 10px;
+}
+/* ---------------------------------------------- Register View: */
+.register-form-box {
+    margin: 10px 35%;
+    background: #aaaaaa;
+    border: 3px solid #cccccc;
+    border-radius: 10px;
+    padding: 20px 0;
+}
+.register-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.register-btn {
+    font-size: 20px;
+    padding: 5px;
 }

@@ -3,16 +3,19 @@ from random import sample
 
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView
 from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView
 
 from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price, FavoriteCompany, \
     Evaluation
 from main_app.utils import get_field_dictionaries, extract_historical_prices, get_all_countries
-from main_app.forms import SearchFiltersForm
+from main_app.forms import SearchFiltersForm, RegisterForm
 
 
 class HomeView(View):
@@ -40,9 +43,6 @@ class CompanyListView(ListView):
         queryset = super().get_queryset()
         form = self.form_class(self.request.GET)
         if form.is_valid():
-            sort_by = self.request.GET.get('sort_by', 'pk')
-            queryset = queryset.order_by(sort_by)
-
             phrase = form.cleaned_data['phrase']
             exchanges = [exchange for exchange in form.cleaned_data['exchanges']]
             sectors = [sector for sector in form.cleaned_data['sectors']]
@@ -76,7 +76,9 @@ class CompanyListView(ListView):
             if market_cap:
                 queryset = queryset.filter(market_cap__gt=market_cap * 1_000_000)
 
-            return queryset
+        sort_by = self.request.GET.get('sort_by', 'pk')
+        queryset = queryset.order_by(sort_by)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -153,5 +155,32 @@ class EvaluationListView(ListView):
     model = Evaluation
 
 
-class CustomLogoutView(LogoutView):
-    pass
+class RegisterView(FormView):
+    form_class = RegisterForm
+    template_name = 'register.html'
+    success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        email = form.cleaned_data['email']
+        password = form.cleaned_data['password']
+        password_repeated = form.cleaned_data['password_repeated']
+
+        if User.objects.filter(email=email).exists():
+            form.add_error(None, 'This e-mail address is already taken!')
+            return super().form_invalid(form)
+
+        if password != password_repeated:
+            form.add_error(None, 'Passwords did not match!')
+            return super().form_invalid(form)
+
+        user = User.objects.create_user(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            password=password,
+        )
+
+        login(self.request, user)
+        return super().form_valid(form)

@@ -33,6 +33,14 @@ class SearchFiltersForm(forms.Form):
             choices.append((num, country))
         return choices
 
+
+class RegisterForm(forms.Form):
+    first_name = forms.CharField(max_length=256)
+    last_name = forms.CharField(max_length=256)
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+    password_repeated = forms.CharField(widget=forms.PasswordInput)
+
 # class EvaluationEditablesForm(forms.Form):
 #     wacc =
 #     g =
