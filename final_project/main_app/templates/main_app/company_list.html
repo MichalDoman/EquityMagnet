@@ -8,11 +8,7 @@
 {% block title %}Company List{% endblock %}
 
 {% block content %}
-    <form id="csrf-token">
-        {% csrf_token %}
-    </form>
-
-    <form class="search-form">
+    <form class="search-form" id="csrf-token">
         {% csrf_token %}
         {{ form }}
         <button type="submit">

@@ -283,13 +283,28 @@ footer {
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-.values-form label {
     font-size: 20px;
-    text-align: center;
 }
 
+.form-itself {
+    padding-top: 10px;
+}
+
+.form-itself input {
+    width: 30%;
+    height: 20px;
+    border: none;
+    border-bottom: 2px solid #aaaaaa;
+    border-radius: 3px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.form-itself input:focus {
+    outline: none;
+    border-bottom: 2px solid green;
+    color: green;
+}
 
 .calculate-btn {
     border: none;
