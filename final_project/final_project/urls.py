@@ -3,7 +3,7 @@ from django.urls import path, include
 from django.contrib.auth.views import LoginView
 
 from main_app.views import HomeView, CompanyListView, CompanyDetailView, ManageFavoritesView, WatchlistView, \
-    EvaluationListView, RegisterView
+    EvaluationListView, EvaluationView, RegisterView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -17,4 +17,5 @@ urlpatterns = [
     path("manage-favorites/", ManageFavoritesView.as_view()),
     path("watchlist/", WatchlistView.as_view(), name="watchlist"),
     path("evaluation-list", EvaluationListView.as_view(), name="evaluation_list"),
+    path("evaluation/<int:pk>", EvaluationView.as_view(), name="evaluation"),
 ]

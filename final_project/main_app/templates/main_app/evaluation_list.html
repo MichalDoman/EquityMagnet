@@ -19,7 +19,7 @@
             {% for company in companies %}
                 <tr>
                     <td>
-                        <a href="{% url "company_details" company.pk %}">{{ company.name }}</a>
+                        <a href="{% url "evaluation" company.pk %}">{{ company.name }}</a>
                     </td>
                     <td>{{ company.symbol }}</td>
                     <td>{{ company.exchange.symbol }}</td>

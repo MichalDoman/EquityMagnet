@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block javascript %}
+
+{% endblock %}
+
+{% block title %}{{ company.symbol }} evaluation{% endblock %}
+
+{% block content %}
+    <div class="main-box">
+        <div class="values-box">
+            <form class="values-form">
+                {% csrf_token %}
+
+                <button type="submit">
+                    <span class="calculate-btn">
+                        <i class="material-icons">calculate</i>
+                        Calculate
+                    </span>
+                </button>
+            </form>
+        </div>
+        <div class="evaluation-box">
+            <div class="evaluation-tabs">
+                <button class="tab-btn active" data-id="projections">Projections</button>
+                <button class="tab-btn" data-id="discounted-cash-flow">Discounted Cash Flow</button>
+            </div>
+            <div class="content-box">
+                <div class="content active" id="projections">
+
+                </div>
+                <div class="content" id="discounted-cash-flow">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

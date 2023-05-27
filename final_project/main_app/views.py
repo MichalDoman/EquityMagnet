@@ -162,6 +162,12 @@ class EvaluationListView(BaseListView):
     model = Evaluation
 
 
+class EvaluationView(DetailView):
+    model = Company
+    context_object_name = "company"
+    template_name_suffix = "_evaluation"
+
+
 class RegisterView(FormView):
     form_class = RegisterForm
     template_name = 'register.html'
