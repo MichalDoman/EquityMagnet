@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import MinValueValidator
 
 from main_app.models import Exchange, Sector
-from main_app.utils import get_all_countries
+from main_app.utils.general_utils import get_all_countries
 
 
 class SearchFiltersForm(forms.Form):
@@ -41,13 +41,13 @@ class RegisterForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
     password_repeated = forms.CharField(widget=forms.PasswordInput)
 
-# class EvaluationEditablesForm(forms.Form):
-#     wacc =
-#     g =
-#     average_revenue =
-#     koszty_w_przychodach =
-#     dynamika_aktywow=
-#     dynamika_pasywów =
-#     podatek =
-#     udział_pozostałych_kosztów =
-#     instrukcja do wyceny
+
+class EvaluationEditablesForm(forms.Form):
+    wacc = forms.FloatField(initial=0.2, required=False)
+    g = forms.FloatField(initial=0.059, required=False)
+    average_revenue = forms.IntegerField(required=False)
+    costs_part_in_revenue = forms.FloatField(required=False)
+    assets_change = forms.FloatField(required=False)
+    liabilities_change = forms.FloatField(required=False)
+    tax = forms.FloatField(required=False)
+    other_expenses_part_in_revenue = forms.FloatField(required=False)

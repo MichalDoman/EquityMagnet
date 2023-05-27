@@ -120,7 +120,7 @@ footer {
     padding: 0 10px;
 }
 
-.sort-arrows-box a:first-child i{
+.sort-arrows-box a:first-child i {
     margin-bottom: -5px;
 }
 
@@ -262,6 +262,67 @@ footer {
     text-align: left;
     padding: 0 10px;
 }
+
+/* ---------------------------------------------- Evaluation View: */
+.main-box {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    gap: 20px;
+    background-color: #cccccc;
+    padding: 20px;
+    border-radius: 5px;
+    border: 3px solid #aaaaaa;
+}
+
+.values-box {
+    border: 1px solid #aaaaaa;
+    padding: 10px;
+}
+
+.values-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.values-form label {
+    font-size: 20px;
+    text-align: center;
+}
+
+
+.calculate-btn {
+    border: none;
+    text-transform: capitalize;
+    font-size: 20px;
+}
+
+.evaluation-box {
+    display: flex;
+    flex-direction: column;
+    padding-right: 20px;
+}
+
+.evaluation-tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.evaluation-tabs button {
+    width: 50%;
+}
+
+.content {
+    display: none;
+    padding: 20px;
+}
+
+.content.active {
+    display: block;
+    background: #ffffff;
+}
+
 /* ---------------------------------------------- Register View: */
 .register-form-box {
     margin: 10px 35%;
@@ -270,6 +331,7 @@ footer {
     border-radius: 10px;
     padding: 20px 0;
 }
+
 .register-form {
     display: flex;
     flex-direction: column;

@@ -2,7 +2,7 @@ const tab_buttons = document.querySelectorAll(".tab-btn");
 const details = document.querySelectorAll(".details");
 const section = document.querySelector(".section-center")
 
-section.addEventListener("click", function (event) {
+section.addEventListener("click", (event) => {
     const tab_id = event.target.dataset.id;
     if (tab_id) {
         tab_buttons.forEach(function (button) {

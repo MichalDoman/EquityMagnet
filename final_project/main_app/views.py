@@ -13,8 +13,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price, FavoriteCompany, \
     Evaluation
-from main_app.utils import get_field_dictionaries, extract_historical_prices, get_all_countries
-from main_app.forms import SearchFiltersForm, RegisterForm
+from main_app.utils.general_utils import get_field_dictionaries, extract_historical_prices, get_all_countries
+from main_app.forms import SearchFiltersForm, EvaluationEditablesForm, RegisterForm
 
 
 class HomeView(View):
@@ -166,6 +166,19 @@ class EvaluationView(DetailView):
     model = Company
     context_object_name = "company"
     template_name_suffix = "_evaluation"
+    form_class = EvaluationEditablesForm
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        form = self.form_class(self.request.GET)
+        if form.is_valid():
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class(self.request.GET)
+        return context
 
 
 class RegisterView(FormView):

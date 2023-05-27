@@ -2,23 +2,29 @@
 {% load static %}
 
 {% block javascript %}
-
+    <script src="{% static "js/evaluation.js" %}" defer></script>
 {% endblock %}
 
 {% block title %}{{ company.symbol }} evaluation{% endblock %}
 
 {% block content %}
+
+    <div class="company-label">
+        <h2>{{ company.name }} ({{ company.symbol }}) - Evaluation</h2>
+        <p>{{ company.exchange.symbol }}</p>
+    </div>
+
     <div class="main-box">
         <div class="values-box">
             <form class="values-form">
                 {% csrf_token %}
-
                 <button type="submit">
                     <span class="calculate-btn">
                         <i class="material-icons">calculate</i>
                         Calculate
                     </span>
                 </button>
+                {{ form }}
             </form>
         </div>
         <div class="evaluation-box">
