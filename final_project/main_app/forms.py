@@ -45,9 +45,9 @@ class RegisterForm(forms.Form):
 class EvaluationEditablesForm(forms.Form):
     wacc = forms.FloatField(required=False)
     g = forms.FloatField(required=False)
-    average_revenue_change = forms.FloatField(required=False)
-    costs_income_ratio = forms.FloatField(required=False)
+    revenue_rate = forms.FloatField(required=False)
+    operational_costs = forms.FloatField(required=False)
     # assets_change = forms.FloatField(required=False)
     # liabilities_change = forms.FloatField(required=False)
     tax = forms.FloatField(required=False)
-    other_costs_income_ratio = forms.FloatField(required=False)
+    other_operational_costs = forms.FloatField(required=False)

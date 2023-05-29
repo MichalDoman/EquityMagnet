@@ -176,21 +176,26 @@ class EvaluationView(DetailView):
         form = self.form_class(self.request.GET)
         context['form'] = form
 
-        wacc = g = average_revenue_change = costs_income_ratio = tax = other_costs_income_ratio = None
+        wacc = g = revenue_rate = operational_costs = tax = other_operational_costs = None
 
         if form.is_valid():
             wacc = form.cleaned_data['wacc']
             g = form.cleaned_data['g']
-            average_revenue_change = form.cleaned_data['average_revenue_change']
-            costs_income_ratio = form.cleaned_data['costs_income_ratio']
+            revenue_rate = form.cleaned_data['revenue_rate']
+            operational_costs = form.cleaned_data['operational_costs']
             tax = form.cleaned_data['tax']
-            other_costs_income_ratio = form.cleaned_data['other_costs_income_ratio']
+            other_operational_costs = form.cleaned_data['other_operational_costs']
 
         income_statements = IncomeStatement.objects.filter(company=self.kwargs['pk']).order_by("year")
         balance_sheets = BalanceSheet.objects.filter(company=self.kwargs['pk']).order_by("year")
         cash_flow_statements = CashFlowStatement.objects.filter(company=self.kwargs['pk']).order_by("year")
 
-        context['projection'] = get_projection_dict(income_statements, average_revenue_change, costs_income_ratio)
+        context['projection'] = get_projection_dict(
+            income_statements,
+            revenue_rate,
+            operational_costs,
+            other_operational_costs,
+        )
 
         return context
 

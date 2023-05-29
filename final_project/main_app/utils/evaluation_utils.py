@@ -1,18 +1,25 @@
 from main_app.utils.general_utils import style_numeric_data
 
 
-def get_projection_dict(income_statements, revenue_change, costs_income_ratio):
+def get_projection_dict(income_statements, user_revenue_rate, user_operational_costs, user_other_operational_costs):
     projection_dict = {}
 
     years = []
     revenues = []
-    total_costs = []
+    operational_costs = []
+    operational_profits = []
+    other_operational_costs = []
+    gross_profits = []
+    net_incomes = []
 
     # Get necessary data from income statement:
     for statement in income_statements:
         years.append(statement.year)
         revenues.append(statement.total_revenue)
-        total_costs.append(statement.cost_and_expenses)
+        operational_costs.append(statement.cost_and_expenses)
+        other_operational_costs.append(statement.operating_expenses)
+        gross_profits.append(statement.gross_profit)
+        net_incomes.append(statement.net_income)
 
     # Update projection dictionary with 'year' key:
     last_period = years[-1]
@@ -21,7 +28,7 @@ def get_projection_dict(income_statements, revenue_change, costs_income_ratio):
     projection_dict.update({"year": years})
 
     # Update projection dictionary with 'revenue' key:
-    average_change = get_average_change(revenues) if not revenue_change else revenue_change
+    average_change = get_average_change(revenues) if not user_revenue_rate else user_revenue_rate
     print(average_change)
     for _ in range(1, 6):
         future_revenue = revenues[-1] * (1 + average_change)
@@ -30,16 +37,36 @@ def get_projection_dict(income_statements, revenue_change, costs_income_ratio):
     projection_dict.update({"total_revenue": styled_revenues})
 
     # Update projection dictionary with 'operational_costs' key:
-    costs_ratio = get_average_ratio(revenues, total_costs) if not costs_income_ratio else costs_income_ratio
+    operational_costs_ratio = get_average_ratio(revenues, operational_costs)
+    if user_operational_costs:
+        operational_costs_ratio = user_operational_costs
+
     for i in range(1, 6):
-        index = len(total_costs.copy())
+        index = len(operational_costs.copy())
         future_revenue = revenues[index]
         print(future_revenue)
-        print(costs_ratio)
-        future_total_costs = future_revenue * costs_ratio
-        total_costs.append(int(future_total_costs))
-    styled_total_costs = [style_numeric_data(cost) for cost in total_costs]
-    projection_dict.update({"total_costs": styled_total_costs})
+        print(operational_costs_ratio)
+        future_operational_costs = future_revenue * operational_costs_ratio
+        operational_costs.append(int(future_operational_costs))
+    styled_operational_costs = [style_numeric_data(cost) for cost in operational_costs]
+    projection_dict.update({"operational_costs": styled_operational_costs})
+
+    # Update projection dictionary with 'operational_profit' key:
+    for index, value in enumerate(revenues):
+        operational_profit = value - operational_costs[index]
+        operational_profits.append(operational_profit)
+    styled_operational_profits = [style_numeric_data(operational_profit) for operational_profit in operational_profits]
+    projection_dict.update({"operational_profits": styled_operational_profits})
+
+    # Update projection dictionary with 'other_operational_costs' key:
+    for index, value in enumerate(revenues):
+        operational_profit = value - operational_costs[index]
+        operational_profits.append(operational_profit)
+
+    # Update projection dictionary with 'gross_profit' key:
+    other_operational_costs_ratio = get_average_ratio(operational_profits, other_operational_costs)
+    if user_other_operational_costs:
+        other_operational_costs_ratio = user_other_operational_costs
 
     return projection_dict
 
