@@ -15,6 +15,7 @@
     </div>
 
     <div class="main-box">
+
         <div class="values-box">
             <form class="values-form">
                 {% csrf_token %}
@@ -29,14 +30,26 @@
                 </div>
             </form>
         </div>
+
         <div class="evaluation-box">
             <div class="evaluation-tabs">
                 <button class="tab-btn active" data-id="projections">Projections</button>
                 <button class="tab-btn" data-id="discounted-cash-flow">Discounted Cash Flow</button>
             </div>
+
             <div class="content-box">
                 <div class="content active" id="projections">
-
+                    <span>(millions USD)</span>
+                    <table class="company-list">
+                        {% for key, items in projection.items %}
+                            <tr>
+                                <th>{{ key }}</th>
+                                {% for item in items %}
+                                    <td>{{ item }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
                 </div>
                 <div class="content" id="discounted-cash-flow">
 

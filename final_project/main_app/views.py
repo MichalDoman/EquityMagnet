@@ -11,9 +11,10 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement, Price, FavoriteCompany, \
-    Evaluation
-from main_app.utils.general_utils import get_field_dictionaries, extract_historical_prices, get_all_countries
+from main_app.models import Company, Price, FavoriteCompany, Evaluation, IncomeStatement, BalanceSheet, \
+    CashFlowStatement
+from main_app.utils.general_utils import extract_historical_prices, get_all_countries, get_field_dictionaries
+from main_app.utils.evaluation_utils import get_projection_dict
 from main_app.forms import SearchFiltersForm, EvaluationEditablesForm, RegisterForm
 
 
@@ -25,7 +26,7 @@ class HomeView(View):
     """
 
     def get(self, request):
-        all_companies = Company.objects.all()
+        all_companies = Company.objects.select_related("exchange", "sector")
         sample_companies = sample(list(all_companies), 4)
 
         return render(request, "home.html", context={
@@ -76,7 +77,9 @@ class CompanyListView(ListView):
                 queryset = queryset.filter(market_cap__gt=market_cap * 1_000_000)
 
         sort_by = self.request.GET.get('sort_by', 'pk')
-        queryset = queryset.order_by(sort_by)
+        if sort_by in ['name', '-name', 'symbol', '-symbol', 'exchange', '-exchange', 'country', '-country', 'sector',
+                       '-sector', 'market_cap', '-market_cap']:
+            queryset = queryset.order_by(sort_by)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -94,11 +97,11 @@ class CompanyDetailView(DetailView):
 
         context = super().get_context_data(**kwargs)
 
-        income_statements = IncomeStatement.objects.filter(company=self.kwargs["pk"]).order_by("year")
-        balance_sheets = BalanceSheet.objects.filter(company=self.kwargs["pk"]).order_by("year")
-        cash_flow_statements = CashFlowStatement.objects.filter(company=self.kwargs["pk"]).order_by("year")
+        income_statements = IncomeStatement.objects.filter(company=self.kwargs['pk']).order_by("year")
+        balance_sheets = BalanceSheet.objects.filter(company=self.kwargs['pk']).order_by("year")
+        cash_flow_statements = CashFlowStatement.objects.filter(company=self.kwargs['pk']).order_by("year")
 
-        # Add all field names of every type of statement to the context:
+        # Add company's financial statements to the context:
         context["income_statement_dicts"] = get_field_dictionaries(income_statements)
         context["balance_sheet_dicts"] = get_field_dictionaries(balance_sheets)
         context["cash_flow_statement_dicts"] = get_field_dictionaries(cash_flow_statements)
@@ -168,23 +171,34 @@ class EvaluationView(DetailView):
     template_name_suffix = "_evaluation"
     form_class = EvaluationEditablesForm
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        form = self.form_class(self.request.GET)
-        if form.is_valid():
-            pass
-        return queryset
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = self.form_class(self.request.GET)
+        form = self.form_class(self.request.GET)
+        context['form'] = form
+
+        wacc = g = average_revenue_change = costs_income_ratio = tax = other_costs_income_ratio = None
+
+        if form.is_valid():
+            wacc = form.cleaned_data['wacc']
+            g = form.cleaned_data['g']
+            average_revenue_change = form.cleaned_data['average_revenue_change']
+            costs_income_ratio = form.cleaned_data['costs_income_ratio']
+            tax = form.cleaned_data['tax']
+            other_costs_income_ratio = form.cleaned_data['other_costs_income_ratio']
+
+        income_statements = IncomeStatement.objects.filter(company=self.kwargs['pk']).order_by("year")
+        balance_sheets = BalanceSheet.objects.filter(company=self.kwargs['pk']).order_by("year")
+        cash_flow_statements = CashFlowStatement.objects.filter(company=self.kwargs['pk']).order_by("year")
+
+        context['projection'] = get_projection_dict(income_statements, average_revenue_change, costs_income_ratio)
+
         return context
 
 
 class RegisterView(FormView):
     form_class = RegisterForm
-    template_name = 'register.html'
-    success_url = reverse_lazy('index')
+    template_name = 'registration/register.html'
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         first_name = form.cleaned_data['first_name']
@@ -202,6 +216,7 @@ class RegisterView(FormView):
             return super().form_invalid(form)
 
         user = User.objects.create_user(
+            username=email,
             first_name=first_name,
             last_name=last_name,
             email=email,

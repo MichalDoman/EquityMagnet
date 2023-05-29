@@ -8,8 +8,11 @@
 {% block title %}Company List{% endblock %}
 
 {% block content %}
-    <form class="search-form" id="csrf-token">
+    <form id="csrf-token">
         {% csrf_token %}
+    </form>
+
+    <form class="search-form">
         {{ form }}
         <button type="submit">
             <i class="material-icons">search</i>
@@ -24,11 +27,11 @@
                 <div class="table-head-box">
                     <span>Name</span>
                     <div class="sort-arrows-box">
-                        <a href="?sort_by=name">
+                        <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET.getlist %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET.sectors %}&sectors={{ sector }}{% endfor %}{% for country in request.GET.countries %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=name">
                             <i class="material-icons sort-icon">arrow_drop_up</i>
                         </a>
                         <a href="?sort_by=-name">
-                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                            <i class="material-icons sort-icon">arrow_drop_down</i>
                         </a>
                     </div>
                 </div>
@@ -41,7 +44,7 @@
                             <i class="material-icons sort-icon">arrow_drop_up</i>
                         </a>
                         <a href="/companies/?sort_by=-symbol">
-                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                            <i class="material-icons sort-icon">arrow_drop_down</i>
                         </a>
                     </div>
                 </div>
@@ -54,7 +57,7 @@
                             <i class="material-icons sort-icon">arrow_drop_up</i>
                         </a>
                         <a href="/companies/?sort_by=-exchange">
-                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                            <i class="material-icons sort-icon">arrow_drop_down</i>
                         </a>
                     </div>
                 </div>
@@ -67,7 +70,7 @@
                             <i class="material-icons sort-icon">arrow_drop_up</i>
                         </a>
                         <a href="/companies/?sort_by=-country">
-                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                            <i class="material-icons sort-icon">arrow_drop_down</i>
                         </a>
                     </div>
                 </div>
@@ -80,7 +83,7 @@
                             <i class="material-icons sort-icon">arrow_drop_up</i>
                         </a>
                         <a href="/companies/?sort_by=-sector">
-                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                            <i class="material-icons sort-icon">arrow_drop_down</i>
                         </a>
                     </div>
                 </div>
@@ -93,7 +96,7 @@
                             <i class="material-icons sort-icon">arrow_drop_up</i>
                         </a>
                         <a href="/companies/?sort_by=market_cap">
-                                <i class="material-icons sort-icon">arrow_drop_down</i>
+                            <i class="material-icons sort-icon">arrow_drop_down</i>
                         </a>
                     </div>
                 </div>

@@ -7,9 +7,9 @@ from main_app.utils.general_utils import get_all_countries
 
 class SearchFiltersForm(forms.Form):
     phrase = forms.CharField(max_length=64, required=False)
-    exchanges = forms.MultipleChoiceField(required=False)
-    sectors = forms.MultipleChoiceField(required=False)
-    countries = forms.MultipleChoiceField(required=False)
+    exchanges = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple())
+    sectors = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple())
+    countries = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple())
     market_cap = forms.IntegerField(validators=[MinValueValidator(0)], required=False)
 
     def __init__(self, *args, **kwargs):
@@ -43,11 +43,11 @@ class RegisterForm(forms.Form):
 
 
 class EvaluationEditablesForm(forms.Form):
-    wacc = forms.FloatField(initial=0.2, required=False)
-    g = forms.FloatField(initial=0.059, required=False)
-    average_revenue = forms.IntegerField(required=False)
-    costs_part_in_revenue = forms.FloatField(required=False)
-    assets_change = forms.FloatField(required=False)
-    liabilities_change = forms.FloatField(required=False)
+    wacc = forms.FloatField(required=False)
+    g = forms.FloatField(required=False)
+    average_revenue_change = forms.FloatField(required=False)
+    costs_income_ratio = forms.FloatField(required=False)
+    # assets_change = forms.FloatField(required=False)
+    # liabilities_change = forms.FloatField(required=False)
     tax = forms.FloatField(required=False)
-    other_expenses_part_in_revenue = forms.FloatField(required=False)
+    other_costs_income_ratio = forms.FloatField(required=False)

@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 .content-block {
     display: flex;
@@ -142,11 +147,10 @@ footer {
     border-collapse: collapse;
     width: 100%;
     margin-top: 30px;
-
 }
 
 .company-details-link:hover {
-    text-decoration: underline;
+    text-decoration: underline;;
 }
 
 .company-list tr {
@@ -297,7 +301,7 @@ footer {
     border-bottom: 2px solid #aaaaaa;
     border-radius: 3px;
     font-weight: bold;
-    text-align: right;
+    text-align: center;
 }
 
 .form-itself input:focus {
@@ -336,6 +340,11 @@ footer {
 .content.active {
     display: block;
     background: #ffffff;
+}
+
+.content .company-list tr td,
+.content .company-list tr th {
+    font-size: 16px;
 }
 
 /* ---------------------------------------------- Register View: */

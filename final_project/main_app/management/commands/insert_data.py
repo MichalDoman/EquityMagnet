@@ -236,7 +236,7 @@ def insert_all_data():
     path = os.path.join(BASE_DIR, 'main_app', 'management', 'commands_data', f'data.csv')
     try:
         # tickers = get_tickers(path)
-        for ticker in ['WMT']:
+        for ticker in ['NVDA']:
             insert_company_data(ticker)
             insert_company_price_history_data(ticker)
             insert_income_statement_data(ticker)

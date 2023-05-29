@@ -1,4 +1,4 @@
-from main_app.models import Company
+from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement
 from main_app.templatetags.style_numeric_data import style_numeric_data
 
 
