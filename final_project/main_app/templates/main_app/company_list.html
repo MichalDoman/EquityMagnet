@@ -14,136 +14,148 @@
         {% csrf_token %}
     </form>
 
-    <form class="search-form">
-        {{ form }}
-        <button type="submit">
-            <i class="material-icons">search</i>
-        </button>
-    </form>
+    <div class="main-box">
 
-    <table class="company-list">
-        <tr>
-            <th>
-                <div class="table-head-box">
-                    <span>Name </span>
-                    <div class="sort-arrows-box">
-                        <a href="{{ request.path }}?phrase=
+        <div class="values-box">
+            <form class="search-form-box">
+                {% csrf_token %}
+                <button type="submit">
+                    <span class="calculate-btn">
+                        <i class="material-icons">search</i>
+                        Search
+                    </span>
+                </button>
+                {{ form }}
+            </form>
+        </div>
 
-                                {{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=name">
-                            <i class="material-icons sort-icon">arrow_drop_up</i>
-                        </a>
-                        <a href="{{ request.path }}?phrase=
 
-                                {{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-name">
-                            <i class="material-icons sort-icon">arrow_drop_down</i>
-                        </a>
-                    </div>
-                </div>
-            </th>
-            <th>
-                <div class="table-head-box">
-                    <span>Symbol</span>
-                    <div class="sort-arrows-box">
-                        <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=symbol">
-                            <i class="material-icons sort-icon">arrow_drop_up</i>
-                        </a>
-                        <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-symbol">
-                            <i class="material-icons sort-icon">arrow_drop_down</i>
-                        </a>
-                    </div>
-                </div>
-            </th>
-            <th>
-                <div class="table-head-box">
-                    <span>Exchange</span>
-                    <div class="sort-arrows-box">
-                        <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=exchange">
-                            <i class="material-icons sort-icon">arrow_drop_up</i>
-                        </a>
-                        <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-exchange">
-                            <i class="material-icons sort-icon">arrow_drop_down</i>
-                        </a>
-                    </div>
-                </div>
-            </th>
-            <th>
-                <div class="table-head-box">
-                    <span>Country</span>
-                    <div class="sort-arrows-box">
-                        <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=country">
-                            <i class="material-icons sort-icon">arrow_drop_up</i>
-                        </a>
-                        <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-country">
-                            <i class="material-icons sort-icon">arrow_drop_down</i>
-                        </a>
-                    </div>
-                </div>
-            </th>
-            <th>
-                <div class="table-head-box">
-                    <span>Sector</span>
-                    <div class="sort-arrows-box">
-                        <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=sector">
-                            <i class="material-icons sort-icon">arrow_drop_up</i>
-                        </a>
-                        <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-sector">
-                            <i class="material-icons sort-icon">arrow_drop_down</i>
-                        </a>
-                    </div>
-                </div>
-            </th>
-            <th>
-                <div class="table-head-box">
-                    <span>Market cap (millions USD)</span>
-                    <div class="sort-arrows-box">
-                        <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-market_cap">
-                            <i class="material-icons sort-icon">arrow_drop_up</i>
-                        </a>
-                        <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=market_cap">
-                            <i class="material-icons sort-icon">arrow_drop_down</i>
-                        </a>
-                    </div>
-                </div>
-            </th>
-            <th></th>
-        </tr>
-        {% for company in page_obj %}
-            <tr>
-                <td>
-                    <a class="company-details-link" href="{% url "company_details" company.pk %}">{{ company.name }}</a>
-                </td>
-                <td>{{ company.symbol }}</td>
-                <td>{{ company.exchange.symbol }}</td>
-                <td>{{ company.country }}</td>
-                <td>{{ company.sector.name }}</td>
-                <td>{{ company.market_cap|style_numeric_data }}</td>
-                <td><i class="material-icons favorite-icon" data-company-id="{{ company.pk }}"
-                >favorite_border</i></td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td class="no-search-results-info" colspan="7">
-                    There are no companies matching your filters!
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+        <div class="company-list-box">
+            <table class="company-list">
+                <tr>
+                    <th>
+                        <div class="table-head-box">
+                            <span>Name </span>
+                            <div class="sort-arrows-box">
+                                <a href="{{ request.path }}?phrase=
 
-    <div class="pagination">
-        <span class="step_links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-            {% endif %}
+                                        {{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=name">
+                                    <i class="material-icons sort-icon">arrow_drop_up</i>
+                                </a>
+                                <a href="{{ request.path }}?phrase=
 
-            <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </span>
+                                        {{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-name">
+                                    <i class="material-icons sort-icon">arrow_drop_down</i>
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-head-box">
+                            <span>Symbol</span>
+                            <div class="sort-arrows-box">
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=symbol">
+                                    <i class="material-icons sort-icon">arrow_drop_up</i>
+                                </a>
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-symbol">
+                                    <i class="material-icons sort-icon">arrow_drop_down</i>
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-head-box">
+                            <span>Exchange</span>
+                            <div class="sort-arrows-box">
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=exchange">
+                                    <i class="material-icons sort-icon">arrow_drop_up</i>
+                                </a>
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-exchange">
+                                    <i class="material-icons sort-icon">arrow_drop_down</i>
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-head-box">
+                            <span>Country</span>
+                            <div class="sort-arrows-box">
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=country">
+                                    <i class="material-icons sort-icon">arrow_drop_up</i>
+                                </a>
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-country">
+                                    <i class="material-icons sort-icon">arrow_drop_down</i>
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-head-box">
+                            <span>Sector</span>
+                            <div class="sort-arrows-box">
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=sector">
+                                    <i class="material-icons sort-icon">arrow_drop_up</i>
+                                </a>
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-sector">
+                                    <i class="material-icons sort-icon">arrow_drop_down</i>
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-head-box">
+                            <span>Market cap (millions USD)</span>
+                            <div class="sort-arrows-box">
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-market_cap">
+                                    <i class="material-icons sort-icon">arrow_drop_up</i>
+                                </a>
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=market_cap">
+                                    <i class="material-icons sort-icon">arrow_drop_down</i>
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+                    <th></th>
+                </tr>
+                {% for company in page_obj %}
+                    <tr>
+                        <td>
+                            <a class="company-details-link" href="{% url "company_details" company.pk %}">{{ company.name }}</a>
+                        </td>
+                        <td>{{ company.symbol }}</td>
+                        <td>{{ company.exchange.symbol }}</td>
+                        <td>{{ company.country }}</td>
+                        <td>{{ company.sector.name }}</td>
+                        <td>{{ company.market_cap|style_numeric_data }}</td>
+                        <td><i class="material-icons favorite-icon" data-company-id="{{ company.pk }}"
+                        >favorite_border</i></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td class="no-search-results-info" colspan="7">
+                            There are no companies matching your filters!
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
 
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
-        </span>
+            <div class="pagination">
+                <span class="step_links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
     </div>
 {% endblock %}

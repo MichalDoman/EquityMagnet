@@ -6,8 +6,8 @@
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .content-block {
@@ -103,12 +103,21 @@ footer {
 }
 
 /* ---------------------------------------------- Company List: */
-.search-form {
-    font-size: 20px;
+.search-form-box {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 20px;
+    flex-direction: column;
+    font-size: 15px;
+}
+
+.search-form input{
+    width: 40%;
+    height: 20px;
+    border: none;
+    border-bottom: 2px solid #aaaaaa;
+    border-radius: 3px;
+    font-weight: bold;
+    margin: 8px 30%;
+    text-align: center;
 }
 
 .table-head-box {
@@ -141,6 +150,10 @@ footer {
 
 .no-search-results-info {
     color: red;
+}
+
+.company-list-box {
+    background-color: #ffffff;
 }
 
 .company-list {
@@ -286,7 +299,6 @@ footer {
 .values-form {
     display: flex;
     flex-direction: column;
-
     font-size: 20px;
 }
 
