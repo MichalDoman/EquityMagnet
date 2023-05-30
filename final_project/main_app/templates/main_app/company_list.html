@@ -37,14 +37,10 @@
                         <div class="table-head-box">
                             <span>Name </span>
                             <div class="sort-arrows-box">
-                                <a href="{{ request.path }}?phrase=
-
-                                        {{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=name">
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=name">
                                     <i class="material-icons sort-icon">arrow_drop_up</i>
                                 </a>
-                                <a href="{{ request.path }}?phrase=
-
-                                        {{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-name">
+                                <a href="{{ request.path }}?phrase={{ request.GET.phrase }}{% for exchange in request.GET|get_request_url_list:'exchanges' %}&exchanges={{ exchange }}{% endfor %}{% for sector in request.GET|get_request_url_list:'sectors' %}&sectors={{ sector }}{% endfor %}{% for country in request.GET|get_request_url_list:'countries' %}&countries={{ country }}{% endfor %}&market_cap={{ request.GET.market_cap }}&sort_by=-name">
                                     <i class="material-icons sort-icon">arrow_drop_down</i>
                                 </a>
                             </div>
