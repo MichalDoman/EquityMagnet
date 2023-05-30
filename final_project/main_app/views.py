@@ -195,6 +195,7 @@ class EvaluationView(DetailView):
             revenue_rate,
             operational_costs,
             other_operational_costs,
+            tax
         )
 
         return context
