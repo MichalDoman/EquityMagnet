@@ -1,5 +1,5 @@
 from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement
-from main_app.templatetags.style_numeric_data import style_numeric_data
+from main_app.templatetags.templatetags import style_numeric_data
 
 
 def get_field_dictionaries(queryset):

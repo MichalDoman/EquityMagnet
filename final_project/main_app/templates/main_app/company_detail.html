@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load templatetags %}
 
 {% block javascript %}
     <script src="{% static "js/company_details.js" %}" defer></script>
@@ -9,8 +10,6 @@
 {% block title %}{{ company.symbol }}{% endblock %}
 
 {% block content %}
-    {% load style_numeric_data %}
-
     <section class="details-section">
         <div class="company-label">
             <h2>{{ company.name }} ({{ company.symbol }})</h2>

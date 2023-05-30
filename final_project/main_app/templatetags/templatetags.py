@@ -39,3 +39,8 @@ def style_numeric_data(value):
             value = "-" + value
 
     return value
+
+
+@register.filter(name="get_request_url_list")
+def get_request_url_list(request, key):
+    return request.getlist(key)

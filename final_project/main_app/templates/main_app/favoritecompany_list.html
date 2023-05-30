@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% load templatetags %}
 
 {% block title %}Watchlist{% endblock %}
 
 {% block content %}
     {% if user.is_authenticated %}
-        {% load style_numeric_data %}
         <span>Your watchlist:</span>
         <table class="company-list">
             <tr>

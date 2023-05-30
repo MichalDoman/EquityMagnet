@@ -39,9 +39,11 @@
 
             <div class="content-box">
                 <div class="content active" id="projections">
-                    <p class="value-disclaimer">(all values in millions USD)</p>
+
+
+                    <label class="projection-label">Income Statement</label>
                     <table class="company-list">
-                        {% for key, items in projection.items %}
+                        {% for key, items in income_projection.items %}
                             <tr>
                                 <th>{{ key }}</th>
                                 {% for item in items %}
@@ -50,6 +52,20 @@
                             </tr>
                         {% endfor %}
                     </table>
+
+                    <label class="projection-label">Net Working Capital</label>
+                    <table class="company-list">
+                        {% for key, items in net_working_capital_projection.items %}
+                            <tr>
+                                <th>{{ key }}</th>
+                                {% for item in items %}
+                                    <td>{{ item }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+                    <p class="value-disclaimer">* all values in millions USD</p>
                 </div>
                 <div class="content" id="discounted-cash-flow">
 

@@ -1,7 +1,8 @@
 from main_app.utils.general_utils import style_numeric_data
 
 
-def get_projection_dict(income_statements, user_revenue_rate, user_operating_costs, user_other_operating_costs, user_tax):
+def get_income_projection_dict(income_statements, user_revenue_rate, user_operating_costs, user_other_operating_costs,
+                               user_tax):
     projection_dict = {}
 
     years = []
@@ -77,6 +78,10 @@ def get_projection_dict(income_statements, user_revenue_rate, user_operating_cos
     style_and_update(projection_dict, "net_income", net_incomes)
 
     return projection_dict
+
+
+def get_net_working_capital_projection_dict(balance_sheets):
+    pass
 
 
 def get_average_change(data_list):

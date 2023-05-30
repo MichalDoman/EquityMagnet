@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
+{% load templatetags %}
 
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
-    {% load style_numeric_data %}
-
     <article class="grid-box">
         {% for company in companies %}
             <div class="grid-item">
