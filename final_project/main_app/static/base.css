@@ -118,7 +118,7 @@ footer {
     font-weight: normal;
 }
 
-.search-form input{
+.search-form input {
     width: 40%;
     height: 20px;
     border: none;
@@ -128,6 +128,7 @@ footer {
     margin: 8px 30%;
     text-align: center;
 }
+
 
 .table-head-box {
     display: flex;
@@ -168,7 +169,7 @@ footer {
 .main-table {
     border-collapse: collapse;
     width: 100%;
-    margin-top: 30px;
+    margin-top: 5px;
 }
 
 .company-details-link:hover {
@@ -366,13 +367,28 @@ footer {
 }
 
 .content.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
     background: #ffffff;
+}
+
+.projection-label {
+    align-self: center;
+    font-weight: bold;
+    padding-top: 30px;
+}
+
+.content .projection-label:first-child {
+    padding-top: 10px;
 }
 
 .content .main-table tr td,
 .content .main-table tr th {
     font-size: 16px;
+}
+
+.main-table tr:first-child {
+    font-weight: bold;
 }
 
 .turnover-ratios-box {

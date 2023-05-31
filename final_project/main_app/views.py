@@ -190,7 +190,7 @@ class EvaluationView(DetailView):
         balance_sheets = BalanceSheet.objects.filter(company=self.kwargs['pk']).order_by("year")
         cash_flow_statements = CashFlowStatement.objects.filter(company=self.kwargs['pk']).order_by("year")
 
-        evaluation = DiscountedCashFlow(income_statements, balance_sheets)
+        evaluation = DiscountedCashFlow(income_statements, balance_sheets, cash_flow_statements)
 
         context['income_projection'] = evaluation.get_income_projection_dict(
             revenue_rate,
@@ -201,6 +201,7 @@ class EvaluationView(DetailView):
         context['turnover_ratios'] = evaluation.get_turnover_ratios_dict()
         context['average_turnover_ratios'] = evaluation.average_turnover_ratios
         context['net_working_capital'] = evaluation.get_net_working_capital_dict()
+        context['capex_and_amortization'] = evaluation.get_capex_dict()
 
         return context
 

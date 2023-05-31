@@ -3,9 +3,10 @@ from main_app.utils.general_utils import style_numeric_data
 
 
 class DiscountedCashFlow:
-    def __init__(self, income_statements, balance_sheets):
+    def __init__(self, income_statements, balance_sheets, cash_flow_statements):
         self.income_statements = income_statements
         self.balance_sheets = balance_sheets
+        self.cash_flow_statements = cash_flow_statements
 
         # years:
         self.past_years = []
@@ -25,15 +26,20 @@ class DiscountedCashFlow:
         self.net_receivables = []
         self.inventory = []
         self.total_liabilities = []
+        self.total_non_current_assets = []
+
+        # Cash flow data:
+        self.amortization = []
+        self.capital_expenditure = []
 
         # Initial actions:
         self.get_data()
         self.get_years()
 
         # Turnover indexes:
-        self.receivable_turnover_ratios = calculate_turnover_ratios(self.net_receivables, self.revenues)
-        self.inventory_turnover_ratios = calculate_turnover_ratios(self.inventory, self.revenues)
-        self.liabilities_turnover_ratios = calculate_turnover_ratios(self.total_liabilities, self.revenues)
+        self.receivable_turnover_ratios = calculate_turnover_ratio(self.net_receivables, self.revenues)
+        self.inventory_turnover_ratios = calculate_turnover_ratio(self.inventory, self.revenues)
+        self.liabilities_turnover_ratios = calculate_turnover_ratio(self.total_liabilities, self.revenues)
         self.average_turnover_ratios = {"Average": [
             round(mean(self.receivable_turnover_ratios), 2),
             round(mean(self.inventory_turnover_ratios), 2),
@@ -56,6 +62,11 @@ class DiscountedCashFlow:
             self.net_receivables.append(statement.net_receivables)
             self.inventory.append(statement.inventory)
             self.total_liabilities.append(statement.total_liabilities)
+            self.total_non_current_assets.append(statement.total_non_current_assets)
+
+        for statement in self.cash_flow_statements:
+            self.amortization.append(statement.depreciation_and_amortization)
+            self.capital_expenditure.append(statement.investments_in_property_plant_and_equipment)
 
     def get_years(self):
         last_period = self.all_years[-1]
@@ -70,17 +81,11 @@ class DiscountedCashFlow:
         projection_dict.update({"year": self.all_years})
 
         # Update projection dictionary with 'revenue' key:
-        average_rate = get_average_change(self.revenues)
-        if user_revenue_rate or user_revenue_rate == 0:
-            average_rate = user_revenue_rate
-
-        for _ in range(1, 6):
-            future_revenue = self.revenues[-1] * (1 + average_rate)
-            self.revenues.append(int(future_revenue))
+        get_values_from_average_change(self.revenues, user_revenue_rate)
         style_and_update(projection_dict, "total_revenue", self.revenues)
 
         # Update projection dictionary with 'operating_costs' key:
-        get_costs_from_ratio(self.revenues, self.operating_costs, user_operating_costs)
+        get_values_from_ratio(self.revenues, self.operating_costs, user_operating_costs)
         style_and_update(projection_dict, "operating_costs", self.operating_costs)
 
         # Update projection dictionary with 'operating_incomes' key:
@@ -92,7 +97,7 @@ class DiscountedCashFlow:
         style_and_update(projection_dict, "operating_income", self.operating_incomes)
 
         # Update projection dictionary with 'other_operating_costs' key:
-        get_costs_from_ratio(self.revenues, self.other_operating_costs, user_other_operating_costs)
+        get_values_from_ratio(self.revenues, self.other_operating_costs, user_other_operating_costs)
         style_and_update(projection_dict, "other_operating_costs", self.other_operating_costs)
 
         # Update projection dictionary with 'income_before_tax' key:
@@ -104,7 +109,7 @@ class DiscountedCashFlow:
         style_and_update(projection_dict, "income_before_tax", self.incomes_before_tax)
 
         # Update projection dictionary with 'income_tax_expense' key:
-        get_costs_from_ratio(self.incomes_before_tax, self.income_tax_expenses, user_tax)
+        get_values_from_ratio(self.incomes_before_tax, self.income_tax_expenses, user_tax)
         style_and_update(projection_dict, "income_tax_expense", self.income_tax_expenses)
 
         # Update projection dictionary with 'net_income' key:
@@ -171,6 +176,24 @@ class DiscountedCashFlow:
 
         return net_working_capital_dict
 
+    def get_capex_dict(self):
+        capex_dict = {}
+        capex_dict.update({"year": self.all_years})
+
+        # Calculate non current assets:
+        get_values_from_average_change(self.total_non_current_assets)
+        style_and_update(capex_dict, "non_current_assets", self.total_non_current_assets)
+
+        # Calculate amortization:
+        get_values_from_ratio(self.total_non_current_assets, self.amortization)
+        style_and_update(capex_dict, "amortization", self.amortization)
+
+        # Calculate capital expenditure:
+        get_values_from_average_change(self.capital_expenditure)
+        style_and_update(capex_dict, "capital_expenditure", self.capital_expenditure)
+
+        return capex_dict
+
 
 def get_average_change(data_list):
     changes = []
@@ -184,6 +207,16 @@ def get_average_change(data_list):
     return mean(changes)
 
 
+def get_values_from_average_change(values, user_rate=None):
+    average_change = get_average_change(values)
+    if user_rate or user_rate == 0:
+        average_change = user_rate
+
+    for _ in range(1, 6):
+        future_value = values[-1] * (1 + average_change)
+        values.append(int(future_value))
+
+
 def get_average_ratio(nominator_list, denominator_list):
     ratios = []
 
@@ -194,24 +227,24 @@ def get_average_ratio(nominator_list, denominator_list):
     return mean(ratios)
 
 
+def get_values_from_ratio(relative_values, key_values, user_ratio=None):
+    ratio = get_average_ratio(relative_values, key_values)
+    if user_ratio or user_ratio == 0:
+        ratio = user_ratio
+
+    for _ in range(1, 6):
+        index = len(key_values)
+        future_revenue = relative_values[index]
+        future_costs = future_revenue * ratio
+        key_values.append(int(future_costs))
+
+
 def style_and_update(dictionary, key, items):
     styled_values = [style_numeric_data(value) for value in items]
     dictionary.update({key: styled_values})
 
 
-def get_costs_from_ratio(revenues, costs, user_ratio):
-    ratio = get_average_ratio(revenues, costs)
-    if user_ratio or user_ratio == 0:
-        ratio = user_ratio
-
-    for _ in range(1, 6):
-        index = len(costs)
-        future_revenue = revenues[index]
-        future_costs = future_revenue * ratio
-        costs.append(int(future_costs))
-
-
-def calculate_turnover_ratios(data, revenues_list):
+def calculate_turnover_ratio(data, revenues_list):
     ratios = []
     for index, value in enumerate(data):
         ratio = round(value / revenues_list[index] * 365, 2)
