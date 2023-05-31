@@ -164,7 +164,7 @@ footer {
     background-color: #ffffff;
 }
 
-.company-list {
+.main-table {
     border-collapse: collapse;
     width: 100%;
     margin-top: 30px;
@@ -174,16 +174,16 @@ footer {
     text-decoration: underline;;
 }
 
-.company-list tr {
+.main-table tr {
     height: 50px;
 }
 
-.company-list tr:hover {
+.main-table tr:hover {
     background: #cccccc;
 }
 
-.company-list tr th,
-.company-list tr td {
+.main-table tr th,
+.main-table tr td {
     text-decoration: none;
     font-size: 20px;
     padding: 5px;
@@ -192,7 +192,7 @@ footer {
     white-space: nowrap;
 }
 
-.company-list a {
+.main-table a {
     text-decoration: none;
     color: #333333;
 }
@@ -369,8 +369,8 @@ footer {
     background: #ffffff;
 }
 
-.content .company-list tr td,
-.content .company-list tr th {
+.content .main-table tr td,
+.content .main-table tr th {
     font-size: 16px;
 }
 

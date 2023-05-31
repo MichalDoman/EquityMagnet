@@ -200,6 +200,7 @@ class EvaluationView(DetailView):
         )
         context['turnover_ratios'] = evaluation.get_turnover_ratios_dict()
         context['average_turnover_ratios'] = evaluation.average_turnover_ratios
+        context['net_working_capital'] = evaluation.get_net_working_capital_dict()
 
         return context
 

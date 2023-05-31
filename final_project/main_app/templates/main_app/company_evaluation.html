@@ -40,9 +40,8 @@
             <div class="content-box">
                 <div class="content active" id="projections">
 
-
                     <label class="projection-label">Income Statement</label>
-                    <table class="company-list">
+                    <table class="main-table">
                         {% for key, items in income_projection.items %}
                             <tr>
                                 <th>{{ key }}</th>
@@ -55,7 +54,7 @@
 
                     <label class="projection-label">Turnover Ratios</label>
                     <div class="turnover-ratios-box">
-                        <table class="company-list">
+                        <table class="main-table">
                             {% for key, items in turnover_ratios.items %}
                                 <tr>
                                     <th>{{ key }}</th>
@@ -65,7 +64,7 @@
                                 </tr>
                             {% endfor %}
                         </table>
-                        <table class="company-list">
+                        <table class="main-table">
                             {% for key, items in average_turnover_ratios.items %}
                                 <tr>
                                     <th>{{ key }}</th>
@@ -78,6 +77,17 @@
                             {% endfor %}
                         </table>
                     </div>
+                    <label class="projection-label">Net Working Capital</label>
+                    <table class="main-table">
+                            {% for key, items in net_working_capital.items %}
+                                <tr>
+                                    <th>{{ key }}</th>
+                                    {% for item in items %}
+                                        <td>{{ item }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
                     <p class="value-disclaimer">* all values in millions USD</p>
                 </div>
                 <div class="content" id="discounted-cash-flow">

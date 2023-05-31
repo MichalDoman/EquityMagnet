@@ -7,9 +7,12 @@ class DiscountedCashFlow:
         self.income_statements = income_statements
         self.balance_sheets = balance_sheets
 
-        # Income statement data:
+        # years:
         self.past_years = []
-        self.all_years = []  # previous years + future projection years
+        self.future_years = []  # years of projection
+        self.all_years = []  # past_years & future_years
+
+        # Income statement data:
         self.revenues = []
         self.operating_costs = []
         self.operating_incomes = []
@@ -25,6 +28,7 @@ class DiscountedCashFlow:
 
         # Initial actions:
         self.get_data()
+        self.get_years()
 
         # Turnover indexes:
         self.receivable_turnover_ratios = calculate_turnover_ratios(self.net_receivables, self.revenues)
@@ -53,15 +57,18 @@ class DiscountedCashFlow:
             self.inventory.append(statement.inventory)
             self.total_liabilities.append(statement.total_liabilities)
 
+    def get_years(self):
+        last_period = self.all_years[-1]
+        for i in range(1, 6):
+            self.all_years.append(last_period + i)
+            self.future_years.append(last_period + i)
+
     def get_income_projection_dict(self, user_revenue_rate, user_operating_costs,
                                    user_other_operating_costs,
                                    user_tax):
         projection_dict = {}
 
         # Update projection dictionary with 'year' key:
-        last_period = self.all_years[-1]
-        for i in range(1, 6):
-            self.all_years.append(last_period + i)
         projection_dict.update({"year": self.all_years})
 
         # Update projection dictionary with 'revenue' key:
@@ -121,6 +128,36 @@ class DiscountedCashFlow:
         turnover_ratios_dict.update({"liabilities_turnover_ratio": self.liabilities_turnover_ratios})
 
         return turnover_ratios_dict
+
+    def get_net_working_capital_dict(self):
+        net_working_capital_dict = {}
+
+        # Get last year + future years:
+        years_list = self.future_years.copy()
+        years_list.insert(0, self.past_years[-1])
+        net_working_capital_dict.update({"year": years_list})
+
+        # Calculate future data:
+        future_net_receivables = []
+        future_inventory = []
+        future_total_liabilities = []
+        start_index = len(self.past_years) - 1
+        for revenue in self.revenues[start_index:-1]:
+            future_net_receivables.append(int(revenue/365 * self.average_turnover_ratios['Average'][0]))
+            future_inventory.append(int(revenue/365 * self.average_turnover_ratios['Average'][1]))
+            future_total_liabilities.append(int(revenue/365 * self.average_turnover_ratios['Average'][2]))
+
+        future_net_receivables.insert(0, self.net_receivables[-1])
+        style_and_update(net_working_capital_dict, "net_receivables", future_net_receivables)
+        future_inventory.insert(0, self.inventory[-1])
+        style_and_update(net_working_capital_dict, "inventory", future_inventory)
+        future_total_liabilities.insert(0, self.total_liabilities[-1])
+        style_and_update(net_working_capital_dict, "future_total_liabilities", future_total_liabilities)
+
+        # Calculate future net working capital:
+
+
+        return net_working_capital_dict
 
 
 def get_average_change(data_list):
