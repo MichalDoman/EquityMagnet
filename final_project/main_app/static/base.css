@@ -1,3 +1,5 @@
+/* ---------------------------------------------- Base HTML: */
+
 * {
     margin: 0;
     padding: 0;
@@ -62,19 +64,8 @@ footer {
     border-radius: 15px;
 }
 
-/* ---------------------------------------------- Messages: */
-/*.messages {*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    left: -5px;*/
-/*    border: 4px solid #a41515;*/
-/*    background: #006b1b;*/
-/*    border-radius: 10px;*/
-/*    width: 490px;*/
-/*    height: 90px;*/
-/*}*/
-
 /* ---------------------------------------------- Home Page: */
+
 .grid-box {
     display: grid;
     grid-template-columns: auto auto;
@@ -103,6 +94,7 @@ footer {
 }
 
 /* ---------------------------------------------- Company List: */
+
 .search-form-box {
     display: flex;
     flex-direction: column;
@@ -211,6 +203,7 @@ footer {
 }
 
 /* ---------------------------------------------- Company Details: */
+
 .details-section {
     padding: 0 10px;
     background: #dddddd;
@@ -291,6 +284,7 @@ footer {
 }
 
 /* ---------------------------------------------- Evaluation View: */
+
 .main-box {
     display: grid;
     grid-template-columns: 15% 85%;
@@ -397,6 +391,7 @@ footer {
 }
 
 /* ---------------------------------------------- Register View: */
+
 .register-form-box {
     margin: 10px 35%;
     background: #aaaaaa;
