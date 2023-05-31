@@ -121,7 +121,11 @@
                             <tr>
                                 <th>{{ key|style_string_data }}</th>
                                 {% for item in items %}
-                                    <td>{{ item }}</td>
+                                    {% if forloop.counter0 > 0 %}
+                                        <td class="projection-data">{{ item }}</td>
+                                    {% else %}
+                                        <td>{{ item }}</td>
+                                    {% endif %}
                                 {% endfor %}
                             </tr>
                         {% endfor %}

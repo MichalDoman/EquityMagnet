@@ -29,6 +29,7 @@ class DiscountedCashFlow:
         self.inventory = []
         self.total_liabilities = []
         self.total_non_current_assets = []
+        self.net_working_capital_changes = [0]
 
         # Cash flow data:
         self.amortization = []
@@ -137,7 +138,7 @@ class DiscountedCashFlow:
 
         return turnover_ratios_dict
 
-    def get_net_working_capital_dict(self):
+    def get_net_working_capital_dict(self):  # TODO check if dcf_index can optimize the code
         net_working_capital_dict = {}
 
         # Get last year + future years:
@@ -170,14 +171,13 @@ class DiscountedCashFlow:
         style_and_update(net_working_capital_dict, "net_working_capital", net_working_capital_list)
 
         # Calculate net working capital change:
-        nwc_change = ["-"]
         previous_value = None
         for index, value in enumerate(net_working_capital_list):
             if previous_value:
                 change_value = round(previous_value - value, 2)
-                nwc_change.append(change_value)
+                self.net_working_capital_changes.append(change_value)
             previous_value = value
-        style_and_update(net_working_capital_dict, "net_working_capital_change", nwc_change)
+        style_and_update(net_working_capital_dict, "net_working_capital_change", self.net_working_capital_changes)
 
         return net_working_capital_dict
 
@@ -214,8 +214,37 @@ class DiscountedCashFlow:
             periods.append(period)
         dcf_dict.update({"period": periods})
 
-        # Get revenues for display:
-        style_and_update(dcf_dict, "revenue", self.revenues[self.dcf_index:])
+        # Get revenues and operating costs:
+        revenues_list = self.revenues[self.dcf_index:]
+        style_and_update(dcf_dict, "revenue", revenues_list)
+
+        operating_costs_list = self.operating_costs[self.dcf_index:]
+        style_and_update(dcf_dict, "operating_costs", operating_costs_list)
+
+        # Calculate EBITDA and get amortization:
+        amortization_list = self.amortization[self.dcf_index:]
+        ebitda_list = []
+        for i, value in enumerate(revenues_list):
+            ebitda = value - operating_costs_list[i] + amortization_list[i]
+            ebitda_list.append(ebitda)
+        style_and_update(dcf_dict, "ebitda", ebitda_list)
+        style_and_update(dcf_dict, "amortization", amortization_list)
+
+        # Get operating_income and tax expenses:
+        operating_income_list = self.operating_incomes[self.dcf_index:]
+        style_and_update(dcf_dict, "operating_income", operating_income_list)
+
+        tax_list = self.income_tax_expenses[self.dcf_index:]
+        style_and_update(dcf_dict, "income_tax_expenses", tax_list)
+
+        # Calculate NOPAT, display net_working_capital_change and amortization again:
+        nopat_list = []
+        for i, value in enumerate(operating_income_list):
+            nopat = value - tax_list[i]
+            nopat_list.append(nopat)
+        style_and_update(dcf_dict, "nopat", nopat_list)
+        style_and_update(dcf_dict, "amortization_", amortization_list)
+        dcf_dict.update({"Net_working_capital_change": self.net_working_capital_changes[self.dcf_index:]})
 
         return dcf_dict
 
