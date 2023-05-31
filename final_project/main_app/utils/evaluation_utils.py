@@ -63,9 +63,7 @@ class DiscountedCashFlow:
             self.all_years.append(last_period + i)
             self.future_years.append(last_period + i)
 
-    def get_income_projection_dict(self, user_revenue_rate, user_operating_costs,
-                                   user_other_operating_costs,
-                                   user_tax):
+    def get_income_projection_dict(self, user_revenue_rate, user_operating_costs, user_other_operating_costs, user_tax):
         projection_dict = {}
 
         # Update projection dictionary with 'year' key:
@@ -114,7 +112,7 @@ class DiscountedCashFlow:
             index = len(self.net_incomes)
             future_income = self.incomes_before_tax[index]
             future_expense = self.income_tax_expenses[index]
-            self.net_incomes.append(future_income + future_expense)
+            self.net_incomes.append(future_income - future_expense)
         style_and_update(projection_dict, "net_income", self.net_incomes)
 
         return projection_dict
@@ -143,9 +141,9 @@ class DiscountedCashFlow:
         future_total_liabilities = []
         start_index = len(self.past_years) - 1
         for revenue in self.revenues[start_index:-1]:
-            future_net_receivables.append(int(revenue/365 * self.average_turnover_ratios['Average'][0]))
-            future_inventory.append(int(revenue/365 * self.average_turnover_ratios['Average'][1]))
-            future_total_liabilities.append(int(revenue/365 * self.average_turnover_ratios['Average'][2]))
+            future_net_receivables.append(int(revenue / 365 * self.average_turnover_ratios['Average'][0]))
+            future_inventory.append(int(revenue / 365 * self.average_turnover_ratios['Average'][1]))
+            future_total_liabilities.append(int(revenue / 365 * self.average_turnover_ratios['Average'][2]))
 
         future_net_receivables.insert(0, self.net_receivables[-1])
         style_and_update(net_working_capital_dict, "net_receivables", future_net_receivables)
@@ -155,7 +153,21 @@ class DiscountedCashFlow:
         style_and_update(net_working_capital_dict, "future_total_liabilities", future_total_liabilities)
 
         # Calculate future net working capital:
+        net_working_capital_list = []
+        for index, value in enumerate(future_net_receivables):
+            net_working_capital = value + future_inventory[index] - future_total_liabilities[index]
+            net_working_capital_list.append(net_working_capital)
+        style_and_update(net_working_capital_dict, "net_working_capital", net_working_capital_list)
 
+        # Calculate net working capital change:
+        nwc_change = ["-"]
+        previous_value = None
+        for index, value in enumerate(net_working_capital_list):
+            if previous_value:
+                change_value = round(previous_value - value, 2)
+                nwc_change.append(change_value)
+            previous_value = value
+        style_and_update(net_working_capital_dict, "net_working_capital_change", nwc_change)
 
         return net_working_capital_dict
 
@@ -169,7 +181,7 @@ def get_average_change(data_list):
             changes.append(change)
         previous_value = value
 
-    return sum(changes) / len(changes)
+    return mean(changes)
 
 
 def get_average_ratio(nominator_list, denominator_list):

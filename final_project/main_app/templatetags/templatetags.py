@@ -17,6 +17,8 @@ def style_numeric_data(value):
         pass
     elif isinstance(value, float):
         value = str(round((value * 100), 2)) + "%"
+    elif isinstance(value, str):
+        pass
     else:
         is_negative = False
         if value < 0:
