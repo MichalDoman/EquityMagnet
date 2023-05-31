@@ -173,7 +173,7 @@ footer {
 }
 
 .main-table tr:hover {
-    background: #cccccc;
+    background: #c4dce8;
 }
 
 .main-table tr th,
@@ -380,6 +380,10 @@ footer {
 
 .main-table tr:first-child {
     font-weight: bold;
+}
+
+.projection-data {
+    background-color: #c4dce8;
 }
 
 .turnover-ratios-box {

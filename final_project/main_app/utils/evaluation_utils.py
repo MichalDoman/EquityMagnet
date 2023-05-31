@@ -38,6 +38,9 @@ class DiscountedCashFlow:
         self.get_data()
         self.get_years()
 
+        # Index to display years from current to the end of projection:
+        self.dcf_index = self.all_years.index(self.past_years[-1])
+
         # Turnover indexes:
         self.receivable_turnover_ratios = calculate_turnover_ratio(self.net_receivables, self.revenues)
         self.inventory_turnover_ratios = calculate_turnover_ratio(self.inventory, self.revenues)
@@ -199,23 +202,20 @@ class DiscountedCashFlow:
     def get_dcf_dict(self, user_wacc, user_g):
         dcf_dict = {}
 
-        index = self.all_years.index(self.past_years[-1])
-
         # Get years:
-        years = [self.all_years[index]]
+        years = [self.all_years[self.dcf_index]]
         years.extend(self.future_years)
         dcf_dict.update({"year": years})
 
         # Get periods:
         periods = []
-        last_period = len(self.all_years) - index
+        last_period = len(self.all_years) - self.dcf_index
         for period in range(0, last_period):
             periods.append(period)
         dcf_dict.update({"period": periods})
 
         # Get revenues for display:
-        style_and_update(dcf_dict, "revenue", self.revenues[index:])
-
+        style_and_update(dcf_dict, "revenue", self.revenues[self.dcf_index:])
 
         return dcf_dict
 

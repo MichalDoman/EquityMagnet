@@ -192,6 +192,9 @@ class EvaluationView(DetailView):
 
         evaluation = DiscountedCashFlow(income_statements, balance_sheets, cash_flow_statements)
 
+        # Get dcf_index for highlighting projection data:
+        context["dcf_index"] = evaluation.dcf_index
+
         # Get projection context:
         context['income_projection'] = evaluation.get_income_projection_dict(
             revenue_rate,
