@@ -192,6 +192,7 @@ class EvaluationView(DetailView):
 
         evaluation = DiscountedCashFlow(income_statements, balance_sheets, cash_flow_statements)
 
+        # Get projection context:
         context['income_projection'] = evaluation.get_income_projection_dict(
             revenue_rate,
             operational_costs,
@@ -202,6 +203,12 @@ class EvaluationView(DetailView):
         context['average_turnover_ratios'] = evaluation.average_turnover_ratios
         context['net_working_capital'] = evaluation.get_net_working_capital_dict()
         context['capex_and_amortization'] = evaluation.get_capex_dict()
+
+        # Get dcf context:
+        context['dcf_data'] = evaluation.get_dcf_dict(
+            wacc,
+            g
+        )
 
         return context
 

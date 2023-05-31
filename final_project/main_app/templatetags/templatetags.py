@@ -43,6 +43,13 @@ def style_numeric_data(value):
     return value
 
 
+@register.filter(name="style_string_data")
+def style_string_data(string):
+    if isinstance(string, str):
+        styled_string = string.capitalize().replace("_", " ")
+        return styled_string
+
+
 @register.filter(name="get_request_url_list")
 def get_request_url_list(request, key):
     return request.getlist(key)

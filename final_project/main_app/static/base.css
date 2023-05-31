@@ -370,10 +370,7 @@ footer {
     align-self: center;
     font-weight: bold;
     padding-top: 30px;
-}
-
-.content .projection-label:first-child {
-    padding-top: 10px;
+    text-decoration: underline;
 }
 
 .content .main-table tr td,

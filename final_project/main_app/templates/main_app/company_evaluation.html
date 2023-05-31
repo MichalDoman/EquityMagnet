@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load templatetags %}
 
 {% block javascript %}
     <script src="{% static "js/evaluation.js" %}" defer></script>
@@ -44,20 +45,19 @@
                     <table class="main-table">
                         {% for key, items in income_projection.items %}
                             <tr>
-                                <th>{{ key }}</th>
+                                <th>{{ key|style_string_data }}</th>
                                 {% for item in items %}
                                     <td>{{ item }}</td>
                                 {% endfor %}
                             </tr>
                         {% endfor %}
                     </table>
-
                     <label class="projection-label">Turnover Ratios</label>
                     <div class="turnover-ratios-box">
                         <table class="main-table">
                             {% for key, items in turnover_ratios.items %}
                                 <tr>
-                                    <th>{{ key }}</th>
+                                    <th>{{ key|style_string_data }}</th>
                                     {% for item in items %}
                                         <td>{{ item }}</td>
                                     {% endfor %}
@@ -67,7 +67,7 @@
                         <table class="main-table">
                             {% for key, items in average_turnover_ratios.items %}
                                 <tr>
-                                    <th>{{ key }}</th>
+                                    <th>{{ key|style_string_data }}</th>
                                 </tr>
                                 {% for item in items %}
                                 <tr>
@@ -81,7 +81,7 @@
                     <table class="main-table">
                         {% for key, items in net_working_capital.items %}
                             <tr>
-                                <th>{{ key }}</th>
+                                <th>{{ key|style_string_data }}</th>
                                 {% for item in items %}
                                     <td>{{ item }}</td>
                                 {% endfor %}
@@ -92,7 +92,7 @@
                     <table class="main-table">
                         {% for key, items in capex_and_amortization.items %}
                             <tr>
-                                <th>{{ key }}</th>
+                                <th>{{ key|style_string_data }}</th>
                                 {% for item in items %}
                                     <td>{{ item }}</td>
                                 {% endfor %}
@@ -101,8 +101,20 @@
                     </table>
                     <p class="value-disclaimer">* all values in millions USD</p>
                 </div>
-                <div class="content" id="discounted-cash-flow">
 
+                <div class="content" id="discounted-cash-flow">
+                    <label class="projection-label">Discounted Cash Flow</label>
+                    <table class="main-table">
+                        {% for key, items in dcf_data.items %}
+                            <tr>
+                                <th>{{ key|style_string_data }}</th>
+                                {% for item in items %}
+                                    <td>{{ item }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <p class="value-disclaimer">* all values in millions USD</p>
                 </div>
             </div>
         </div>

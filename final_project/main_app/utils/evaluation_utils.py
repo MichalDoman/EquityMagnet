@@ -146,8 +146,8 @@ class DiscountedCashFlow:
         future_net_receivables = []
         future_inventory = []
         future_total_liabilities = []
-        start_index = len(self.past_years) - 1
-        for revenue in self.revenues[start_index:-1]:
+        start_index = len(self.past_years)
+        for revenue in self.revenues[start_index:]:
             future_net_receivables.append(int(revenue / 365 * self.average_turnover_ratios['Average'][0]))
             future_inventory.append(int(revenue / 365 * self.average_turnover_ratios['Average'][1]))
             future_total_liabilities.append(int(revenue / 365 * self.average_turnover_ratios['Average'][2]))
@@ -195,6 +195,29 @@ class DiscountedCashFlow:
         style_and_update(capex_dict, "capital_expenditure", self.capital_expenditure)
 
         return capex_dict
+
+    def get_dcf_dict(self, user_wacc, user_g):
+        dcf_dict = {}
+
+        index = self.all_years.index(self.past_years[-1])
+
+        # Get years:
+        years = [self.all_years[index]]
+        years.extend(self.future_years)
+        dcf_dict.update({"year": years})
+
+        # Get periods:
+        periods = []
+        last_period = len(self.all_years) - index
+        for period in range(0, last_period):
+            periods.append(period)
+        dcf_dict.update({"period": periods})
+
+        # Get revenues for display:
+        style_and_update(dcf_dict, "revenue", self.revenues[index:])
+
+
+        return dcf_dict
 
 
 def get_average_change(data_list):
