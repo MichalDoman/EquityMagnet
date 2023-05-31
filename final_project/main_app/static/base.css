@@ -374,6 +374,11 @@ footer {
     font-size: 16px;
 }
 
+.turnover-ratios-box {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
 /* ---------------------------------------------- Register View: */
 .register-form-box {
     margin: 10px 35%;

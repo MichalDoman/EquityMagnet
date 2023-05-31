@@ -198,9 +198,8 @@ class EvaluationView(DetailView):
             other_operational_costs,
             tax
         )
-        context['net_working_capital_projection'] = evaluation.get_net_working_capital_projection_dict(
-
-        )
+        context['turnover_ratios'] = evaluation.get_turnover_ratios_dict()
+        context['average_turnover_ratios'] = evaluation.average_turnover_ratios
 
         return context
 

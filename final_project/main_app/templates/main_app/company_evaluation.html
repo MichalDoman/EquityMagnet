@@ -53,18 +53,31 @@
                         {% endfor %}
                     </table>
 
-                    <label class="projection-label">Net Working Capital</label>
-                    <table class="company-list">
-                        {% for key, items in net_working_capital_projection.items %}
-                            <tr>
-                                <th>{{ key }}</th>
+                    <label class="projection-label">Turnover Ratios</label>
+                    <div class="turnover-ratios-box">
+                        <table class="company-list">
+                            {% for key, items in turnover_ratios.items %}
+                                <tr>
+                                    <th>{{ key }}</th>
+                                    {% for item in items %}
+                                        <td>{{ item }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        <table class="company-list">
+                            {% for key, items in average_turnover_ratios.items %}
+                                <tr>
+                                    <th>{{ key }}</th>
+                                </tr>
                                 {% for item in items %}
+                                <tr>
                                     <td>{{ item }}</td>
+                                </tr>
                                 {% endfor %}
-                            </tr>
-                        {% endfor %}
-                    </table>
-
+                            {% endfor %}
+                        </table>
+                    </div>
                     <p class="value-disclaimer">* all values in millions USD</p>
                 </div>
                 <div class="content" id="discounted-cash-flow">

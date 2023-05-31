@@ -1,3 +1,4 @@
+from statistics import mean
 from main_app.utils.general_utils import style_numeric_data
 
 
@@ -7,7 +8,8 @@ class DiscountedCashFlow:
         self.balance_sheets = balance_sheets
 
         # Income statement data:
-        self.years = []
+        self.past_years = []
+        self.all_years = []  # previous years + future projection years
         self.revenues = []
         self.operating_costs = []
         self.operating_incomes = []
@@ -18,16 +20,26 @@ class DiscountedCashFlow:
 
         # Balance sheet data:
         self.net_receivables = []
-
-        # Indexes:
-        self.receivable_turnover_ratios = []
+        self.inventory = []
+        self.total_liabilities = []
 
         # Initial actions:
         self.get_data()
 
+        # Turnover indexes:
+        self.receivable_turnover_ratios = calculate_turnover_ratios(self.net_receivables, self.revenues)
+        self.inventory_turnover_ratios = calculate_turnover_ratios(self.inventory, self.revenues)
+        self.liabilities_turnover_ratios = calculate_turnover_ratios(self.total_liabilities, self.revenues)
+        self.average_turnover_ratios = {"Average": [
+            round(mean(self.receivable_turnover_ratios), 2),
+            round(mean(self.inventory_turnover_ratios), 2),
+            round(mean(self.liabilities_turnover_ratios), 2),
+        ]}
+
     def get_data(self):
         for statement in self.income_statements:
-            self.years.append(statement.year)
+            self.past_years.append(statement.year)
+            self.all_years.append(statement.year)
             self.revenues.append(statement.total_revenue)
             self.operating_costs.append(statement.cost_and_expenses)
             self.operating_incomes.append(statement.operating_income)
@@ -38,6 +50,8 @@ class DiscountedCashFlow:
 
         for statement in self.balance_sheets:
             self.net_receivables.append(statement.net_receivables)
+            self.inventory.append(statement.inventory)
+            self.total_liabilities.append(statement.total_liabilities)
 
     def get_income_projection_dict(self, user_revenue_rate, user_operating_costs,
                                    user_other_operating_costs,
@@ -45,10 +59,10 @@ class DiscountedCashFlow:
         projection_dict = {}
 
         # Update projection dictionary with 'year' key:
-        last_period = self.years[-1]
+        last_period = self.all_years[-1]
         for i in range(1, 6):
-            self.years.append(last_period + i)
-        projection_dict.update({"year": self.years})
+            self.all_years.append(last_period + i)
+        projection_dict.update({"year": self.all_years})
 
         # Update projection dictionary with 'revenue' key:
         average_rate = get_average_change(self.revenues)
@@ -98,14 +112,15 @@ class DiscountedCashFlow:
 
         return projection_dict
 
-    def get_net_working_capital_projection_dict(self):
-        projection_dict = {}
+    def get_turnover_ratios_dict(self):
+        turnover_ratios_dict = {}
 
-    def get_turnover_ratios(self):
-        for index, value in enumerate(self.revenues):
-            receivables = round(self.net_receivables[index]/value * 365, 2)
-            self.receivable_turnover_ratios.append(receivables)
+        turnover_ratios_dict.update({"year": self.past_years})
+        turnover_ratios_dict.update({"receivables_turnover_ratio": self.receivable_turnover_ratios})
+        turnover_ratios_dict.update({"inventory_turnover_ratio": self.inventory_turnover_ratios})
+        turnover_ratios_dict.update({"liabilities_turnover_ratio": self.liabilities_turnover_ratios})
 
+        return turnover_ratios_dict
 
 
 def get_average_change(data_list):
@@ -127,7 +142,7 @@ def get_average_ratio(nominator_list, denominator_list):
         ratio = denominator_list[index] / nominator_list[index]
         ratios.append(round(ratio, 3))
 
-    return sum(ratios) / len(ratios)
+    return mean(ratios)
 
 
 def style_and_update(dictionary, key, items):
@@ -145,3 +160,11 @@ def get_costs_from_ratio(revenues, costs, user_ratio):
         future_revenue = revenues[index]
         future_costs = future_revenue * ratio
         costs.append(int(future_costs))
+
+
+def calculate_turnover_ratios(data, revenues_list):
+    ratios = []
+    for index, value in enumerate(data):
+        ratio = round(value / revenues_list[index] * 365, 2)
+        ratios.append(ratio)
+    return ratios
