@@ -1,6 +1,8 @@
 from statistics import mean
 from main_app.utils.general_utils import style_numeric_data
 
+PROJECTION_RANGE = range(1, 6)  # range(1, 6) gives 5 years of projection
+
 
 class DiscountedCashFlow:
     def __init__(self, income_statements, balance_sheets, cash_flow_statements):
@@ -70,7 +72,7 @@ class DiscountedCashFlow:
 
     def get_years(self):
         last_period = self.all_years[-1]
-        for i in range(1, 6):
+        for i in PROJECTION_RANGE:
             self.all_years.append(last_period + i)
             self.future_years.append(last_period + i)
 
@@ -89,7 +91,7 @@ class DiscountedCashFlow:
         style_and_update(projection_dict, "operating_costs", self.operating_costs)
 
         # Update projection dictionary with 'operating_incomes' key:
-        for _ in range(1, 6):
+        for _ in PROJECTION_RANGE:
             index = len(self.operating_incomes)
             future_revenue = self.revenues[index]
             future_operating_costs = self.operating_costs[index]
@@ -101,7 +103,7 @@ class DiscountedCashFlow:
         style_and_update(projection_dict, "other_operating_costs", self.other_operating_costs)
 
         # Update projection dictionary with 'income_before_tax' key:
-        for _ in range(1, 6):
+        for _ in PROJECTION_RANGE:
             index = len(self.incomes_before_tax)
             future_income = self.operating_incomes[index]
             future_operating_cost = self.other_operating_costs[index]
@@ -113,7 +115,7 @@ class DiscountedCashFlow:
         style_and_update(projection_dict, "income_tax_expense", self.income_tax_expenses)
 
         # Update projection dictionary with 'net_income' key:
-        for _ in range(1, 6):
+        for _ in PROJECTION_RANGE:
             index = len(self.net_incomes)
             future_income = self.incomes_before_tax[index]
             future_expense = self.income_tax_expenses[index]
@@ -212,7 +214,7 @@ def get_values_from_average_change(values, user_rate=None):
     if user_rate or user_rate == 0:
         average_change = user_rate
 
-    for _ in range(1, 6):
+    for _ in PROJECTION_RANGE:
         future_value = values[-1] * (1 + average_change)
         values.append(int(future_value))
 
@@ -232,7 +234,7 @@ def get_values_from_ratio(relative_values, key_values, user_ratio=None):
     if user_ratio or user_ratio == 0:
         ratio = user_ratio
 
-    for _ in range(1, 6):
+    for _ in PROJECTION_RANGE:
         index = len(key_values)
         future_revenue = relative_values[index]
         future_costs = future_revenue * ratio
