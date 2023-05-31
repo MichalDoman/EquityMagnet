@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from main_app.models import Company, Price, FavoriteCompany, Evaluation, IncomeStatement, BalanceSheet, \
     CashFlowStatement
 from main_app.utils.general_utils import extract_historical_prices, get_all_countries, get_field_dictionaries
-from main_app.utils.evaluation_utils import get_income_projection_dict, get_net_working_capital_projection_dict
+from main_app.utils.evaluation_utils import DiscountedCashFlow
 from main_app.forms import SearchFiltersForm, EvaluationEditablesForm, RegisterForm
 
 
@@ -190,15 +190,16 @@ class EvaluationView(DetailView):
         balance_sheets = BalanceSheet.objects.filter(company=self.kwargs['pk']).order_by("year")
         cash_flow_statements = CashFlowStatement.objects.filter(company=self.kwargs['pk']).order_by("year")
 
-        context['income_projection'] = get_income_projection_dict(
-            income_statements,
+        evaluation = DiscountedCashFlow(income_statements, balance_sheets)
+
+        context['income_projection'] = evaluation.get_income_projection_dict(
             revenue_rate,
             operational_costs,
             other_operational_costs,
             tax
         )
-        context['net_working_capital_projection'] = get_net_working_capital_projection_dict(
-            balance_sheets
+        context['net_working_capital_projection'] = evaluation.get_net_working_capital_projection_dict(
+
         )
 
         return context

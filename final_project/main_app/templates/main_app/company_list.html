@@ -17,8 +17,7 @@
     <div class="main-box">
 
         <div class="values-box">
-            <form class="search-form-box">
-                {% csrf_token %}
+            <form class="search-form-box" method="GET">
                 <button type="submit">
                     <span class="calculate-btn">
                         <i class="material-icons">search</i>
@@ -28,7 +27,6 @@
                 {{ form }}
             </form>
         </div>
-
 
         <div class="company-list-box">
             <table class="company-list">

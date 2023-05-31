@@ -109,6 +109,14 @@ footer {
     font-size: 15px;
 }
 
+.search-form-box label {
+    font-weight: bold;
+}
+
+.search-form-box div label {
+    font-weight: normal;
+}
+
 .search-form input{
     width: 40%;
     height: 20px;
