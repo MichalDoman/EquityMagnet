@@ -29,7 +29,7 @@ class DiscountedCashFlow:
         self.inventory = []
         self.total_liabilities = []
         self.total_non_current_assets = []
-        self.net_working_capital_changes = [0]
+        self.net_working_capital_changes = []
 
         # Cash flow data:
         self.amortization = []
@@ -142,39 +142,36 @@ class DiscountedCashFlow:
         net_working_capital_dict = {}
 
         # Get last year + future years:
-        years_list = self.future_years.copy()
-        years_list.insert(0, self.past_years[-1])
-        net_working_capital_dict.update({"year": years_list})
+        net_working_capital_dict.update({"year": self.all_years[self.dcf_index:]})
 
         # Calculate future data:
-        future_net_receivables = []
-        future_inventory = []
-        future_total_liabilities = []
         start_index = len(self.past_years)
         for revenue in self.revenues[start_index:]:
-            future_net_receivables.append(int(revenue / 365 * self.average_turnover_ratios['Average'][0]))
-            future_inventory.append(int(revenue / 365 * self.average_turnover_ratios['Average'][1]))
-            future_total_liabilities.append(int(revenue / 365 * self.average_turnover_ratios['Average'][2]))
+            self.net_receivables.append(int(revenue / 365 * self.average_turnover_ratios['Average'][0]))
+            self.inventory.append(int(revenue / 365 * self.average_turnover_ratios['Average'][1]))
+            self.total_liabilities.append(int(revenue / 365 * self.average_turnover_ratios['Average'][2]))
 
-        future_net_receivables.insert(0, self.net_receivables[-1])
-        style_and_update(net_working_capital_dict, "net_receivables", future_net_receivables)
-        future_inventory.insert(0, self.inventory[-1])
-        style_and_update(net_working_capital_dict, "inventory", future_inventory)
-        future_total_liabilities.insert(0, self.total_liabilities[-1])
-        style_and_update(net_working_capital_dict, "future_total_liabilities", future_total_liabilities)
+        style_and_update(net_working_capital_dict, "net_receivables", self.net_receivables[self.dcf_index:])
+        style_and_update(net_working_capital_dict, "inventory", self.inventory[self.dcf_index:])
+        style_and_update(net_working_capital_dict, "future_total_liabilities", self.total_liabilities[self.dcf_index:])
+
+        # Get necessary data to calculate net working capital for all years including the first one (if first one is 2020, calculating change, requires 2019 data):
+        net_receivables = self.net_receivables[self.dcf_index - 1:]
+        inventory = self.inventory[self.dcf_index - 1:]
+        total_liabilities = self.total_liabilities[self.dcf_index - 1:]
 
         # Calculate future net working capital:
         net_working_capital_list = []
-        for index, value in enumerate(future_net_receivables):
-            net_working_capital = value + future_inventory[index] - future_total_liabilities[index]
+        for index, value in enumerate(net_receivables):
+            net_working_capital = value + inventory[index] - total_liabilities[index]
             net_working_capital_list.append(net_working_capital)
-        style_and_update(net_working_capital_dict, "net_working_capital", net_working_capital_list)
+        style_and_update(net_working_capital_dict, "net_working_capital", net_working_capital_list[1:])
 
         # Calculate net working capital change:
         previous_value = None
         for index, value in enumerate(net_working_capital_list):
             if previous_value:
-                change_value = round(previous_value - value, 2)
+                change_value = round(abs(previous_value - value), 2)
                 self.net_working_capital_changes.append(change_value)
             previous_value = value
         style_and_update(net_working_capital_dict, "net_working_capital_change", self.net_working_capital_changes)
@@ -244,7 +241,7 @@ class DiscountedCashFlow:
             nopat_list.append(nopat)
         style_and_update(dcf_dict, "nopat", nopat_list)
         style_and_update(dcf_dict, "amortization_", amortization_list)
-        dcf_dict.update({"Net_working_capital_change": self.net_working_capital_changes[self.dcf_index:]})
+        style_and_update(dcf_dict, "net_working_capital_change", self.net_working_capital_changes)
 
         return dcf_dict
 
