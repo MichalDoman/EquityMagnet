@@ -43,7 +43,11 @@ input::-webkit-inner-spin-button {
 .nav-links li {
     display: inline-block;
     padding: 0 20px;
-    border-left: 1px solid #D2D4D9;
+}
+
+.nav-links li:hover {
+    transform: scale(1.2);
+    transition: all 0.3s ease 0s;
 }
 
 .nav-links li a {
@@ -148,6 +152,7 @@ footer {
 
 .sort-icon:hover {
     transform: scale(1.5);
+    transition: all 0.2s ease 0s;
 }
 
 .no-search-results-info {
@@ -156,39 +161,39 @@ footer {
 
 .company-list-box {
     background-color: #ffffff;
+    margin-right: 20px;
 }
 
-.main-table {
+.list-table {
     border-collapse: collapse;
-    width: 100%;
-    margin-top: 5px;
+    margin: 20px;
 }
 
-.company-details-link:hover {
-    text-decoration: underline;;
-}
-
-.main-table tr {
+.list-table tr {
     height: 50px;
 }
 
-.main-table tr:hover {
+.list-table tr:hover {
     background: #c4dce8;
 }
 
-.main-table tr th,
-.main-table tr td {
+.list-table tr th,
+.list-table tr td {
     text-decoration: none;
     font-size: 20px;
     padding: 5px;
     text-align: center;
     border-bottom: 1px solid #333333;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
 }
 
-.main-table a {
+.list-table a {
     text-decoration: none;
     color: #333333;
+}
+
+.company-details-link:hover {
+    text-decoration: underline;
 }
 
 .favorite-icon {
@@ -371,6 +376,35 @@ footer {
     font-weight: bold;
     padding-top: 30px;
     text-decoration: underline;
+}
+
+.main-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.main-table tr {
+    height: 50px;
+}
+
+.main-table tr:hover {
+    background: #c4dce8;
+}
+
+.main-table tr th,
+.main-table tr td {
+    text-decoration: none;
+    font-size: 20px;
+    padding: 5px;
+    text-align: center;
+    border-bottom: 1px solid #333333;
+    white-space: nowrap;
+}
+
+.main-table a {
+    text-decoration: none;
+    color: #333333;
 }
 
 .content .main-table tr td,
