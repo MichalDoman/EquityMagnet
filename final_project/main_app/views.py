@@ -175,6 +175,7 @@ class EvaluationView(DetailView):
         context = super().get_context_data(**kwargs)
         form = self.form_class(self.request.GET)
         context['form'] = form
+        company = Company.objects.get(pk=self.kwargs['pk'])
 
         wacc = g = revenue_rate = operational_costs = tax = other_operational_costs = None
 
@@ -186,9 +187,10 @@ class EvaluationView(DetailView):
             tax = form.cleaned_data['tax']
             other_operational_costs = form.cleaned_data['other_operational_costs']
 
-        income_statements = IncomeStatement.objects.filter(company=self.kwargs['pk']).order_by("year")
-        balance_sheets = BalanceSheet.objects.filter(company=self.kwargs['pk']).order_by("year")
-        cash_flow_statements = CashFlowStatement.objects.filter(company=self.kwargs['pk']).order_by("year")
+        income_statements = IncomeStatement.objects.filter(company=company).order_by("year")
+        balance_sheets = BalanceSheet.objects.filter(company=company).order_by("year")
+        cash_flow_statements = CashFlowStatement.objects.filter(company=company).order_by("year")
+        current_price = Price.objects.get(company=company).current_value
 
         evaluation = DiscountedCashFlow(income_statements, balance_sheets, cash_flow_statements)
 
@@ -207,11 +209,12 @@ class EvaluationView(DetailView):
         context['net_working_capital'] = evaluation.get_net_working_capital_dict()
         context['capex_and_amortization'] = evaluation.get_capex_dict()
 
-        # Get dcf context:
+        # Get dcf contexts:
         context['dcf_data'] = evaluation.get_dcf_dict(
             wacc,
             g
         )
+        context["share_value"] = evaluation.get_share_value_dict(current_price, company.market_cap)
 
         return context
 

@@ -391,6 +391,13 @@ footer {
     grid-template-columns: auto auto;
 }
 
+.share-value-table tr:last-child th,
+.share-value-table tr:last-child td {
+    font-size: 20px;
+    background-color: gold;
+    font-weight: bold;
+}
+
 /* ---------------------------------------------- Register View: */
 
 .register-form-box {

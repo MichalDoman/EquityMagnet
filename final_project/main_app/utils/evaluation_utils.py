@@ -10,10 +10,13 @@ class DiscountedCashFlow:
         self.balance_sheets = balance_sheets
         self.cash_flow_statements = cash_flow_statements
 
+        # Final evaluation values:
+        self.enterprise_value = 0
+        self.equity_value = 0
+
         # years:
         self.past_years = []
-        self.future_years = []  # years of projection
-        self.all_years = []  # past_years & future_years
+        self.all_years = []
 
         # Income statement data:
         self.revenues = []
@@ -30,6 +33,9 @@ class DiscountedCashFlow:
         self.total_liabilities = []
         self.total_non_current_assets = []
         self.net_working_capital_changes = []
+        self.cash_and_cash_equivalents = 0
+        self.total_non_current_liabilities = 0
+        self.account_payables = 0
 
         # Cash flow data:
         self.amortization = []
@@ -70,6 +76,11 @@ class DiscountedCashFlow:
             self.total_liabilities.append(statement.total_liabilities)
             self.total_non_current_assets.append(statement.total_non_current_assets)
 
+        last = self.balance_sheets.last()
+        self.cash_and_cash_equivalents = last.cash_and_cash_equivalents
+        self.total_non_current_liabilities = last.total_non_current_liabilities
+        self.account_payables = last.account_payables
+
         for statement in self.cash_flow_statements:
             self.amortization.append(statement.depreciation_and_amortization)
             self.capital_expenditure.append(statement.investments_in_property_plant_and_equipment)
@@ -78,7 +89,6 @@ class DiscountedCashFlow:
         last_period = self.all_years[-1]
         for i in PROJECTION_RANGE:
             self.all_years.append(last_period + i)
-            self.future_years.append(last_period + i)
 
     def get_income_projection_dict(self, user_revenue_rate, user_operating_costs, user_other_operating_costs, user_tax):
         projection_dict = {}
@@ -138,7 +148,7 @@ class DiscountedCashFlow:
 
         return turnover_ratios_dict
 
-    def get_net_working_capital_dict(self):  # TODO check if dcf_index can optimize the code
+    def get_net_working_capital_dict(self):
         net_working_capital_dict = {}
 
         # Get last year + future years:
@@ -200,9 +210,7 @@ class DiscountedCashFlow:
         dcf_dict = {}
 
         # Get years:
-        years = [self.all_years[self.dcf_index]]
-        years.extend(self.future_years)
-        dcf_dict.update({"year": years})
+        dcf_dict.update({"year": self.all_years[self.dcf_index:]})
 
         # Get periods:
         periods = []
@@ -234,7 +242,7 @@ class DiscountedCashFlow:
         tax_list = self.income_tax_expenses[self.dcf_index:]
         style_and_update(dcf_dict, "income_tax_expenses", tax_list)
 
-        # Calculate NOPAT, display net_working_capital_change and amortization again:
+        # NOPAT, net working capital changes, amortization, capex
         nopat_list = []
         for i, value in enumerate(operating_income_list):
             nopat = value - tax_list[i]
@@ -242,8 +250,60 @@ class DiscountedCashFlow:
         style_and_update(dcf_dict, "nopat", nopat_list)
         style_and_update(dcf_dict, "amortization_", amortization_list)
         style_and_update(dcf_dict, "net_working_capital_change", self.net_working_capital_changes)
+        capex_list = self.capital_expenditure[self.dcf_index:]
+        style_and_update(dcf_dict, "capex", capex_list)
+
+        # Calculate residual value:
+        residual_value_list = []
+        for _ in periods[:-1]:
+            residual_value_list.append(0)
+
+        wacc = 0.09
+        g = 0.059
+        if user_wacc:
+            wacc = user_wacc
+        if user_g:
+            g = user_g
+        residual_value = nopat_list[-1] - amortization_list[-1] - self.net_working_capital_changes[-1] - \
+                         self.capital_expenditure[-1]
+        residual_value *= (1 + g) / (wacc - g)
+        residual_value_list.append(int(residual_value))
+        style_and_update(dcf_dict, "residual_value", residual_value_list)
+
+        # Calculate Free Cash Flow to Firm:
+        fcff_list = []
+        for i, value in enumerate(nopat_list):
+            fcff = value + amortization_list[i] - self.net_working_capital_changes[i] - capex_list[i] + \
+                   residual_value_list[i]
+            fcff_list.append(fcff)
+        style_and_update(dcf_dict, "free_cash_flow_to_firm", fcff_list)
+
+        # Calculate Discounted Free Cash Flow to Firm:
+        dfcff_list = []
+        for i, value in enumerate(fcff_list):
+            exp = periods[i]
+            dfcff = value / (1 + wacc) ** exp
+            dfcff_list.append(int(dfcff))
+        style_and_update(dcf_dict, "discounted_fcff", dfcff_list)
+        self.enterprise_value = sum(dfcff_list)
 
         return dcf_dict
+
+    def get_share_value_dict(self, current_price, market_cap):
+        equity_value_dict = {}
+
+        style_and_update(equity_value_dict, "enterprise_value", [self.enterprise_value])
+        style_and_update(equity_value_dict, "cash_and_cash_equivalents", [self.cash_and_cash_equivalents])
+        debt = self.total_non_current_liabilities + self.account_payables
+        style_and_update(equity_value_dict, "debt", [debt])
+        self.equity_value = self.enterprise_value + self.cash_and_cash_equivalents - debt
+        style_and_update(equity_value_dict, "equity_value", [self.equity_value])
+
+        number_of_shares = int(market_cap / current_price)
+        predicted_share_value = round(self.equity_value / number_of_shares, 2)
+        equity_value_dict.update({"share_value": [predicted_share_value]})
+
+        return equity_value_dict
 
 
 def get_average_change(data_list):

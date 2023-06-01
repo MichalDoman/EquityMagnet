@@ -130,6 +130,15 @@
                             </tr>
                         {% endfor %}
                     </table>
+                    <label class="projection-label">Share value</label>
+                    <table class="main-table share-value-table">
+                        {% for key, items in share_value.items %}
+                            <tr>
+                                <th>{{ key|style_string_data }}</th>
+                                <td>{{ items.0 }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
                     <p class="value-disclaimer">* all values in millions USD</p>
                 </div>
             </div>
