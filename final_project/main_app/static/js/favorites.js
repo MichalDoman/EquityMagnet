@@ -1,6 +1,7 @@
 const favoriteIcons = document.querySelectorAll(".favorite-icon");
 const csrfToken = document.querySelector('#csrf-token input[name="csrfmiddlewaretoken"]').value;
 
+
 favoriteIcons.forEach(favoriteIcon =>
     favoriteIcon.addEventListener("click", () => {
         const companyId = favoriteIcon.getAttribute("data-company-id");
@@ -19,9 +20,9 @@ favoriteIcons.forEach(favoriteIcon =>
 
                 if (response["is_authenticated"]){
                     if (response["is_favorite"]){
-                        favoriteIcon.textContent = "favorite_border";
+                        favoriteIcon.textContent = "bookmark_border";
                     } else {
-                        favoriteIcon.textContent = "favorite";
+                        favoriteIcon.textContent = "bookmark";
                     }
                 } else {
 

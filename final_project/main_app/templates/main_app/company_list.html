@@ -121,8 +121,15 @@
                         <td>{{ company.country }}</td>
                         <td>{{ company.sector.name }}</td>
                         <td>{{ company.market_cap|style_numeric_data }}</td>
-                        <td><i class="material-icons favorite-icon" data-company-id="{{ company.pk }}"
-                        >favorite_border</i></td>
+                        <td>
+                            <i class="material-icons favorite-icon" data-company-id="{{ company.pk }}">
+                                {% if company in favorites %}
+                                    bookmark
+                                {% else %}
+                                    bookmark_border
+                                {% endif %}
+                            </i>
+                        </td>
                     </tr>
                 {% empty %}
                     <tr>

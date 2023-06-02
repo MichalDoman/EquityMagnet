@@ -13,7 +13,15 @@
     <section class="details-section">
         <div class="company-label">
             <h2>{{ company.name }} ({{ company.symbol }})</h2>
-            <p>{{ company.exchange.symbol }}</p>
+            <div>
+                {{ company.exchange.symbol }}
+                    Price: {{ price.current_value }}
+                {% if price.change > 0 %}
+                     <span class="positive-change">+{{ price.change }}</span>
+                {% else %}
+                     <span class="negative-change">{{ price.change }}</span>
+                {% endif %}
+            </div>
         </div>
 
         <div class="section-center">

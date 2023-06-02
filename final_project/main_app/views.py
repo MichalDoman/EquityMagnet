@@ -91,6 +91,9 @@ class CompanyListView(ListView):
         """Add form to the context."""
         context = super().get_context_data(**kwargs)
         context['form'] = self.form_class(self.request.GET)
+        if self.request.user.is_authenticated:
+            favorites_obj = FavoriteCompany.objects.filter(user=self.request.user)
+            context['favorites'] = [favorite.company for favorite in favorites_obj]
         return context
 
 
@@ -103,6 +106,10 @@ class CompanyDetailView(DetailView):
         """Extend context by company's financial statements and all of their field names"""
 
         context = super().get_context_data(**kwargs)
+
+        # Add company's price data to the context:
+        price = Price.objects.get(company=self.kwargs['pk'])
+        context['price'] = price
 
         income_statements = IncomeStatement.objects.filter(company=self.kwargs['pk']).order_by("year")
         balance_sheets = BalanceSheet.objects.filter(company=self.kwargs['pk']).order_by("year")
@@ -126,8 +133,10 @@ class CompanyDetailView(DetailView):
 class ManageFavoritesView(View, LoginRequiredMixin):
     """ A view that enables management of favorites through javascript POST request.
     This view is connected to the favorites.js file."""
+
     def post(self, request):
         """If user is logged in, add a company to user's favorites or remove it if it is already there."""
+
         response = {"is_authenticated": request.user.is_authenticated}
         if response['is_authenticated']:
             company_id = request.POST["company_id"][0]

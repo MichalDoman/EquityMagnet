@@ -165,7 +165,7 @@ footer {
 .sort-icon {
     font-weight: bolder;
     font-size: 30px;
-    color: #6f94c6;
+    color: #3875d7;
 }
 
 .sort-icon:hover {
@@ -215,7 +215,7 @@ footer {
 }
 
 .favorite-icon {
-    color: red;
+    color: #3875d7;
     font-size: 28px;
     cursor: pointer;
 }
