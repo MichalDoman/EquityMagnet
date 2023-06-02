@@ -22,15 +22,16 @@ class HomeView(View):
     """A view supporting GET method, that represents the Home Page of the app.
 
     :return: an HTTPResponse that passes a context to the home.html template.
-    The context contain a random sample of companies from database.
+    The context contain a random sample of companies from database and their price models.
     """
 
     def get(self, request):
         all_companies = Company.objects.select_related("exchange", "sector")
         sample_companies = sample(list(all_companies), 4)
+        prices = [Price.objects.get(company=c) for c in sample_companies]
 
         return render(request, "home.html", context={
-            "companies": sample_companies
+            "companies": zip(sample_companies, prices)
         })
 
 

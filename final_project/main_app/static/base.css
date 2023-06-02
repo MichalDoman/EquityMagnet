@@ -71,10 +71,16 @@ footer {
 /* ---------------------------------------------- Home Page: */
 
 .grid-box {
+    background: #aaaaaa;
+    border: 3px solid #dddddd;
+    padding: 40px 100px;
+}
+
+.grid-item-box {
     display: grid;
-    grid-template-columns: auto auto;
-    gap: 10px;
-    padding: 10px 150px;
+    grid-template-columns: 50% 50%;
+    gap: 30px;
+    margin-right: 30px;
 }
 
 .grid-item {
@@ -99,8 +105,14 @@ footer {
 
 .home-price-box {
     display: grid;
-    grid-template-columns: auto auto;
-    color: #a41515;
+    grid-template-columns: 45% auto;
+}
+
+.positive-change {
+    color: forestgreen;
+}
+.negative-change {
+    color: #ba2121;
 }
 
 /* ---------------------------------------------- Company List: */

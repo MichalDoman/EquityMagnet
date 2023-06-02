@@ -6,19 +6,25 @@
 
 {% block content %}
     <article class="grid-box">
-        {% for company in companies %}
-            <div class="grid-item">
-                <h3>
-                    <a class="company-link" href="{% url "company_details" company.pk %}">{{ company.symbol }}</a>
-                    ({{ company.country }})</h3>
-                <p>{{ company.name }}</p>
-                <p><i>{{ company.exchange.symbol.upper }}</i></p>
-                <p>Market Cap: ${{ company.market_cap|style_numeric_data }} M</p>
-                <div class="home-price-box">
-                    <p>Price</p>
-                    <p>Change</p>
+        <div class="grid-item-box">
+            {% for company in companies %}
+                <div class="grid-item">
+                    <h3>
+                        <a class="company-link" href="{% url "company_details" company.0.pk %}">{{ company.0.symbol }}</a>
+                        ({{ company.0.country }})</h3>
+                    <p>{{ company.0.name }}</p>
+                    <p><i>{{ company.0.exchange.symbol.upper }}</i></p>
+                    <p>Market Cap: ${{ company.0.market_cap|style_numeric_data }} M</p>
+                    <div class="home-price-box">
+                        <p>price: {{ company.1.current_value }}</p>
+                        {% if company.1.change > 0 %}
+                            <p class="positive-change">+{{ company.1.change }}</p>
+                        {% else %}
+                            <p class="negative-change">{{ company.1.change }}</p>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </article>
 {% endblock %}
