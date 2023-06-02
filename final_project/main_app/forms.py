@@ -6,6 +6,7 @@ from main_app.utils.general_utils import get_all_countries
 
 
 class SearchFiltersForm(forms.Form):
+    """A form used in company list view for filtering data."""
     phrase = forms.CharField(max_length=64, required=False)
     exchanges = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple())
     sectors = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple())
@@ -35,6 +36,7 @@ class SearchFiltersForm(forms.Form):
 
 
 class RegisterForm(forms.Form):
+    """Used for registration. Usernames are set with emails."""
     first_name = forms.CharField(max_length=256)
     last_name = forms.CharField(max_length=256)
     email = forms.EmailField()
@@ -43,6 +45,8 @@ class RegisterForm(forms.Form):
 
 
 class EvaluationEditablesForm(forms.Form):
+    """A form used to acquire customized, user evaluation determinants and
+    implement them to the calculations."""
     wacc = forms.FloatField(required=False)
     g = forms.FloatField(required=False)
     revenue_rate = forms.FloatField(required=False)
