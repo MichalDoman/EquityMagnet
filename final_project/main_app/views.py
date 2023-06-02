@@ -13,7 +13,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from main_app.models import Company, Price, FavoriteCompany, Evaluation, IncomeStatement, BalanceSheet, \
     CashFlowStatement
-from main_app.utils.general_utils import extract_historical_prices, get_all_countries, get_field_dictionaries
+from main_app.utils.general_utils import extract_historical_prices, get_all_countries, get_field_dictionaries, \
+    SORTING_NAMES
 from main_app.utils.evaluation_utils import DiscountedCashFlow
 from main_app.forms import SearchFiltersForm, EvaluationEditablesForm, RegisterForm
 
@@ -77,8 +78,7 @@ class CompanyListView(ListView):
                 queryset = queryset.filter(market_cap__gt=market_cap * 1_000_000)
 
         sort_by = self.request.GET.get('sort_by', 'pk')
-        if sort_by in ['name', '-name', 'symbol', '-symbol', 'exchange', '-exchange', 'country', '-country', 'sector',
-                       '-sector', 'market_cap', '-market_cap']:
+        if sort_by in SORTING_NAMES:
             queryset = queryset.order_by(sort_by)
         return queryset
 

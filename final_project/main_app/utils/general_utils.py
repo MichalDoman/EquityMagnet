@@ -1,6 +1,13 @@
 from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement
 from main_app.templatetags.templatetags import style_numeric_data
 
+SORTING_NAMES = ['name', '-name',
+                 'symbol', '-symbol',
+                 'exchange', '-exchange',
+                 'country', '-country',
+                 'sector', '-sector',
+                 'market_cap', '-market_cap']
+
 
 def get_field_dictionaries(queryset):
     """Convert a queryset of FinancialStatement objects into a dictionary.

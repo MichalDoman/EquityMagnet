@@ -16,6 +16,6 @@ urlpatterns = [
     path("company-details/<int:pk>", CompanyDetailView.as_view(), name="company_details"),
     path("manage-favorites/", ManageFavoritesView.as_view()),
     path("watchlist/", WatchlistView.as_view(), name="watchlist"),
-    path("evaluation-list", EvaluationListView.as_view(), name="evaluation_list"),
+    path("evaluation-list/", EvaluationListView.as_view(), name="evaluation_list"),
     path("evaluation/<int:pk>", EvaluationView.as_view(), name="evaluation"),
 ]
