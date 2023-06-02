@@ -61,11 +61,14 @@ def insert_company_data(ticker):
         )
 
 
-def insert_company_price_data(ticker):
-    """
-    Pull company's price details from financialmodelingprep.com, and save to database.
+def insert_company_price_data(ticker, action):
+    """Pull company's price details from financialmodelingprep.com, and save to database.
     Full price history is saved in json format in a models.JSONField
-    """
+
+    :param ticker - company's ticker.
+    :param action - decides whether the price object is created or updated.
+    It only accepts values: 'create' or 'update'."""
+
     start = "2018-01-01"
     end = datetime.today().strftime('%Y-%m-%d')
     company = Company.objects.get(symbol=ticker)
@@ -80,14 +83,23 @@ def insert_company_price_data(ticker):
     response = requests.get(url_2)
     data = response.json()[0]
 
-    Price.objects.create(
-        company=company,
-        current_value=data["price"],
-        change_percentage=data["changesPercentage"],
-        change=data["change"],
-        history=history,
-        shares_outstanding=data['sharesOutstanding']
-    )
+    if action == 'create':
+        Price.objects.create(
+            company=company,
+            current_value=data["price"],
+            change_percentage=data["changesPercentage"],
+            change=data["change"],
+            history=history,
+            shares_outstanding=data['sharesOutstanding']
+        )
+    elif action == 'update':
+        price = Price.objects.get(company=company)
+        price.current_value = data["price"]
+        price.change_percentage = data["changesPercentage"]
+        price.change = data["change"]
+        price.history = history
+        price.shares_outstanding = data['sharesOutstanding']
+        price.save()
 
 
 def insert_income_statement_data(ticker):
@@ -251,7 +263,7 @@ def insert_all_data():
         # tickers = get_tickers(path)
         for ticker in ['NVDA']:
             insert_company_data(ticker)
-            insert_company_price_data(ticker)
+            insert_company_price_data(ticker, "create")
             insert_income_statement_data(ticker)
             insert_balance_sheet_data(ticker)
             insert_cash_flow_statement_data(ticker)
