@@ -2,7 +2,7 @@ import pytest
 from django.test import Client
 from django.contrib.auth.models import User
 
-from main_app.models import Company, Exchange, FavoriteCompany, Evaluation
+from main_app.models import Company, Exchange, FavoriteCompany, Evaluation, Sector
 
 
 @pytest.fixture
@@ -19,7 +19,6 @@ def company():
         symbol="TEST",
         exchange=exchange,
         country="test_country",
-        sector="test_sector",
         market_cap=1000000
     )
     return company
@@ -30,12 +29,13 @@ def companies():
     exchange = Exchange.objects.create(symbol="EX")
     companies = []
     for i in range(1, 5):
+        sector = Sector.objects.create(name=f"sector_{i}")
         company = Company.objects.create(
             name=f"company_{i}",
             symbol=f"COM{i}",
             exchange=exchange,
-            country="test_country",
-            sector=f"sector_{i}",
+            country=f"country_{i}",
+            sector=sector,
             market_cap=i
         )
         companies.append(company)

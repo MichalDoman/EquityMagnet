@@ -161,12 +161,12 @@ footer {
 
 .company-list-box {
     background-color: #ffffff;
-    margin-right: 20px;
 }
 
 .list-table {
     border-collapse: collapse;
     margin: 20px;
+    width: 96%;
 }
 
 .list-table tr {
@@ -295,7 +295,7 @@ footer {
     grid-template-columns: 15% 85%;
     gap: 20px;
     background-color: #cccccc;
-    padding: 20px;
+    padding: 20px 40px 20px 20px;
     border-radius: 5px;
     border: 3px solid #aaaaaa;
 }

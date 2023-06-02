@@ -18,10 +18,32 @@ def test_company_list_view(client, companies):
 
 
 @pytest.mark.django_db
-def test_company_list_filtering_and_sorting(client, companies):
+def test_company_list_filtering(client, companies):
+    response = client.get("/companies/?phrase=_1&exchanges=1&market_cap=")
+    assert response.status_code == 200
+    assert len(response.context['page_obj']) == 1
+    assert response.context['page_obj'][0] == companies[0]
+
+    response = client.get("/companies/?phrase=&exchanges=1&market_cap=1")
+    assert response.status_code == 200
+    assert len(response.context['page_obj']) == 1
+    assert response.context['page_obj'][0] == companies[0]
+
+    response = client.get("/companies/?phrase=&exchanges=1&sectors=1&market_cap=")
+    assert response.status_code == 200
+    assert len(response.context['page_obj']) == 1
+    assert response.context['page_obj'][0] == companies[0]
+
+@pytest.mark.django_db
+def test_company_list_sorting(client, companies):
     for sort in SORTING_NAMES:
         response = client.get(f"/companies/?phrase=&exchanges=1&market_cap=&sort_by={sort}")
         assert response.status_code == 200
+
+        if sort[0] == "-":
+            assert response.context['page_obj'][0] == companies[-1]
+        else:
+            assert response.context['page_obj'][0] == companies[0]
 
 
 @pytest.mark.django_db
