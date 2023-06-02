@@ -62,20 +62,32 @@ def insert_company_data(ticker):
 
 
 def insert_company_price_data(ticker):
+    """
+    Pull company's price details from financialmodelingprep.com, and save to database.
+    Full price history is saved in json format in a models.JSONField
+    """
     start = "2018-01-01"
     end = datetime.today().strftime('%Y-%m-%d')
+    company = Company.objects.get(symbol=ticker)
 
     # URL for historical data:
     url = f"https://financialmodelingprep.com/api/v3/historical-price-full/{ticker}?from={start}&to={end}&apikey={API_KEY}"
     response = requests.get(url)
-    data = response.json()
-    company = Company.objects.get(symbol=ticker)
-    current_price = data["historical"][0]["close"]
+    history = response.json()
 
     # URL for current_price, change and number of shares:
     url_2 = f"https://financialmodelingprep.com/api/v3/quote/{ticker}?apikey={API_KEY}"
+    response = requests.get(url_2)
+    data = response.json()[0]
 
-    Price.objects.create(company=company, current_value=current_price, history=data)
+    Price.objects.create(
+        company=company,
+        current_value=data["price"],
+        change_percentage=data["changesPercentage"],
+        change=data["change"],
+        history=history,
+        shares_outstanding=data['sharesOutstanding']
+    )
 
 
 def insert_income_statement_data(ticker):

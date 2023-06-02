@@ -37,6 +37,7 @@ class Price(models.Model):
 
     company = models.OneToOneField(Company, on_delete=models.CASCADE)
     current_value = models.FloatField()
+    change_percentage = models.FloatField()
     change = models.FloatField()
     history = models.JSONField()
     shares_outstanding = models.BigIntegerField()
