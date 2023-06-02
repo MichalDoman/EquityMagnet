@@ -3,16 +3,20 @@ from django.contrib.auth.models import User
 
 
 class Exchange(models.Model):
+    """Exchange markets data"""
     name = models.CharField(max_length=255, null=True)
     symbol = models.CharField(max_length=10, unique=True)
 
 
 class Sector(models.Model):
+    """Companies' sectors names. Every sector can be a part of any exchange market,
+    and every exchange can have any sector"""
     name = models.CharField(max_length=255)
     exchanges = models.ManyToManyField(Exchange)
 
 
 class Company(models.Model):
+    """Model representing a company. A company can only be on one exchange market and can be in only one sector."""
     name = models.CharField(max_length=255)
     symbol = models.CharField(max_length=10)
     exchange = models.ForeignKey(Exchange, on_delete=models.CASCADE)
@@ -24,6 +28,13 @@ class Company(models.Model):
 
 
 class Price(models.Model):
+    """Model containing company's current price, its change from the previous period,
+    and whole daily history from 2018 dumped in a json field. Every company has only one corresponding Price model.
+    This model also keeps number of companies shares.
+
+    All attributes are updated on schedule (except company).
+    """
+
     company = models.OneToOneField(Company, on_delete=models.CASCADE)
     current_value = models.FloatField()
     change = models.FloatField()
@@ -32,6 +43,10 @@ class Price(models.Model):
 
 
 class FinancialStatement(models.Model):
+    """A base model for IncomeStatement, BalanceSheet and CashFlowStatement models.
+    Each financial statement is assigned to one company and has the same years range.
+    Each company can have many financial statement of the same type but for different year."""
+
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     year = models.IntegerField()
 
@@ -40,6 +55,7 @@ class FinancialStatement(models.Model):
 
 
 class IncomeStatement(FinancialStatement):
+    """An expansion of FinancialStatement model containing all income statement's data of a company."""
     total_revenue = models.BigIntegerField()
     cost_of_revenue = models.BigIntegerField()
     gross_profit = models.BigIntegerField()
@@ -67,6 +83,7 @@ class IncomeStatement(FinancialStatement):
 
 
 class BalanceSheet(FinancialStatement):
+    """An expansion of FinancialStatement model containing all balance sheet's data of a company."""
     cash_and_cash_equivalents = models.BigIntegerField()
     short_term_investments = models.BigIntegerField()
     cash_and_short_term_investments = models.BigIntegerField()
@@ -114,6 +131,7 @@ class BalanceSheet(FinancialStatement):
 
 
 class CashFlowStatement(FinancialStatement):
+    """An expansion of FinancialStatement model containing all cash flow statement's data of a company."""
     net_income = models.BigIntegerField()
     depreciation_and_amortization = models.BigIntegerField()
     deferred_income_tax = models.BigIntegerField()
@@ -147,6 +165,8 @@ class CashFlowStatement(FinancialStatement):
 
 
 class FavoriteCompany(models.Model):
+    """A model used for assigning user's favorite companies to the user object.
+    One cannot set one company as favorite more than once."""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
@@ -155,6 +175,11 @@ class FavoriteCompany(models.Model):
 
 
 class Evaluation(models.Model):
+    """A model used for assigning users acquired evaluations to the user object.
+    Specific company's evaluation is unique and can only be assigned to a user once.
+
+    Purchase date is the date of acquiring the evaluation by the user.
+    Expiration date is the date when the user looses their access to the evaluation."""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     purchase_date = models.DateField(auto_now_add=True)
