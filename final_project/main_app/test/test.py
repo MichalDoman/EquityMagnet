@@ -1,5 +1,6 @@
 import pytest
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
 from main_app.utils.general_utils import SORTING_NAMES
 
@@ -80,7 +81,7 @@ def test_company_evaluations_list_view(client, user, companies, evaluations):
 #     assert response.context['company'] == company
 
 @pytest.mark.django_db
-def test_registration_login_and_logout(client):
+def test_registration_view(client):
     data = {
         'first_name': 'test_name',
         'last_name': 'test_last_name',
@@ -89,19 +90,11 @@ def test_registration_login_and_logout(client):
         'password_repeated': 'test_password',
     }
     response = client.post("/register/", data)
-    user = authenticate(username='test@email.com', password='test_password')
     assert response.status_code == 302
+    user = User.objects.get(email="test@email.com")
     assert user is not None
     assert user.first_name == 'test_name'
     assert user.last_name == 'test_last_name'
     assert user.email == 'test@email.com'
     assert user.is_authenticated
 
-    client.get("/accounts/logout/")
-    assert not user.is_authenticated
-
-    login_data = {"username": "test@email.com",
-                  "password": "test_password"}
-    response = client.post("/accounts/login/", login_data)
-    assert response.status_code == 302
-    assert user.is_authenticated

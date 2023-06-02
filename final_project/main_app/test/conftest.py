@@ -2,7 +2,7 @@ import pytest
 from django.test import Client
 from django.contrib.auth.models import User
 
-from main_app.models import Company, Exchange, FavoriteCompany, Evaluation, Sector
+from main_app.models import Company, Exchange, FavoriteCompany, Evaluation
 
 
 @pytest.fixture
