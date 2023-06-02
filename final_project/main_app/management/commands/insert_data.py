@@ -10,9 +10,9 @@ from main_app.models import Exchange, Company, Sector, Price, IncomeStatement, B
 
 
 def get_tickers(csv_file_path):
-    """Get 1000 tickers of companies from a csv file"""
+    """Get tickers of companies from a csv file"""
     all_tickers = pd.read_csv(csv_file_path)['Symbol']
-    tickers = all_tickers[:1000]
+    tickers = all_tickers[:50]
     return tickers
 
 
@@ -32,10 +32,11 @@ def insert_and_get_sector(sector_name, exchange):
 
 
 def insert_company_data(ticker):
-    """
-    Pull company's information from financialmodelingprep.com, segregate it and save to database.
+    """Pull company's information from financialmodelingprep.com, segregate it and save to database.
     Check if company's sector and exchange is already in database, if not create new objects.
-    """
+
+    Returns True if company was created.
+    If it already existed then next insertions in insert_all_data will be omitted."""
 
     url = f"https://financialmodelingprep.com/api/v3/profile/{ticker}?apikey={API_KEY}"
     response = requests.get(url)
@@ -59,6 +60,7 @@ def insert_company_data(ticker):
             market_cap=data['mktCap'],
             website=data['website'],
         )
+        return True
 
 
 def insert_company_price_data(ticker, action):
@@ -260,14 +262,16 @@ def insert_all_data():
     companies_inserted = 0
     path = os.path.join(BASE_DIR, 'main_app', 'management', 'commands_data', f'data.csv')
     try:
-        # tickers = get_tickers(path)
-        for ticker in ['NVDA']:
-            insert_company_data(ticker)
-            insert_company_price_data(ticker, "create")
-            insert_income_statement_data(ticker)
-            insert_balance_sheet_data(ticker)
-            insert_cash_flow_statement_data(ticker)
-            companies_inserted += 1
+        tickers = get_tickers(path)
+        for ticker in tickers:
+            company_created = insert_company_data(ticker)
+            if company_created:
+                insert_company_price_data(ticker, "create")
+                insert_income_statement_data(ticker)
+                insert_balance_sheet_data(ticker)
+                insert_cash_flow_statement_data(ticker)
+                companies_inserted += 1
+                print(f"{ticker} added.")
 
     except FileNotFoundError:
         print(f"No such file or directory: '{path}'")

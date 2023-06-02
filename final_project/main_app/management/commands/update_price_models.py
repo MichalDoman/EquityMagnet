@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 
 from main_app.models import Company
-from insert_data import insert_company_price_data
+from main_app.management.commands.insert_data import insert_company_price_data
 
 
 def update_price_models():
