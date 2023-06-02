@@ -86,9 +86,15 @@ footer {
 }
 
 .company-link {
-    text-decoration: underline;
+    text-decoration: none;
     color: #333333;
     font-style: italic;
+    transition: all 0.5s ease 0s;
+}
+
+.company-link:hover {
+    font-size: 40px;
+    text-decoration: underline;
 }
 
 .home-price-box {

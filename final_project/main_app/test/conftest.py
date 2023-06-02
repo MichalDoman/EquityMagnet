@@ -29,14 +29,12 @@ def companies():
     exchange = Exchange.objects.create(symbol="EX")
     companies = []
     for i in range(1, 5):
-        sector = Sector.objects.create(name=f"sector_{i}")
         company = Company.objects.create(
             name=f"company_{i}",
             symbol=f"COM{i}",
             exchange=exchange,
             country=f"country_{i}",
-            sector=sector,
-            market_cap=i
+            market_cap=i * 1_000_000
         )
         companies.append(company)
     return companies

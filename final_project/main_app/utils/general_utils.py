@@ -1,6 +1,7 @@
 from main_app.models import Company, IncomeStatement, BalanceSheet, CashFlowStatement
 from main_app.templatetags.templatetags import style_numeric_data
 
+# Used to prevent users from defining other sort_by variables in th URL:
 SORTING_NAMES = ['name', '-name',
                  'symbol', '-symbol',
                  'exchange', '-exchange',
@@ -56,6 +57,9 @@ def extract_historical_prices(historical_price_list):
 
 
 def get_all_countries():
+    """Get a list of all different countries from Company objects.
+    It is required for displaying country names in a filter form, for the company list"""
+
     country_set = set()
     for company in Company.objects.all():
         country_set.add(company.country)
