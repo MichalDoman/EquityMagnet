@@ -1,15 +1,12 @@
 import os
-from django.core.management import BaseCommand
 import pandas as pd
 import requests
+from datetime import datetime
+from django.core.management import BaseCommand
 
 from final_project.settings import BASE_DIR
+from final_project.local_settings import API_KEY
 from main_app.models import Exchange, Company, Sector, Price, IncomeStatement, BalanceSheet, CashFlowStatement
-
-# API_KEY = "566b84b1d223b010c6be47cf0bc0bce2"
-# API_KEY = "429da98c445a02548c83cb5eb73ce2f1"
-# API_KEY = "6a5c4821aa277d716732ea2cd74fde79"
-API_KEY = "fd176e483095e94a648a283c593dea0f"
 
 
 def get_tickers(csv_file_path):
@@ -64,15 +61,19 @@ def insert_company_data(ticker):
         )
 
 
-def insert_company_price_history_data(ticker):
+def insert_company_price_data(ticker):
     start = "2018-01-01"
-    end = "2023-05-05"
+    end = datetime.today().strftime('%Y-%m-%d')
 
+    # URL for historical data:
     url = f"https://financialmodelingprep.com/api/v3/historical-price-full/{ticker}?from={start}&to={end}&apikey={API_KEY}"
     response = requests.get(url)
     data = response.json()
     company = Company.objects.get(symbol=ticker)
     current_price = data["historical"][0]["close"]
+
+    # URL for current_price, change and number of shares:
+    url_2 = f"https://financialmodelingprep.com/api/v3/quote/{ticker}?apikey={API_KEY}"
 
     Price.objects.create(company=company, current_value=current_price, history=data)
 
@@ -238,7 +239,7 @@ def insert_all_data():
         # tickers = get_tickers(path)
         for ticker in ['NVDA']:
             insert_company_data(ticker)
-            insert_company_price_history_data(ticker)
+            insert_company_price_data(ticker)
             insert_income_statement_data(ticker)
             insert_balance_sheet_data(ticker)
             insert_cash_flow_statement_data(ticker)
@@ -265,4 +266,3 @@ class Command(BaseCommand):
         print("Please wait, the data is loading...")
         companies_inserted = insert_all_data()
         print(f"{companies_inserted} companies were successfully inserted!")
-

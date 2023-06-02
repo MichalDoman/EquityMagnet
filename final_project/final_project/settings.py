@@ -62,16 +62,11 @@ WSGI_APPLICATION = 'final_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'HOST': '127.0.0.1',
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'final_project_db',
-        'USER': 'postgres',
-        'PASSWORD': 'coderslab',
-    }
-}
-
+try:
+    from final_project.local_settings import DATABASES
+except ModuleNotFoundError:
+    print("Database configuration not found in local_settings.py module!")
+    exit(0)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

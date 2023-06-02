@@ -5,7 +5,14 @@ PROJECTION_RANGE = range(1, 6)  # range(1, 6) gives 5 years of projection
 
 
 class DiscountedCashFlow:
+    """A class that stores all functions and data required, for calculating company's share price.
+    !!! All methods have to be called in order, due to data being updated with each one of them !!!"""
+
     def __init__(self, income_statements, balance_sheets, cash_flow_statements):
+        """Set necessary attributes, that are used in DCF.
+        Get all necessary data from financial statements and price.
+        Create a list of financial statements years as well as future years of projection."""
+
         self.income_statements = income_statements
         self.balance_sheets = balance_sheets
         self.cash_flow_statements = cash_flow_statements
@@ -59,6 +66,8 @@ class DiscountedCashFlow:
         ]}
 
     def get_data(self):
+        """Function called in __init__. Gets all necessary data from financial statements."""
+
         for statement in self.income_statements:
             self.past_years.append(statement.year)
             self.all_years.append(statement.year)
@@ -86,11 +95,25 @@ class DiscountedCashFlow:
             self.capital_expenditure.append(statement.investments_in_property_plant_and_equipment)
 
     def get_years(self):
+        """Function called in __init__. Create a list of all years including years of projection."""
+
         last_period = self.all_years[-1]
         for i in PROJECTION_RANGE:
             self.all_years.append(last_period + i)
 
     def get_income_projection_dict(self, user_revenue_rate, user_operating_costs, user_other_operating_costs, user_tax):
+        """This function collects and calculates all data required in the projection of company's income statement.
+
+        :param user_revenue_rate - A rate of revenues growth in the projection periods, given by user.
+        :param user_operating_costs - An average ratio of operating costs in revenue,
+        required to set future operating costs, given by user.
+        :param user_other_operating_costs - An average ratio of other operating costs in revenue,
+        required to set future other operating costs, given by user.
+        :param user_tax - A tax rate given by user.
+
+        :return A dictionary. Its keys are the values that are later styled and displayed.
+        Items are lists, containing data in order, that is ready to display."""
+
         projection_dict = {}
 
         # Update projection dictionary with 'year' key:
@@ -139,6 +162,9 @@ class DiscountedCashFlow:
         return projection_dict
 
     def get_turnover_ratios_dict(self):
+        """This method returns a dictionary, used for data display in a new table,
+        containing turnover ratios. The ratios are calculated in the __init__ method."""
+
         turnover_ratios_dict = {}
 
         turnover_ratios_dict.update({"year": self.past_years})
@@ -149,6 +175,9 @@ class DiscountedCashFlow:
         return turnover_ratios_dict
 
     def get_net_working_capital_dict(self):
+        """This method gathers data necessary to calculate net working capital,
+        and stores it in a dictionary ready to display"""
+
         net_working_capital_dict = {}
 
         # Get last year + future years:
@@ -189,6 +218,9 @@ class DiscountedCashFlow:
         return net_working_capital_dict
 
     def get_capex_dict(self):
+        """This method gathers data necessary to calculate capex,
+        and stores it in a dictionary ready to display"""
+
         capex_dict = {}
         capex_dict.update({"year": self.all_years})
 
@@ -207,6 +239,13 @@ class DiscountedCashFlow:
         return capex_dict
 
     def get_dcf_dict(self, user_wacc, user_g):
+        """This method calculates the core of the Discounted Cash Flow evaluation.
+
+        :param user_wacc - a rate o wacc given by user.
+        :param user_g - g rate given by user.
+
+        :return A dictionary. It contains all core calculations in a dcf model."""
+
         dcf_dict = {}
 
         # Get years:
@@ -290,6 +329,13 @@ class DiscountedCashFlow:
         return dcf_dict
 
     def get_share_value_dict(self, current_price, market_cap):
+        """Calculate and store in a dictionary, all final results of the dcf calculation.
+
+        :param current_price - company's current stock price.
+        :param market_cap - company's market_cap.
+
+        :return A dictionary. It contains all final results of a dcf model."""
+
         equity_value_dict = {}
 
         style_and_update(equity_value_dict, "enterprise_value", [self.enterprise_value])
@@ -307,6 +353,10 @@ class DiscountedCashFlow:
 
 
 def get_average_change(data_list):
+    """Calculate an average change in a list of numeric data.
+    All changes within consecutive periods are stored in 'changes' list.
+    Function returns a mean value of that list."""
+
     changes = []
     previous_value = None
     for value in data_list:
@@ -319,6 +369,12 @@ def get_average_change(data_list):
 
 
 def get_values_from_average_change(values, user_rate=None):
+    """Calculate future values for data, basing on its average change.
+    Future values are appended to the given list.
+
+    :param values - base values to acquire projection from.
+    :param user_rate - None by default. If given by user, average change switches to it."""
+
     average_change = get_average_change(values)
     if user_rate or user_rate == 0:
         average_change = user_rate
@@ -329,6 +385,12 @@ def get_values_from_average_change(values, user_rate=None):
 
 
 def get_average_ratio(nominator_list, denominator_list):
+    """ Calculate an average ratio of a value from denominator_list,
+    to the corresponding value from nominator_list and get the ratio for every period.
+
+    Parameters are two lists. The ratio is a quotient between denominator list and nominator list.
+    """
+
     ratios = []
 
     for index in range(1, len(denominator_list)):
@@ -339,6 +401,15 @@ def get_average_ratio(nominator_list, denominator_list):
 
 
 def get_values_from_ratio(relative_values, key_values, user_ratio=None):
+    """Calculate future projection values basing on the current values and their average ratio.
+    Results are appended to the key_values list.
+
+    :param relative_values - a list of values within which the ratio of key values is calculated.
+    This list contains past and future values already.
+    :param key_values - a list of only past values, whose ratio within relative values is calculated.
+    This function extends key_values list by the future projection values.
+    :param user_ratio - if given it is used as the average ratio of key values in relative values."""
+
     ratio = get_average_ratio(relative_values, key_values)
     if user_ratio or user_ratio == 0:
         ratio = user_ratio
@@ -351,11 +422,17 @@ def get_values_from_ratio(relative_values, key_values, user_ratio=None):
 
 
 def style_and_update(dictionary, key, items):
+    """Using styling functions from general_utils.py,
+    style all values from the list and update a given dictionary with them."""
+
     styled_values = [style_numeric_data(value) for value in items]
     dictionary.update({key: styled_values})
 
 
 def calculate_turnover_ratio(data, revenues_list):
+    """This function is used in __init__ function to calculate turnover ratios for every period.
+    The ratios are required to derive an average turnover ratio."""
+
     ratios = []
     for index, value in enumerate(data):
         ratio = round(value / revenues_list[index] * 365, 2)
