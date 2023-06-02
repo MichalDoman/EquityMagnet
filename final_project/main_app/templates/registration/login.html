@@ -4,16 +4,18 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        <label>
-            Username:
-            <input name="username">
-        </label>
-        <label>
-            Password:
-            <input type="password" name="password">
-        </label>
-        <button type="submit">Login</button>
-    </form>
+    <div class="register-form-box">
+        <form method="POST" class="register-form">
+            {% csrf_token %}
+            <label>
+                Username:
+                <input name="username">
+            </label>
+            <label>
+                Password:
+                <input type="password" name="password">
+            </label>
+            <button class="register-btn" type="submit">Login</button>
+        </form>
+    </div>
 {% endblock %}
