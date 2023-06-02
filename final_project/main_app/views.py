@@ -6,7 +6,6 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, FormView
-from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -36,11 +35,16 @@ class HomeView(View):
 
 
 class CompanyListView(ListView):
+    """A generic list view for displaying paginated list of companies.
+    The view uses a form for filtering the list."""
     model = Company
     paginate_by = 10
     form_class = SearchFiltersForm
 
     def get_queryset(self):
+        """Queryset is set based on the filters requested by the user.
+        Regardless filters queryset can be sorted."""
+
         queryset = super().get_queryset()
         form = self.form_class(self.request.GET)
         if form.is_valid():
@@ -83,12 +87,14 @@ class CompanyListView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
+        """Add form to the context."""
         context = super().get_context_data(**kwargs)
         context['form'] = self.form_class(self.request.GET)
         return context
 
 
 class CompanyDetailView(DetailView):
+    """A generic detail view of Company object's details."""
     model = Company
     context_object_name = "company"
 
@@ -117,7 +123,10 @@ class CompanyDetailView(DetailView):
 
 
 class ManageFavoritesView(View, LoginRequiredMixin):
+    """ A view that enables management of favorites through javascript POST request.
+    This view is connected to the favorites.js file."""
     def post(self, request):
+        """If user is logged in, add a company to user's favorites or remove it if it is already there."""
         response = {"is_authenticated": request.user.is_authenticated}
         if response['is_authenticated']:
             company_id = request.POST["company_id"][0]
@@ -126,10 +135,8 @@ class ManageFavoritesView(View, LoginRequiredMixin):
             is_favorite = FavoriteCompany.objects.filter(user=request.user, company=company).exists()
             if is_favorite:
                 FavoriteCompany.objects.get(user=request.user, company=company).delete()
-                messages.info(request, f"{company.symbol} was removed from favorites.")
             else:
                 FavoriteCompany.objects.create(user=request.user, company=company)
-                messages.add_message(request, messages.SUCCESS, f"{company.symbol} was added to favorites.")
 
             response["is_favorite"] = is_favorite
             return JsonResponse(response)
@@ -166,12 +173,19 @@ class EvaluationListView(BaseListView):
 
 
 class EvaluationView(DetailView):
+    """A view with all calculations and results of dcf evaluation.
+    This view uses a form to get certain values, customized by the user."""
     model = Company
     context_object_name = "company"
     template_name_suffix = "_evaluation"
     form_class = EvaluationEditablesForm
 
     def get_context_data(self, **kwargs):
+        """This view gets data from the form and calculates dcf basing on it.
+        All dcf data is divided into smaller data structures,
+        mostly dictionaries and are displayed in separate tables or divs.
+        Therefore, it is also separately added to the context."""
+
         context = super().get_context_data(**kwargs)
         form = self.form_class(self.request.GET)
         context['form'] = form
@@ -220,11 +234,14 @@ class EvaluationView(DetailView):
 
 
 class RegisterView(FormView):
+    """A view that enables the user to create an account and access favorites and evaluation functionalities."""
     form_class = RegisterForm
     template_name = 'registration/register.html'
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
+        """Check if registration conditions are met. If so create an account and log in the user.
+        Otherwise, return invalid form error."""
         first_name = form.cleaned_data['first_name']
         last_name = form.cleaned_data['last_name']
         email = form.cleaned_data['email']
