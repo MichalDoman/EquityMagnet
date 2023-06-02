@@ -45,6 +45,7 @@ def style_numeric_data(value):
 
 @register.filter(name="style_string_data")
 def style_string_data(string):
+    """Change style of string values. Used mainly for styling dictionary keys in evaluation."""
     if isinstance(string, str):
         styled_string = string.capitalize().replace("_", " ")
         return styled_string
@@ -52,4 +53,5 @@ def style_string_data(string):
 
 @register.filter(name="get_request_url_list")
 def get_request_url_list(request, key):
+    """Used to get a list of filters of the same type from current url, while sorting a filtered company list."""
     return request.getlist(key)
