@@ -3,12 +3,21 @@ const messageTriggers = document.querySelectorAll(".message-trigger")
 let messageDiv = null
 
 function showMessage(message) {
-    if (messageDiv){
+    if (messageDiv) {
         document.body.removeChild(messageDiv)
     }
     messageDiv = document.createElement("div");
     messageDiv.classList.add("message-div")
     messageDiv.innerHTML = message;
+
+    messageDiv.style.transform = 'translateX(-100%)'
+    setTimeout(() => {
+        messageDiv.style.transform = 'translateX(-2%)';
+    }, 1);
+
+    setTimeout(() => {
+        messageDiv.style.transform = 'translateX(-100%)';
+    }, 3000);
 
     header.insertAdjacentElement('afterend', messageDiv);
 }

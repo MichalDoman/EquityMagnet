@@ -1,3 +1,9 @@
+:root {
+    --grey_1: #dddddd;
+    --grey_2: #cccccc;
+    --grey_3: #aaaaaa;
+    --grey_4: #333333;
+}
 /* ---------------------------------------------- Base HTML: */
 
 * {
@@ -17,7 +23,7 @@ input::-webkit-inner-spin-button {
     justify-content: center;
     flex-direction: column;
     font-size: 30px;
-    background-color: #ffffff;
+    background-color: white;
     padding: 0 50px;
 }
 
@@ -27,7 +33,7 @@ input::-webkit-inner-spin-button {
     align-items: center;
     padding: 20px;
     border-bottom: 3px solid #4ac1f7;
-    background-color: #333333;
+    background-color: var(--grey_4);
 }
 
 .logo {
@@ -57,7 +63,7 @@ input::-webkit-inner-spin-button {
 }
 
 footer {
-    background-color: #333333;
+    background-color: var(--grey_4);
     padding: 50px;
 }
 
@@ -71,13 +77,21 @@ footer {
 .message-div {
     position: fixed;
     z-index: 99;
+    font-size: 20px;
+    text-align: center;
+    padding: 15px;
+    width: 30%;
+    background-color: var(--grey_1);
+    border: 2px solid var(--grey_4);
+    border-radius: 10px;
+    transition: all 0.5s ease 0s;
 }
 
 /* ---------------------------------------------- Home Page: */
 
 .grid-box {
-    background: #aaaaaa;
-    border: 3px solid #dddddd;
+    background: var(--grey_3);
+    border: 3px solid var(--grey_1);
     padding: 40px 100px;
 }
 
@@ -92,13 +106,13 @@ footer {
     padding: 20px;
     text-align: start;
     background-color: #ffffff;
-    border: 2px solid #dddddd;
+    border: 2px solid var(--grey_1);
     border-radius: 5px;
 }
 
 .company-link {
     text-decoration: none;
-    color: #333333;
+    color: var(--grey_4);
     font-style: italic;
     transition: all 0.5s ease 0s;
 }
@@ -141,7 +155,7 @@ footer {
     width: 40%;
     height: 20px;
     border: none;
-    border-bottom: 2px solid #aaaaaa;
+    border-bottom: 2px solid var(--grey_3);
     border-radius: 3px;
     font-weight: bold;
     margin: 8px 30%;
@@ -206,13 +220,13 @@ footer {
     font-size: 20px;
     padding: 5px;
     text-align: center;
-    border-bottom: 1px solid #333333;
+    border-bottom: 1px solid var(--grey_4);
     /*white-space: nowrap;*/
 }
 
 .list-table a {
     text-decoration: none;
-    color: #333333;
+    color: var(--grey_4);
 }
 
 .company-details-link:hover {
@@ -234,7 +248,7 @@ footer {
 
 .details-section {
     padding: 0 10px;
-    background: #dddddd;
+    background: var(--grey_1);
 }
 
 .company-label {
@@ -252,7 +266,7 @@ footer {
     text-transform: capitalize;
     font-size: 20px;
     display: block;
-    background: #dddddd;
+    background: var(--grey_1);
 }
 
 .tab-btn.active {
@@ -291,7 +305,7 @@ footer {
 }
 
 .financial-statement table tr:first-child {
-    background: #dddddd;
+    background: var(--grey_1);
     font-weight: bold;
 }
 
@@ -317,14 +331,14 @@ footer {
     display: grid;
     grid-template-columns: 15% 85%;
     gap: 20px;
-    background-color: #cccccc;
+    background-color: var(--grey_2);
     padding: 20px 40px 20px 20px;
     border-radius: 5px;
-    border: 3px solid #aaaaaa;
+    border: 3px solid var(--grey_3);
 }
 
 .values-box {
-    border: 1px solid #aaaaaa;
+    border: 1px solid var(--grey_3);
     padding: 10px;
 }
 
@@ -348,7 +362,7 @@ footer {
     width: 40%;
     height: 20px;
     border: none;
-    border-bottom: 2px solid #aaaaaa;
+    border-bottom: 2px solid var(--grey_3);
     border-radius: 3px;
     font-weight: bold;
     margin: 8px 30%;
@@ -421,13 +435,13 @@ footer {
     font-size: 20px;
     padding: 5px;
     text-align: center;
-    border-bottom: 1px solid #333333;
+    border-bottom: 1px solid var(--grey_4);
     white-space: nowrap;
 }
 
 .main-table a {
     text-decoration: none;
-    color: #333333;
+    color: var(--grey_4);
 }
 
 .content .main-table tr td,
@@ -459,8 +473,8 @@ footer {
 
 .register-form-box {
     margin: 10px 35%;
-    background: #aaaaaa;
-    border: 3px solid #cccccc;
+    background: var(--grey_3);
+    border: 3px solid var(--grey_2);
     border-radius: 10px;
     padding: 20px 0;
 }
