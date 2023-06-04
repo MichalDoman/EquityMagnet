@@ -10,6 +10,9 @@
 {% block title %}Company List{% endblock %}
 
 {% block content %}
+    <script>
+        let is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+    </script>
     <form id="csrf-token">
         {#    Used for javascript   #}
         {% csrf_token %}

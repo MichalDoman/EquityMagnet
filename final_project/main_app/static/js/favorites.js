@@ -18,7 +18,7 @@ favoriteIcons.forEach(favoriteIcon =>
             if (request.status === 200){
                 const response = JSON.parse(request.responseText);
 
-                if (response["is_authenticated"]){
+                if (is_authenticated){
                     if (response["is_favorite"]){
                         favoriteIcon.textContent = "bookmark_border";
                     } else {

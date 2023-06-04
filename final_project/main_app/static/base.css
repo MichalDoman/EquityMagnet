@@ -3,7 +3,15 @@
     --grey_2: #cccccc;
     --grey_3: #aaaaaa;
     --grey_4: #333333;
+    --main_1: #D3E3EB;
+    --main_2: #5F8CD6;
+    --main_3: #FA811E;
+    --main_4: #3875d7;
+    --green: forestgreen;
+    --red: #ba2121;
+    --yellow: #EFD16D;
 }
+
 /* ---------------------------------------------- Base HTML: */
 
 * {
@@ -16,6 +24,12 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .content-block {
@@ -32,13 +46,14 @@ input::-webkit-inner-spin-button {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    border-bottom: 3px solid #4ac1f7;
+    border-bottom: 3px solid var(--main_3);
     background-color: var(--grey_4);
 }
 
 .logo {
-    color: #4ac1f7;
+    color: var(--main_3);
     font-size: 40px;
+    margin-left: 25px;
 }
 
 .nav-links {
@@ -68,18 +83,18 @@ footer {
 }
 
 .footer-box {
-    background-color: #81d4fa;
+    background-color: var(--main_1);
     padding: 50px;
-    border: 3px solid #4ac1f7;
+    border: 3px solid var(--main_3);
     border-radius: 15px;
 }
 
 .message-div {
     position: fixed;
     z-index: 99;
-    font-size: 20px;
+    font-size: 25px;
     text-align: center;
-    padding: 15px;
+    padding: 18px;
     width: 30%;
     background-color: var(--grey_1);
     border: 2px solid var(--grey_4);
@@ -105,7 +120,7 @@ footer {
 .grid-item {
     padding: 20px;
     text-align: start;
-    background-color: #ffffff;
+    background-color: white;
     border: 2px solid var(--grey_1);
     border-radius: 5px;
 }
@@ -128,10 +143,11 @@ footer {
 }
 
 .positive-change {
-    color: forestgreen;
+    color: var(--green);
 }
+
 .negative-change {
-    color: #ba2121;
+    color: var(--red);
 }
 
 /* ---------------------------------------------- Company List: */
@@ -184,7 +200,7 @@ footer {
 .sort-icon {
     font-weight: bolder;
     font-size: 30px;
-    color: #3875d7;
+    color: var(--main_4);
 }
 
 .sort-icon:hover {
@@ -197,7 +213,7 @@ footer {
 }
 
 .company-list-box {
-    background-color: #ffffff;
+    background-color: white;
 }
 
 .list-table {
@@ -211,7 +227,7 @@ footer {
 }
 
 .list-table tr:hover {
-    background: #c4dce8;
+    background: var(--main_1);
 }
 
 .list-table tr th,
@@ -234,7 +250,7 @@ footer {
 }
 
 .favorite-icon {
-    color: #3875d7;
+    color: var(--main_4);
     font-size: 28px;
     cursor: pointer;
 }
@@ -270,7 +286,7 @@ footer {
 }
 
 .tab-btn.active {
-    background: #ffffff;
+    background: white;
 }
 
 .details {
@@ -280,7 +296,7 @@ footer {
 
 .details.active {
     display: block;
-    background: #ffffff;
+    background: white;
 }
 
 .value-disclaimer {
@@ -405,7 +421,7 @@ footer {
 .content.active {
     display: flex;
     flex-direction: column;
-    background: #ffffff;
+    background: white;
 }
 
 .projection-label {
@@ -426,7 +442,7 @@ footer {
 }
 
 .main-table tr:hover {
-    background: #c4dce8;
+    background: var(--main_1);
 }
 
 .main-table tr th,
@@ -454,7 +470,7 @@ footer {
 }
 
 .projection-data {
-    background-color: #c4dce8;
+    background-color: var(--main_1);
 }
 
 .turnover-ratios-box {
@@ -465,7 +481,7 @@ footer {
 .share-value-table tr:last-child th,
 .share-value-table tr:last-child td {
     font-size: 20px;
-    background-color: gold;
+    background-color: var(--yellow);
     font-weight: bold;
 }
 

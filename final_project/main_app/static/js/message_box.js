@@ -27,12 +27,16 @@ messageTriggers.forEach(trigger => {
         let messageType = trigger.getAttribute("data-message-type")
         let message = ""
         if (messageType === "favorites") {
-            if (trigger.innerHTML === "bookmark_border") {
-                message = "Company added to favorites successfully!"
+            if (is_authenticated) {
+                if (trigger.innerHTML === "bookmark_border") {
+                    message = "Company successfully added to favorites!"
+                } else {
+                    message = "Company removed from favorites!"
+                }
             } else {
-                message = "Company removed from favorites!"
+                message = "You are not logged in!"
             }
         }
-        showMessage(message)
-    })
+    showMessage(message)
+})
 })
