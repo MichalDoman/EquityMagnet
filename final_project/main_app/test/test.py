@@ -1,5 +1,4 @@
 import pytest
-from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
 from main_app.utils.general_utils import SORTING_NAMES
