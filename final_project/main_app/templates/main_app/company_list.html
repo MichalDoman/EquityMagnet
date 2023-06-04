@@ -4,6 +4,7 @@
 
 {% block javascript %}
     <script src="{% static "js/favorites.js" %}" defer></script>
+    <script src="{% static "js/message_box.js" %}" defer></script>
 {% endblock %}
 
 {% block title %}Company List{% endblock %}
@@ -122,7 +123,8 @@
                         <td>{{ company.sector.name }}</td>
                         <td>{{ company.market_cap|style_numeric_data }}</td>
                         <td>
-                            <i class="material-icons favorite-icon" data-company-id="{{ company.pk }}">
+                            <i class="material-icons favorite-icon message-trigger" data-company-id="{{ company.pk }}"
+                            data-message-type="favorites">
                                 {% if company in favorites %}
                                     bookmark
                                 {% else %}

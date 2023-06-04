@@ -68,6 +68,11 @@ footer {
     border-radius: 15px;
 }
 
+.message-div {
+    position: fixed;
+    z-index: 99;
+}
+
 /* ---------------------------------------------- Home Page: */
 
 .grid-box {
