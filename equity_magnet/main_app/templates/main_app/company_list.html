@@ -23,10 +23,8 @@
         <div class="values-box">
             <form class="search-form-box" method="GET">
                 <button type="submit">
-                    <span class="calculate-btn">
-                        <i class="material-icons">search</i>
-                        Search
-                    </span>
+                    <i class="material-icons">search</i>
+                    <span class="btn-text">Search</span>
                 </button>
                 {{ form }}
             </form>
@@ -146,7 +144,7 @@
             </table>
 
             <div class="pagination">
-                <span class="step_links">
+                <div class="step_links">
                     {% if page_obj.has_previous %}
                         <a href="{{ request.path }}?page=1{{ url_part }}&sort_by={{ request.GET.sort_by }}">
                             &laquo; first
@@ -157,7 +155,7 @@
                     {% endif %}
 
                     <span class="current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        Page {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
                     </span>
 
                     {% if page_obj.has_next %}
@@ -168,7 +166,7 @@
                             last &raquo;
                         </a>
                     {% endif %}
-                </span>
+                </div>
             </div>
         </div>
     </div>

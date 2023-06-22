@@ -158,6 +158,13 @@ footer {
     font-size: 18px;
 }
 
+.search-form-box button {
+    border-radius: 10px;
+    background-color: var(--main_1);
+    color: var(--grey_4);
+    font-weight: bold;
+}
+
 .search-form-box label {
     font-weight: bold;
     padding: 5px 0;
@@ -258,6 +265,26 @@ footer {
 .pagination {
     text-align: center;
     padding: 25px 0;
+}
+
+.step_links {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    line-height: 1;
+    font-size: 30px;
+}
+
+.step_links a {
+    padding: 10px;
+    text-decoration: none;
+    color: var(--main_3);
+}
+
+.current {
+    margin-top: 10px;
+    padding: 0 15px;
+    color: var(--grey_4);
 }
 
 /* ---------------------------------------------- Company Details: */

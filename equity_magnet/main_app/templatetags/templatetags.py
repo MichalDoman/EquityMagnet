@@ -49,9 +49,3 @@ def style_string_data(string):
     if isinstance(string, str):
         styled_string = string.capitalize().replace("_", " ")
         return styled_string
-
-
-@register.filter(name="get_request_url_list")
-def get_request_url_list(request, key):
-    """Used to get a list of filters of the same type from current url, while sorting a filtered company list."""
-    return request.getlist(key)
