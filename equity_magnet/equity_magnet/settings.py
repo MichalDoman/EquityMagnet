@@ -63,7 +63,7 @@ WSGI_APPLICATION = 'equity_magnet.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 try:
-    from final_project.local_settings import DATABASES
+    from equity_magnet.local_settings import DATABASES
 except ModuleNotFoundError:
     print("Database configuration not found in local_settings.py module!")
     exit(0)

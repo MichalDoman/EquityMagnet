@@ -4,8 +4,8 @@ import requests
 from datetime import datetime
 from django.core.management import BaseCommand
 
-from final_project.settings import BASE_DIR
-from final_project.local_settings import API_KEY
+from equity_magnet.settings import BASE_DIR
+from equity_magnet.local_settings import API_KEY
 from main_app.models import Exchange, Company, Sector, Price, IncomeStatement, BalanceSheet, CashFlowStatement
 
 
