@@ -38,7 +38,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'final_project.urls'
+ROOT_URLCONF = 'equity_magnet.urls'
 
 TEMPLATES = [
     {
@@ -56,7 +56,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'final_project.wsgi.application'
+WSGI_APPLICATION = 'equity_magnet.wsgi.application'
 
 
 # Database
