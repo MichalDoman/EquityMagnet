@@ -1,5 +1,5 @@
 /equity_magnet/.pytest_cache/
 __pycache__/
-EquityMagnet/final_project/final_project/__pycache__/
 env/
 .idea/
+local_settings.py

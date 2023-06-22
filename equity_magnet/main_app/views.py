@@ -88,12 +88,38 @@ class CompanyListView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        """Add form to the context."""
+        """
+        Add form and url part to the context.
+        This url part allows to sort and paginate filtered data.
+        """
         context = super().get_context_data(**kwargs)
         context['form'] = self.form_class(self.request.GET)
         if self.request.user.is_authenticated:
             favorites_obj = FavoriteCompany.objects.filter(user=self.request.user)
             context['favorites'] = [favorite.company for favorite in favorites_obj]
+
+        # Get sorting and paginating main url part:
+        if self.request.method == 'GET':
+            phrase = self.request.GET.get('phrase', '')
+            exchanges = self.request.GET.getlist('exchanges', [])
+            sectors = self.request.GET.getlist('sectors', [])
+            countries = self.request.GET.getlist('countries', [])
+            market_cap = self.request.GET.get('market_cap', '')
+
+            url = f"&phrase={phrase}"
+            for i, category in enumerate([exchanges, sectors, countries]):
+                for index in category:
+                    if i == 0:
+                        url += f"&exchanges={index}"
+                    elif i == 1:
+                        url += f"&sectors={index}"
+                    else:
+                        url += f"&countries={index}"
+
+            url += f"&market_cap={market_cap}"
+
+            context['url_part'] = url
+
         return context
 
 
