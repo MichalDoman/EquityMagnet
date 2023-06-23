@@ -159,10 +159,18 @@ footer {
 }
 
 .search-form-box button {
+    display: flex;
+    justify-content: center;
+    border: 2px solid var(--grey_3);
     border-radius: 10px;
     background-color: var(--main_1);
     color: var(--grey_4);
     font-weight: bold;
+    padding: 7px;
+}
+
+.search-form-box button span {
+    margin-top: 5px;
 }
 
 .search-form-box label {
