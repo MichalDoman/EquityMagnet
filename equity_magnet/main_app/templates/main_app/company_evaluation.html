@@ -20,11 +20,9 @@
         <div class="values-box">
             <form class="values-form">
                 {% csrf_token %}
-                <button type="submit">
-                    <span class="calculate-btn">
-                        <i class="material-icons">calculate</i>
-                        Calculate
-                    </span>
+                <button class="form-btn" type="submit">
+                    <i class="material-icons">calculate</i>
+                    <span>Calculate</span>
                 </button>
                 <div class="form-itself">
                     {{ form.as_p }}

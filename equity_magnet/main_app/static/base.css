@@ -158,7 +158,7 @@ footer {
     font-size: 18px;
 }
 
-.search-form-box button {
+.form-btn{
     display: flex;
     justify-content: center;
     border: 2px solid var(--grey_3);
@@ -169,7 +169,7 @@ footer {
     padding: 7px;
 }
 
-.search-form-box button span {
+.form-btn span {
     margin-top: 5px;
 }
 
