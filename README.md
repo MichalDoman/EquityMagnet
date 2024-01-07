@@ -36,3 +36,11 @@ Next tabs display all crucial financial statemnts with past and current values.
 </p>
     
 ### Discounted Cash Flow:
+In the evaluation view there are two tabs. One is for projections, and the other for evaluation itself. on the left there is a panel with inputs where a user can adjust the necessary values, basing on which new calculations are done. 
+
+<p align="center">
+    <img src="https://github.com/MichalDoman/EquityMagnet/blob/main/screenshots/projections_1.png"  width="80%" height="100%">
+    <img src="https://github.com/MichalDoman/EquityMagnet/blob/main/screenshots/projections_2.png"  width="80%" height="100%">
+    <img src="https://github.com/MichalDoman/EquityMagnet/blob/main/screenshots/evaluation_1.png"  width="80%" height="100%">
+    <img src="https://github.com/MichalDoman/EquityMagnet/blob/main/screenshots/evaluation_2.png"  width="80%" height="100%">
+</p>
