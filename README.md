@@ -23,10 +23,16 @@ At first screen there is basic information about a company that includes, brief 
     <img src="https://github.com/MichalDoman/EquityMagnet/blob/main/screenshots/about.png"  width="80%" height="100%">
 </p>
 
+In the next tab there is a price chart, that shows past share prices of currently watched company. Chart was created using Chart.js library.
+<p align="center">
+    <img src="https://github.com/MichalDoman/EquityMagnet/blob/main/screenshots/price_chart.png"  width="80%" height="100%">
+</p>
 
+Next tabs display all crucial financial statemnts with past and current values.
 <p align="center">
     <img src="https://github.com/MichalDoman/EquityMagnet/blob/main/screenshots/income_statement.png"  width="80%" height="100%">
     <img src="https://github.com/MichalDoman/EquityMagnet/blob/main/screenshots/balance_sheet.png"  width="80%" height="100%">
     <img src="https://github.com/MichalDoman/EquityMagnet/blob/main/screenshots/cash_flow.png"  width="80%" height="100%">
 </p>
     
+### Discounted Cash Flow:
